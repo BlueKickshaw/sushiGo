@@ -16,6 +16,12 @@ public class ClientConnectionManager {
         new Thread(new ClientConnectionListener(),"ConnectionListenerThread").start();
     }
 
+    // Creates a listener to someone we have a connection with (allows server to send client messages)
+    public ClientConnectionManager(Network network, Socket socket){
+        this.network = network;
+        new Thread(new ClientConnectionHandler(socket)).start();
+    }
+
     // Creates a listener thread on the server to listen for incoming connections
     private class ClientConnectionListener implements Runnable {
         @Override
@@ -23,7 +29,7 @@ public class ClientConnectionManager {
             while (running) {
                 System.out.println(Thread.currentThread().getName()+": Listening for connections");
                 try {
-                    Socket client = network.server.socket.accept();
+                    Socket client = network.server.serverSocket.accept();
                     new Thread(new ClientConnectionHandler(client),"Handler:"
                             +client.getInetAddress()).start();
                     System.out.println(Thread.currentThread().getName()
@@ -38,10 +44,9 @@ public class ClientConnectionManager {
     private class ClientConnectionHandler implements  Runnable {
         Socket socket;
         RequestManager requestManager;
-
         ClientConnectionHandler(Socket socket){
             this.socket = socket;
-            this.requestManager = new RequestManager(socket);
+            this.requestManager = new RequestManager(network,socket);
         }
 
         @Override
@@ -58,7 +63,7 @@ public class ClientConnectionManager {
                         size = dis.readInt();
                         bytes = new byte[size];
                         dis.readFully(bytes,0,size);
-                        requestManager.handleRequest(socket,new String(bytes));
+                        requestManager.handleRequest(socket,bytes);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

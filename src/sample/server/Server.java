@@ -2,22 +2,20 @@ package sample.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Server {
-    ServerSocket socket;
+    ServerSocket serverSocket;
     int port;
-    private Network network;
-    private ClientConnectionManager listener;
 
-    // Start the server on the specified port
+    // Start the server on the specified port; start listening for requests
     public Server(Network network, int port){
-        this.network = network;
         this.port = port;
 
         try {
-            socket = new ServerSocket(port);
+            serverSocket = new ServerSocket(port);
             System.out.println(Thread.currentThread().getName()+": Started server over port "+port);
-            listener = new ClientConnectionManager(network);
+            new ClientConnectionManager(network);
         } catch (IOException e) {
             System.err.println(Thread.currentThread().getName()+": Unable to start server over port "+port);
         }
