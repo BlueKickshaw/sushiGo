@@ -17,8 +17,8 @@ public abstract class Card{
     }
 
 
-    protected BufferedImage cardImage;
-    protected String name;
+    private BufferedImage cardImage;
+    private String name;
 
     public Card(String name, BufferedImage cardImage) {
         this.name = name;
@@ -62,10 +62,10 @@ public abstract class Card{
                 cardImage = ImageIO.read(new File("../CardImages/Maki_Roll_1.jpg"));
             }
             else if(num == 2){
-                ImageIO.read(new File("../CardImages/Maki_Roll_2.jpg"));
+                cardImage = ImageIO.read(new File("../CardImages/Maki_Roll_2.jpg"));
             }
             else if(num == 3){
-                ImageIO.read(new File("../CardImages/Maki_Roll_3.jpg"));
+                cardImage = ImageIO.read(new File("../CardImages/Maki_Roll_3.jpg"));
             }
             else{
                 System.err.print("Invalid Maki Roll Number must be 1-3\nValue passed was " + num);
