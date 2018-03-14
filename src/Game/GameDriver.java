@@ -25,7 +25,7 @@ public class GameDriver {
         //deal the hands
         for (int i = 0; i <numOfPlayers; i++) {
             for (int j = 0; j < handSize; j++) {
-                playerList.get(i).getPlayerHand().addCard(deck.deal());
+//                playerList.get(i).getPlayerHand().addCard(deck.deal());
             }
         }
     }
@@ -34,7 +34,8 @@ public class GameDriver {
         player.chooseCard(c);
     }
 
-    public int[] calculatePoints(Vector<Player> playerList){
+    // TODO // changed from int[] to void return type
+    public void calculatePoints(Vector<Player> playerList){
         int points =0;
         for (int i = 0; i < numOfPlayers; i++) {
             Player currentPLayer = playerList.get(i);
@@ -45,6 +46,8 @@ public class GameDriver {
             points += currentPLayer.tempuraPoints();
             currentPLayer.addPoints(points);
         }
+        return;
+
     }
 
     public int calulatePuddingPoints(Vector<Player> playerList){
