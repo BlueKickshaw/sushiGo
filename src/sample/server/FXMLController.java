@@ -22,6 +22,8 @@ public class FXMLController implements Initializable {
     private ActionEvent e_saved;
     private static Stage stage;
 
+    public static FXMLLoader loader;
+
     public static Network network;
 
     // URL list (screen locations)
@@ -63,17 +65,17 @@ public class FXMLController implements Initializable {
         network.sendRequest("login");
         network.sendRequest(loginNameText.getText());
         network.sendRequest(loginPasswordText.getText());
+
     }
 
     // Load the scene, get the stage from the button pressed
     @FXML
     public void loadScene(ActionEvent e, URL url) throws IOException {
-        Parent root = FXMLLoader.load(url);
+        Parent root = loader.load(url);
         Scene newScene = new Scene(root, screenWidth, screenHeight);
         Stage s = (Stage)((Node)e.getSource()).getScene().getWindow();
         s.setScene(newScene);
         s.show();
-        System.out.println(s.getTitle());
 
         stage = s;
     }
@@ -85,6 +87,16 @@ public class FXMLController implements Initializable {
         Scene newScene = new Scene(root, screenWidth, screenHeight);
         stage.setScene(newScene);
         stage.show();
+    }
+
+    // WELCOME
+    @FXML
+    public void welcomeCreateLobby() {
+
+    }
+
+    public void welcomeShowLobby() {
+
     }
 
     @Override

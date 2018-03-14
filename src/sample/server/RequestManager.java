@@ -82,6 +82,17 @@ public class RequestManager {
 
             case "loginSuccessful":
                 // TODO: Send the user to the welcome page
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        URL url = getClass().getResource("scenes/welcomeScreen.fxml");
+                        try {
+                            network.fxmlController.loadScene(url);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 break;
 
             case "receivedLobbyList":

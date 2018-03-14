@@ -6,7 +6,7 @@ import java.net.*;
 public class Network {
     public Socket socket;
     public Server server;
-    public FXMLController fxmlController;
+    public static FXMLController fxmlController;
 
     LobbyManager lobbyManager = new LobbyManager(this);
 

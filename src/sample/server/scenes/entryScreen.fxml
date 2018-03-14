@@ -10,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.server.FXMLController">
   <children>
-    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff7a00" height="500.0" layoutX="0.0" layoutY="0.0" stroke="BLACK" strokeType="INSIDE" width="300.0" />
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="radial-gradient(focus-angle 0.0deg, focus-distance 0.0% , center 180.0px 280.0px, radius 500.0px, 0xff0000ff 0.0%, 0xff0000ff 30.0%, 0x000000ff 100.0%)" height="500.0" layoutX="0.0" layoutY="0.0" stroke="BLACK" strokeType="INSIDE" width="300.0" />
     <VBox alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="472.0" prefWidth="272.0">
       <children>
         <ImageView id="sushi_go_logo.jpg" blendMode="MULTIPLY" fitHeight="200.0" fitWidth="200.0">
