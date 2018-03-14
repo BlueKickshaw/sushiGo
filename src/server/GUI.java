@@ -1,4 +1,4 @@
-package sample.server;
+package server;
 
 import javafx.application.Platform;
 import javafx.scene.control.Button;

@@ -1,4 +1,4 @@
-package sample.Cards;
+package Cards;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
