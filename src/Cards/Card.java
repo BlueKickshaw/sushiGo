@@ -17,7 +17,7 @@ public abstract class Card{
     }
 
 
-    private BufferedImage cardImage;
+    private BufferedImage cardImage;//TODO make this static
     private String name;
 
     public Card(String name, BufferedImage cardImage) {
