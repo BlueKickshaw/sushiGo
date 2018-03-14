@@ -13,6 +13,11 @@ public class Hand {
         this.playerHand = playerHand;
     }
 
+    public Hand(int handSize, boolean playerHand) {
+        this.cards = new Vector<>(handSize);
+        this.playerHand = playerHand;
+    }
+
     public Vector<Card> getCards() {
         return cards;
     }
