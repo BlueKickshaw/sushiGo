@@ -6,6 +6,7 @@ import java.net.*;
 public class Network {
     public Socket socket;
     public Server server;
+    public FXMLController fxmlController;
 
     LobbyManager lobbyManager = new LobbyManager(this);
 
@@ -86,6 +87,8 @@ public class Network {
             dos.write(request.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (NullPointerException e){
+            System.err.println("Null Socket; did you use the wrong Send Request to communicate to the client?");
         }
     }
 

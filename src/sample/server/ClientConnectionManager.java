@@ -66,6 +66,7 @@ public class ClientConnectionManager {
                         requestManager.handleRequest(socket,bytes);
                     }
                 } catch (IOException e) {
+                    running = false;
                     e.printStackTrace();
                 }
             }

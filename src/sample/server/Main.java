@@ -1,20 +1,27 @@
 package sample.server;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class Main extends Application {
-    private int port = 8080;
-    private int screenWidth = 400;
-    private int screenHeight = 500;
+import java.io.IOException;
 
+public class Main extends Application {
+    int port = 8080;
+
+    public void start(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("scenes/entryScreen.fxml"));
+        stage.setTitle("SushiGo");
+        stage.setScene(new Scene(root,300,500));
+        stage.show();
+
+        Network network = new Network(port);
+        FXMLController.network = network;
+    }
+    /*
     public void start(Stage primaryStage) {
         Network network = new Network(port);
         LobbyManager lm = new LobbyManager(network);
@@ -114,6 +121,7 @@ public class Main extends Application {
         // Add GUI components
         GUI.serverGrid = serverGrid;
     }
+    */
 
     public static void main(String[] args) {
         launch(args);
