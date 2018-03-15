@@ -6,17 +6,23 @@ import java.io.IOException;
 import java.util.*;
 
 public class Deck {
-    Stack<Card> deck;
+    private Stack<Card> deck = new Stack<>();
 
     Deck(){
-        // create an arraylist, shuffle it, the populate the stack
-        ArrayList<Card> tmp;
-        try {
-            deck.add(new Dumpling());
-            deck.add(new Dumpling());
-
-        }catch (IOException e) {
-            System.out.println("No dumpling added");
+        // create an vector, shuffle it, the populate the stack
+        Vector<Card> tmp = new Vector<>();
+//        try {
+        for (int i = 0; i < 14; i++) {
+            tmp.add(new Dumpling("Dumpling " + String.valueOf(i)));
+//            tmp.add(new Dumpling());
+        }
+//        }catch(IOException e){
+//            System.out.println("no dumpling created");
+//            e.printStackTrace();
+//        }
+        Collections.shuffle(tmp);
+        for (Card card: tmp) {
+            deck.push(card);
         }
     }
 
@@ -30,7 +36,10 @@ public class Deck {
 
     public static void main(String[] args){
         Deck test = new Deck();
-        System.out.println(test.getCards(2)[0].getName());
+
+        for (int i = 0; i < 14; i++){
+            System.out.println(test.getCards(1)[0].getName());
+        }
     }
 
 }
