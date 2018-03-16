@@ -3,18 +3,19 @@
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="server.FXMLController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.server.FXMLController">
   <children>
     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="radial-gradient(focus-angle 0.0deg, focus-distance 0.0% , center 180.0px 280.0px, radius 500.0px, 0xff0000ff 0.0%, 0xff0000ff 30.0%, 0x000000ff 100.0%)" height="500.0" layoutX="0.0" layoutY="0.0" stroke="BLACK" strokeType="INSIDE" width="300.0" />
     <Label layoutX="10.0" layoutY="5.0" text="Server Information:" textFill="WHITE" />
     <GridPane alignment="CENTER" layoutX="28.0" layoutY="20.0" prefHeight="81.0" prefWidth="196.0">
       <children>
         <Label text="Users:" textAlignment="LEFT" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <TextField editable="false" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TextField fx:id="serverUserCountField" editable="false" prefWidth="200.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         <Label text="Lobbies:" textAlignment="LEFT" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1" />
       </children>
       <columnConstraints>
@@ -27,6 +28,23 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GREY" height="413.0" layoutX="14.0" layoutY="73.0" stroke="BLACK" strokeType="INSIDE" width="272.0" />
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#660000" height="413.0" layoutX="14.0" layoutY="73.0" stroke="BLACK" strokeType="INSIDE" width="272.0" />
+    <VBox fillWidth="true" focusTraversable="false" layoutX="14.0" layoutY="73.0" prefHeight="413.0" prefWidth="272.0" visible="true">
+      <children>
+        <Label text="Name:                  Count:    P/W:" textFill="#9f9f9f" />
+        <AnchorPane fx:id="serverScreenTemplate" prefHeight="42.0" prefWidth="272.0" visible="false">
+          <children>
+            <ImageView id="lock.png" fitHeight="25.0" fitWidth="25.0" layoutX="182.0" layoutY="6.0">
+              <image>
+                <Image url="@resources/lock.png" preserveRatio="true" smooth="true" />
+              </image>
+            </ImageView>
+            <Label layoutX="0.0" layoutY="12.0" text="&lt;LOBBY NAME&gt;" textFill="WHITE" />
+            <Label layoutX="123.0" layoutY="12.0" text="&lt;N/4&gt;" textFill="WHITE" />
+            <Button layoutX="218.0" layoutY="8.0" mnemonicParsing="false" text="Join" />
+          </children>
+        </AnchorPane>
+      </children>
+    </VBox>
   </children>
 </AnchorPane>

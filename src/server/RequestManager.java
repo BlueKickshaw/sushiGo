@@ -1,4 +1,4 @@
-package server;
+package sample.server;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -10,12 +10,10 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class RequestManager {
-    Socket socket;
     Network network;
 
     public RequestManager(Network network, Socket socket){
         this.network = network;
-        this.socket = socket;
     }
 
     public void handleRequest(Socket socket, byte[] request){
@@ -24,15 +22,12 @@ public class RequestManager {
         switch (message) {
             case "accountCreationFailed":
                 int error = Integer.parseInt(network.getNextString(socket));
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (error == -2) {
-                            new Alert(Alert.AlertType.ERROR,"Name already taken!", ButtonType.OK).show();
-                        } else {
-                            new Alert(Alert.AlertType.ERROR,"Name and password must be alphanumeric!",
-                                    ButtonType.OK).show();
-                        }
+                Platform.runLater(() -> {
+                    if (error == -2) {
+                        new Alert(Alert.AlertType.ERROR,"Name already taken!", ButtonType.OK).show();
+                    } else {
+                        new Alert(Alert.AlertType.ERROR,"Name and password must be alphanumeric!",
+                                ButtonType.OK).show();
                     }
                 });
                 break;
@@ -43,15 +38,45 @@ public class RequestManager {
                 error = network.server.accounts.createAccount(name,password);
                 if (error != 0) {
                     network.sendRequest(socket, "accountCreationFailed".getBytes());
-                    network.sendRequest(socket, new String("" + error).getBytes());
+                    network.sendRequest(socket, ("" + error).getBytes());
                 }
+                break;
+
+            case "disconnect":
+                Platform.runLater(() -> {
+                    Network.fxmlController.updateUserCount(-1);
+                    System.out.println(Thread.currentThread().getName()+": Disconnecting "+
+                            socket.getInetAddress().toString());
+                });
                 break;
 
             case "host":
                 name = network.getNextString(socket);
                 password = network.getNextString(socket);
-                network.lobbyManager.createLobby(socket.getInetAddress().toString(),name,password);
-                GUI.UpdateLobbyGrid(GUI.serverGrid,network.lobbyManager);
+                Lobby l = network.lobbyManager.createLobby(socket.getInetAddress().toString(),name,password);
+                if (l != null) {
+                    network.sendRequest(socket,"hostSuccess".getBytes());
+                    network.fxmlController.updateServerLobbyDisplay(network.lobbyManager.lobbyList);
+                } else {
+                    network.sendRequest(socket,"hostFailed".getBytes());
+                }
+                break;
+
+            case "hostSuccess":
+                URL url = getClass().getResource("scenes/hostLobbyScreen.fxml");
+                Platform.runLater(() -> {
+                    try {
+                        Network.fxmlController.loadScene(url);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+
+            case "hostFailed":
+                new Alert(Alert.AlertType.ERROR,
+                        "Failed to host lobby; Perhaps the name is taken?",
+                        ButtonType.OK);
                 break;
 
             case "joinLobby":
@@ -65,6 +90,7 @@ public class RequestManager {
                 boolean success = network.server.accounts.verifyAccount(name,password);
                 if (success) {
                     network.sendRequest(socket,"loginSuccessful".getBytes());
+                    Platform.runLater(() -> Network.fxmlController.updateUserCount(1));
                 } else {
                     network.sendRequest(socket,"loginFailed".getBytes());
                 }
@@ -98,7 +124,6 @@ public class RequestManager {
             case "receivedLobbyList":
                 network.lobbyManager.lobbyList =
                         (ArrayList<Lobby>)network.deserializeObject(network.getNextBytes(socket));
-                GUI.UpdateLobbyGrid(GUI.lobbyViewerGrid,network.lobbyManager);
                 break;
 
             case "showLobbyList":

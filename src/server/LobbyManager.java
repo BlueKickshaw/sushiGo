@@ -1,4 +1,4 @@
-package server;
+package sample.server;
 
 import java.util.ArrayList;
 
@@ -11,6 +11,11 @@ public class LobbyManager {
     }
 
     public Lobby createLobby(String host, String name, String password){
+        for (Lobby l : lobbyList){
+            if (l.name.equals(name)){
+                return null;
+            }
+        }
         Lobby lobby = new Lobby(host,name,password);
         lobbyList.add(lobby);
         lobby.ipList.add(host);
