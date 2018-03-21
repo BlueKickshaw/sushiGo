@@ -1,4 +1,4 @@
-package sample.server;
+package server;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -56,7 +56,11 @@ public class RequestManager {
                 Lobby l = network.lobbyManager.createLobby(socket.getInetAddress().toString(),name,password);
                 if (l != null) {
                     network.sendRequest(socket,"hostSuccess".getBytes());
-                    network.fxmlController.updateServerLobbyDisplay(network.lobbyManager.lobbyList);
+
+                    // We need to run this on the main thread where the FXML loader resides, that's why
+                    // we use runLater
+                    Platform.runLater(() ->
+                            network.fxmlController.updateServerLobbyDisplay(network.lobbyManager.lobbyList));
                 } else {
                     network.sendRequest(socket,"hostFailed".getBytes());
                 }
@@ -74,9 +78,11 @@ public class RequestManager {
                 break;
 
             case "hostFailed":
-                new Alert(Alert.AlertType.ERROR,
-                        "Failed to host lobby; Perhaps the name is taken?",
-                        ButtonType.OK);
+                Platform.runLater(() -> {
+                    new Alert(Alert.AlertType.ERROR,
+                            "Failed to host lobby; Perhaps the name is taken?",
+                            ButtonType.OK).show();
+                });
                 break;
 
             case "joinLobby":

@@ -1,4 +1,4 @@
-package sample.server;
+package server;
 
 import java.io.*;
 import java.net.*;
@@ -69,6 +69,11 @@ public class Network {
             return buffer;
         } catch (IOException e) {
             e.printStackTrace();
+            try {
+                socket.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
         return null;
     }

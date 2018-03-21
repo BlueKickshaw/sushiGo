@@ -1,20 +1,26 @@
-package sample.server;
+package server;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -124,16 +130,33 @@ public class FXMLController implements Initializable {
     }
 
     @FXML private TextField serverUserCountField;
-    public void updateUserCount(int i){
-        //serverUserCountField.setText(""+(Integer.parseInt(serverUserCountField.getText())+1));
+    @FXML public void updateUserCount(int i){
+        if (serverUserCountField.getText().equals("")){
+            serverUserCountField.setText(""+1);
+        } else {
+            serverUserCountField.setText("" + (Integer.parseInt(serverUserCountField.getText()) + 1));
+
+        }
     }
 
     @FXML private VBox serverVBox;
     @FXML public AnchorPane serverLobbyTemplate;
-    public void updateServerLobbyDisplay(ArrayList<Lobby> list) {
-    }
+    @FXML public void updateServerLobbyDisplay(ArrayList<Lobby> list) {
+        ImageView iv = new ImageView(String.valueOf(getClass().getResource("scenes/resources/lock.png")));
+        iv.setFitHeight(15);
+        iv.setFitWidth(15);
+        GridPane gp = new GridPane();
 
-    private void copyAnchorPane(AnchorPane target) throws Exception {
+        int i = 0;
+        for (Lobby l : list){
+            i++;
+            gp.setMinWidth(100);
+            gp.addRow(i,
+                    new Label(l.name),
+                    new Label(l.playerCount+"/4"),
+                    iv);
+        }
+        serverVBox.getChildren().add(gp);
     }
 
     @Override

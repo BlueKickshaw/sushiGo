@@ -1,4 +1,4 @@
-package sample.server;
+package server;
 
 import javafx.application.Platform;
 
@@ -37,8 +37,11 @@ public class ClientConnectionManager {
                             +": Accepted connection from "+client.getInetAddress());
                     // We want to tell this socket when we forcefully close;
                     // When we close, we want to tell the server that
-                    Runtime.getRuntime().addShutdownHook(new Thread(() -> network.sendRequest(client,
-                            "disconnect".getBytes())));
+                    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                        if (client != null) {
+                            network.sendRequest(client, "disconnect".getBytes());
+                        }
+                    }));
                 } catch (IOException e) {
                     System.err.println(Thread.currentThread().getName()+": Unable to accept incoming socket");
                 }
