@@ -42,6 +42,7 @@ public class RequestManager {
                 }
                 break;
 
+            // When we want to disconnect a user from the server (booting them when their lobby starts for example)
             case "disconnect":
                 Platform.runLater(() -> {
                     Network.fxmlController.updateUserCount(-1);
@@ -50,6 +51,7 @@ public class RequestManager {
                 });
                 break;
 
+            // Received a request to host a lobby
             case "host":
                 name = network.getNextString(socket);
                 password = network.getNextString(socket);
@@ -60,7 +62,8 @@ public class RequestManager {
                     // We need to run this on the main thread where the FXML loader resides, that's why
                     // we use runLater
                     Platform.runLater(() ->
-                            network.fxmlController.updateServerLobbyDisplay(network.lobbyManager.lobbyList));
+                            network.fxmlController.updateServerLobbyDisplay(network.lobbyManager.lobbyList,
+                                    true));
                 } else {
                     network.sendRequest(socket,"hostFailed".getBytes());
                 }
@@ -85,11 +88,44 @@ public class RequestManager {
                 });
                 break;
 
-            case "joinLobby":
+            // Recevied a request to join a lobby
+            case "joinLobby": {
                 String lobbyName = network.getNextString(socket);
-                System.out.println("Requesting to join lobby '"+lobbyName+"'");
+                String lobbyPassword = network.getNextString(socket);
+                System.out.println("User requesting to join lobby '" + lobbyName + ":" + lobbyPassword + "'");
+                boolean success = false;
+
+                for (Lobby lobby : network.lobbyManager.lobbyList) {
+                    if (lobbyName.equals(lobby.name)) {
+                        if (lobbyPassword.equals(lobby.password)) {
+                            success = true;
+                            break;
+                        }
+                        break;
+                    }
+                }
+
+                if (success) {
+                    network.sendRequest(socket,"joinSuccessful".getBytes());
+                } else {
+                    network.sendRequest(socket,"joinFailed".getBytes());
+                }
+            } break;
+
+
+            case "joinFailed":
+                Platform.runLater(() -> {
+                    new Alert(Alert.AlertType.ERROR,"Unable to join lobby; perhaps it's full" +
+                            " or the password was incorrect?",ButtonType.OK).show();
+                });
                 break;
 
+            case "joinSuccessful":
+                Platform.runLater(() -> new Alert(Alert.AlertType.CONFIRMATION,
+                        "YAY", ButtonType.OK).show());
+                break;
+
+            // Received a request to login
             case "login":
                 name = network.getNextString(socket);
                 password = network.getNextString(socket);
@@ -103,17 +139,11 @@ public class RequestManager {
                 break;
 
             case "loginFailed":
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new Alert(Alert.AlertType.ERROR,"Login failed; the username/password combination" +
-                                "could not be found in the database",ButtonType.OK);
-                    }
-                });
+                Platform.runLater(() -> new Alert(Alert.AlertType.ERROR,"Login failed; the " +
+                        "username/password combination could not be found in the database",ButtonType.OK));
                 break;
 
             case "loginSuccessful":
-                // TODO: Send the user to the welcome page
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -130,6 +160,7 @@ public class RequestManager {
             case "receivedLobbyList":
                 network.lobbyManager.lobbyList =
                         (ArrayList<Lobby>)network.deserializeObject(network.getNextBytes(socket));
+                Platform.runLater(() -> network.fxmlController.updateServerLobbyDisplay(network.lobbyManager.lobbyList,false));
                 break;
 
             case "showLobbyList":

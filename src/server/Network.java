@@ -8,7 +8,7 @@ public class Network {
     public Server server;
     public static FXMLController fxmlController;
 
-    LobbyManager lobbyManager = new LobbyManager(this);
+    public LobbyManager lobbyManager = new LobbyManager(this);
 
     private int port;
     private String address = "localhost";

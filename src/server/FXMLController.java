@@ -1,26 +1,19 @@
 package server;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -29,7 +22,6 @@ import java.util.ResourceBundle;
 public class FXMLController implements Initializable {
     private static int screenWidth = 300;
     private static int screenHeight = 500;
-    private ActionEvent e_saved;
     private static Stage stage;
 
     public static FXMLLoader loader;
@@ -81,6 +73,7 @@ public class FXMLController implements Initializable {
         network.sendRequest(loginNameText.getText());
         network.sendRequest(loginPasswordText.getText());
     }
+
     @FXML
     public void loginLogin(){
         network.fxmlController = this;
@@ -88,7 +81,6 @@ public class FXMLController implements Initializable {
         network.sendRequest("login");
         network.sendRequest(loginNameText.getText());
         network.sendRequest(loginPasswordText.getText());
-
     }
 
     // Load the scene, get the stage from the button pressed
@@ -112,6 +104,100 @@ public class FXMLController implements Initializable {
         stage.show();
     }
 
+    public String promptForPassword(){
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Lobby Password");
+        dialog.setHeaderText("This lobby requires a password, please enter the password below");
+
+        GridPane gp = new GridPane();
+        Label label = new Label("Password: ");
+        TextField password = new PasswordField();
+
+        gp.addRow(0,label,password);
+        dialog.getDialogPane().setContent(gp);
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.setResultConverter(s -> password.getText());
+
+        return dialog.showAndWait().get();
+    }
+
+    @FXML public void updatePlayerGrid(){
+
+    }
+
+
+    @FXML private TextField serverUserCountField;
+    @FXML public void updateUserCount(int i){
+        if (serverUserCountField.getText().equals("")){
+            serverUserCountField.setText(""+i);
+        } else {
+            serverUserCountField.setText("" + (Integer.parseInt(serverUserCountField.getText()) + i));
+
+        }
+    }
+
+    @FXML private GridPane serverGridPane;
+    @FXML private GridPane browserGridPane;
+    @FXML public void updateServerLobbyDisplay(ArrayList<Lobby> list, boolean isServer) {
+        // Clear all the previous entries
+        if (isServer) {
+            serverGridPane.getChildren().remove(0, serverGridPane.getChildren().size());
+        } else {
+            browserGridPane.getChildren().remove(0, browserGridPane.getChildren().size());
+        }
+
+        int i = 0;
+        for (Lobby l : list){
+            // Create a new imageview; cannot reuse it every time because we get duplicate node errors
+            ImageView iv = new ImageView(String.valueOf(getClass().getResource("scenes/resources/lock.png")));
+
+            iv.setFitHeight(15);
+            iv.setFitWidth(15);
+
+            // If there's no password, we want to hide the lock graphic
+            if (!l.hasPassword) {
+                iv.setVisible(false);
+            }
+
+            Label name = new Label (l.name);
+            name.setTextFill(Color.WHITESMOKE);
+
+            Label playerCount = new Label(l.playerCount+"/4");
+            playerCount.setTextFill(Color.WHITESMOKE);
+
+
+            // We want to change whether or not the join button is shown to prevent the server from
+            // throwing some wacky errors
+            if (isServer) {
+                serverGridPane.addRow(
+                        i,
+                        name,
+                        playerCount,
+                        iv);
+            } else {
+
+                // Create and add the button which will ask us to join the game
+                Button join = new Button("Join");
+                join.setOnAction(e -> {
+                    String password = promptForPassword();
+                    network.sendRequest("joinLobby");
+                    network.sendRequest(l.name);
+                    network.sendRequest(password);
+                });
+
+                browserGridPane.addRow(
+                        i,
+                        name,
+                        playerCount,
+                        iv,
+                        join);
+            }
+
+            i++;
+        }
+    }
+
     // WELCOME
     public void welcomeCreateLobby(ActionEvent e) {
         try {
@@ -124,39 +210,11 @@ public class FXMLController implements Initializable {
     public void welcomeShowLobby(ActionEvent e) {
         try {
             loadScene(e,browserScreen);
+            // Request the lobby list
+            network.sendRequest("showLobbyList");
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-    }
-
-    @FXML private TextField serverUserCountField;
-    @FXML public void updateUserCount(int i){
-        if (serverUserCountField.getText().equals("")){
-            serverUserCountField.setText(""+1);
-        } else {
-            serverUserCountField.setText("" + (Integer.parseInt(serverUserCountField.getText()) + 1));
-
-        }
-    }
-
-    @FXML private VBox serverVBox;
-    @FXML public AnchorPane serverLobbyTemplate;
-    @FXML public void updateServerLobbyDisplay(ArrayList<Lobby> list) {
-        ImageView iv = new ImageView(String.valueOf(getClass().getResource("scenes/resources/lock.png")));
-        iv.setFitHeight(15);
-        iv.setFitWidth(15);
-        GridPane gp = new GridPane();
-
-        int i = 0;
-        for (Lobby l : list){
-            i++;
-            gp.setMinWidth(100);
-            gp.addRow(i,
-                    new Label(l.name),
-                    new Label(l.playerCount+"/4"),
-                    iv);
-        }
-        serverVBox.getChildren().add(gp);
     }
 
     @Override

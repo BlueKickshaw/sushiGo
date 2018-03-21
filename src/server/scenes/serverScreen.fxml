@@ -31,19 +31,18 @@
     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#660000" height="413.0" layoutX="14.0" layoutY="73.0" stroke="BLACK" strokeType="INSIDE" width="272.0" />
     <VBox fx:id="serverVBox" fillWidth="true" focusTraversable="false" layoutX="14.0" layoutY="73.0" prefHeight="413.0" prefWidth="272.0" visible="true">
       <children>
-        <Label text="Name:                  Count:    P/W:" textFill="#9f9f9f" />
-        <AnchorPane fx:id="serverLobbyTemplate" prefHeight="42.0" prefWidth="272.0" visible="false">
-          <children>
-            <Label layoutX="0.0" layoutY="12.0" text="&lt;LOBBY NAME&gt;" textFill="WHITE" />
-            <Label layoutX="123.0" layoutY="12.0" text="&lt;N/4&gt;" textFill="WHITE" />
-            <ImageView id="lock.png" fitHeight="25.0" fitWidth="25.0" layoutX="182.0" layoutY="6.0">
-              <image>
-                <Image url="@resources/lock.png" preserveRatio="true" smooth="true" />
-              </image>
-            </ImageView>
-            <Button layoutX="218.0" layoutY="8.0" mnemonicParsing="false" text="Join" />
-          </children>
-        </AnchorPane>
+        <Label prefWidth="272.0" text="Name:                  Count:                   P/W:" textFill="WHITESMOKE" />
+        <GridPane fx:id="serverGridPane" prefHeight="81.0" prefWidth="272.0">
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="132.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="265.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="353.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+        </GridPane>
       </children>
     </VBox>
   </children>
