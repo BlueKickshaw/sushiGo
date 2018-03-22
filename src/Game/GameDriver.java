@@ -7,8 +7,8 @@ import java.util.Vector;
 public class GameDriver {
 
     //create the hands
-    private static Vector<Player> playerList;
-    private static int numOfPlayers;
+    private  Vector<Player> playerList;
+    private int numOfPlayers = 4;
 
     public void initialize(int numOfPlayers){
         //choose players and hand size
@@ -34,8 +34,8 @@ public class GameDriver {
         player.chooseCard(c);
     }
 
-    // TODO // changed from int[] to void return type
-    public void calculatePoints(Vector<Player> playerList){
+
+    public void calculatePoints(Vector<Player> playerList, int roundNum){
         int points =0;
         for (int i = 0; i < numOfPlayers; i++) {
             Player currentPLayer = playerList.get(i);
@@ -46,18 +46,49 @@ public class GameDriver {
             points += currentPLayer.tempuraPoints();
             currentPLayer.addPoints(points);
         }
-        return;
-
+        if(roundNum == 3){
+            calculatePuddingPoints(playerList);
+        }
     }
 
-    public int calulatePuddingPoints(Vector<Player> playerList){
+    public void calculatePuddingPoints(Vector<Player> playerList){
         int points =0;
-        int indexOfHighest;
+        int high=0;
+        int low=1000;
+        Vector<Player> highPlayer = new Vector<>();
+        Vector<Player> lowPlayer = new Vector<>();
+
+        //find highest and lowest amount of puddings
         for (int i = 0; i < numOfPlayers; i++) {
-            playerList.get(i).getPudding();//TODO
+            Player currentPlayer = playerList.get(i);
+            int puddings = playerList.get(i).getPudding();
+            if(puddings>high){
+                highPlayer.clear();
+                highPlayer.add(currentPlayer);
+            }else if (puddings==high){
+                highPlayer.add(currentPlayer);
+            }
+
+            if(puddings<low){
+                lowPlayer.clear();
+                lowPlayer.add(currentPlayer);
+            }else if (puddings==low){
+                lowPlayer.add(currentPlayer);
+            }
         }
 
-        return 0;
+        if(highPlayer.size()==numOfPlayers){//everyone had the same amount of pudding
+            return;
+        }
+
+        points = 6 / highPlayer.size();
+        for (Player aHighPlayer : highPlayer) {
+            aHighPlayer.addPoints(points);
+        }
+        points = -6/ highPlayer.size();
+        for (Player aLowPlayer : lowPlayer) {
+            aLowPlayer.addPoints(points);
+        }
     }
 
 }
