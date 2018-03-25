@@ -2,44 +2,64 @@ package Game;
 
 import Cards.*;
 
-import java.io.IOException;
 import java.util.*;
 
 public class Deck {
     private Stack<Card> deck = new Stack<>();
 
     Deck(){
+
         // create an vector, shuffle it, the populate the stack
         Vector<Card> tmp = new Vector<>();
-//        try {
-        for (int i = 0; i < 14; i++) {
-            tmp.add(new Dumpling("Dumpling " + String.valueOf(i)));
-//            tmp.add(new Dumpling());
+        for (int i = 0; i < 4; i++) {
+            tmp.add(new Chopsticks("Chopsticks"));
         }
-//        }catch(IOException e){
-//            System.out.println("no dumpling created");
-//            e.printStackTrace();
-//        }
+        for (int i = 0; i < 14; i++) {
+            tmp.add(new Dumpling("Dumpling"));
+        }
+        for (int i = 0; i < 5; i++) {
+            tmp.add(new EggNigiri("Egg Nigiri"));
+        }
+        for (int i = 0; i < 6; i++) {
+            tmp.add(new MakiRoll1("Maki Roll 1"));
+        }
+        for (int i = 0; i < 12; i++) {
+            tmp.add(new MakiRoll2("Maki Roll 2"));
+        }
+        for (int i = 0; i < 8; i++) {
+            tmp.add(new MakiRoll3("Maki Roll 3"));
+        }
+        for (int i = 0; i < 10; i++) {
+            tmp.add(new Pudding("Pudding"));
+        }
+        for (int i = 0; i < 10; i++) {
+            tmp.add(new SalmonNigiri("SalmonNigiri"));
+        }
+        for (int i = 0; i < 14; i++) {
+            tmp.add(new Sashimi("Sashimi"));
+        }
+        for (int i = 0; i < 5; i++) {
+            tmp.add(new SquidNigiri("Squid Nigiri"));
+        }
+        for (int i = 0; i < 14; i++) {
+            tmp.add(new Tempura("Tempura"));
+        }
+        for (int i = 0; i < 6; i++) {
+            tmp.add(new Wasabi("Wasabi"));
+        }
+
+
         Collections.shuffle(tmp);
         for (Card card: tmp) {
             deck.push(card);
         }
     }
 
-    private Card[] getCards(int num){
+    public Card[] getCards(int num) throws EmptyStackException {
         Card[] tmp = new Card[num];
         for (int i = 0; i < num; i++){
             tmp[i] = deck.pop();
         }
         return tmp;
     }
-
-    public static void main(String[] args){
-        Deck test = new Deck();
-
-        for (int i = 0; i < 14; i++){
-            System.out.println(test.getCards(1)[0].getName());
-        }
-    }
-
 }

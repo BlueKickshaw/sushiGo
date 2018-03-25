@@ -1,13 +1,15 @@
 package Cards;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 
 public class Tempura extends Card{
 
+    private String imagePath = "/CardImages/Tempura.jpg";
 
-    public Tempura() throws IOException {
-        super("Tempura", ImageIO.read(new File("../CardImages/Tempura.jpg")));
+    public Tempura(String name){
+        super(name);
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }

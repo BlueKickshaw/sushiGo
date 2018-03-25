@@ -1,13 +1,15 @@
 package Cards;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 
 public class EggNigiri extends Card{
 
+    private String imagePath = "/CardImages/EggNigiri.jpg";
 
-    public EggNigiri() throws IOException {
-        super("Egg Nigiri", ImageIO.read(new File("../CardImages/Egg_Nigiri.jpg")));
+    public EggNigiri(String name){
+        super(name);
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }
