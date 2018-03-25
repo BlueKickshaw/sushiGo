@@ -23,6 +23,6 @@
       </rowConstraints>
     </GridPane>
     <Label layoutX="14.0" layoutY="14.0" text="Lobbies:" textAlignment="LEFT" textFill="WHITE" />
-    <ScrollBar layoutX="272.0" layoutY="34.0" orientation="VERTICAL" prefHeight="452.0" />
+    <Button layoutX="14.0" layoutY="463.0" mnemonicParsing="false" onAction="#toWelcomeBtn" prefWidth="92.0" text="Back" />
   </children>
 </AnchorPane>

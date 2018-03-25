@@ -4,13 +4,16 @@ import java.io.*;
 import java.net.*;
 
 public class Network {
+    public int port;
     public Socket socket;
     public Server server;
+    public String username;
+
+
     public static FXMLController fxmlController;
 
     public LobbyManager lobbyManager = new LobbyManager(this);
 
-    private int port;
     private String address = "localhost";
 
     Network(int port){

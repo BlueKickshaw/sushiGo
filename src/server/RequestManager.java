@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -69,15 +70,16 @@ public class RequestManager {
                 }
                 break;
 
-            case "hostSuccess":
-                URL url = getClass().getResource("scenes/hostLobbyScreen.fxml");
-                Platform.runLater(() -> {
-                    try {
-                        Network.fxmlController.loadScene(url);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+            case "hostSuccess": {
+                    URL url = getClass().getResource("scenes/hostLobbyScreen.fxml");
+                    Platform.runLater(() -> {
+                        try {
+                            Network.fxmlController.loadScene(url);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
                 break;
 
             case "hostFailed":
@@ -88,7 +90,7 @@ public class RequestManager {
                 });
                 break;
 
-            // Recevied a request to join a lobby
+            // Received a request to join a lobby
             case "joinLobby": {
                 String lobbyName = network.getNextString(socket);
                 String lobbyPassword = network.getNextString(socket);
@@ -98,7 +100,20 @@ public class RequestManager {
                 for (Lobby lobby : network.lobbyManager.lobbyList) {
                     if (lobbyName.equals(lobby.name)) {
                         if (lobbyPassword.equals(lobby.password)) {
+                            // The user successfully joins the lobby, we need to apply the necessary logic
                             success = true;
+                            lobby.playerCount++;
+                            lobby.ipList.add(socket.getInetAddress().toString());
+                            lobby.playerNames.add(network.getNextString(socket));
+
+                            for (String s : lobby.ipList) {
+                                try {
+                                    Socket connection = new Socket(InetAddress.getByName(s), network.port);
+                                    network.sendRequest(connection,"testCase".getBytes());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                             break;
                         }
                         break;
@@ -112,6 +127,11 @@ public class RequestManager {
                 }
             } break;
 
+            case "testCase": {
+                System.out.println("TESTCASE");
+                break;
+            }
+
 
             case "joinFailed":
                 Platform.runLater(() -> {
@@ -120,9 +140,18 @@ public class RequestManager {
                 });
                 break;
 
-            case "joinSuccessful":
-                Platform.runLater(() -> new Alert(Alert.AlertType.CONFIRMATION,
-                        "YAY", ButtonType.OK).show());
+            case "joinSuccessful": {
+                URL url = getClass().getResource("scenes/hostLobbyScreen.fxml");
+                Platform.runLater(() -> {
+                    try {
+                        Network.fxmlController.loadScene(url);
+                        Network.fxmlController.removeStartLobbyBtn();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+
                 break;
 
             // Received a request to login
@@ -168,6 +197,12 @@ public class RequestManager {
                 network.sendRequest(socket, "receivedLobbyList".getBytes());
                 network.sendRequest(socket, network.serializeObject(network.lobbyManager.lobbyList));
                 break;
+
+            case "updateLobbyPlayers": {
+                Lobby lobby = (Lobby)network.deserializeObject(network.getNextBytes(socket));
+                Platform.runLater(() -> network.fxmlController.updatePlayerGrid(lobby));
+                break;
+            }
 
             default:
                 System.out.println(socket.getInetAddress().toString()+": illegal request");

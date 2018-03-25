@@ -12,6 +12,8 @@ public class Lobby implements Serializable {
     String host;
     int playerCount;
     ArrayList<String> ipList = new ArrayList<>();
+    ArrayList<String> playerNames = new ArrayList<>();
+
 
     public Lobby(String host, String name, String password){
         this.host = host;

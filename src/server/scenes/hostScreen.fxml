@@ -16,5 +16,6 @@
     <Text fill="WHITE" layoutX="24.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
     <PasswordField id="hostPassword" fx:id="hostPasswordText" layoutX="114.0" layoutY="253.0" prefWidth="172.0" />
     <Button fx:id="hostCreateLobbyBtn" layoutX="114.0" layoutY="278.0" mnemonicParsing="false" onAction="#hostCreateLobby" prefWidth="172.0" text="Create Lobby" />
+    <Button layoutX="14.0" layoutY="463.0" mnemonicParsing="false" onAction="#toWelcomeBtn" prefWidth="92.0" text="Back" />
   </children>
 </AnchorPane>

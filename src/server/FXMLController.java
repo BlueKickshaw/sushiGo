@@ -34,6 +34,18 @@ public class FXMLController implements Initializable {
     URL hostScreen = getClass().getResource("scenes/hostScreen.fxml");
     URL browserScreen = getClass().getResource("scenes/browserScreen.fxml");
 
+
+    @FXML
+    // The user presses a button indicating they want to go back to the welcome screen
+    private void toWelcomeBtn(ActionEvent e){
+        URL url = getClass().getResource("scenes/welcomeScreen.fxml");
+        try {
+            loadScene(e, url);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
     @FXML
     public void entryLogin(ActionEvent e){
         try {
@@ -78,6 +90,8 @@ public class FXMLController implements Initializable {
     public void loginLogin(){
         network.fxmlController = this;
         network.connectToServer();
+
+        network.username = loginNameText.getText();
         network.sendRequest("login");
         network.sendRequest(loginNameText.getText());
         network.sendRequest(loginPasswordText.getText());
@@ -121,9 +135,17 @@ public class FXMLController implements Initializable {
 
         return dialog.showAndWait().get();
     }
+    @FXML private Button hostStartLobbyBtn;
+    @FXML public void removeStartLobbyBtn(){
+        hostStartLobbyBtn.setDisable(true);
+    }
 
-    @FXML public void updatePlayerGrid(){
-
+    @FXML private GridPane hostPlayerGridPane;
+    @FXML public void updatePlayerGrid(Lobby lobby){
+        int i = 0;
+        for (String name : lobby.playerNames) {
+            hostPlayerGridPane.addRow(i++,new Label(name));
+        }
     }
 
 
@@ -184,6 +206,8 @@ public class FXMLController implements Initializable {
                     network.sendRequest("joinLobby");
                     network.sendRequest(l.name);
                     network.sendRequest(password);
+                    // We want to tell the server who's joining as well
+                    network.sendRequest(network.username);
                 });
 
                 browserGridPane.addRow(
