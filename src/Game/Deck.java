@@ -33,7 +33,7 @@ public class Deck {
             tmp.add(new Pudding("Pudding"));
         }
         for (int i = 0; i < 10; i++) {
-            tmp.add(new SalmonNigiri("SalmonNigiri"));
+            tmp.add(new SalmonNigiri("Salmon Nigiri"));
         }
         for (int i = 0; i < 14; i++) {
             tmp.add(new Sashimi("Sashimi"));
