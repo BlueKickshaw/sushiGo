@@ -5,11 +5,11 @@ import Cards.*;
 import java.util.*;
 
 public class Deck {
+
     private Stack<Card> deck = new Stack<>();
 
     Deck(){
-
-        // create an vector, shuffle it, the populate the stack
+        // create a vector, shuffle it, then populate the stack
         Vector<Card> tmp = new Vector<>();
         for (int i = 0; i < 4; i++) {
             tmp.add(new Chopsticks("Chopsticks"));
@@ -47,7 +47,6 @@ public class Deck {
         for (int i = 0; i < 6; i++) {
             tmp.add(new Wasabi("Wasabi"));
         }
-
 
         Collections.shuffle(tmp);
         for (Card card: tmp) {
