@@ -4,7 +4,6 @@ import Cards.Card;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Random;
 import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -42,8 +41,8 @@ public class GameDriver {
 
         calculateMakiPoints(playerList);
         for (int i = 0; i < numOfPlayers; i++) {
+            playerList.get(i).calculateDumplingPoints();
             Player currentPLayer = playerList.get(i);
-            points += currentPLayer.dumplingPoints();
             points += currentPLayer.nigiriPoints();
             points += currentPLayer.sashimiPoints();
             points += currentPLayer.tempuraPoints();
@@ -65,7 +64,7 @@ public class GameDriver {
         //find highest and lowest amount of puddings
         for (int i = 0; i < numOfPlayers; i++) {
             Player currentPlayer = playerList.get(i);
-            int puddings = playerList.get(i).getPudding();
+            int puddings = playerList.get(i).getPuddingCount();
             if (puddings > high) {
                 highPlayer.clear();
                 highPlayer.add(currentPlayer);
@@ -147,17 +146,16 @@ public class GameDriver {
 
     public static void main(String[] args) {
 
-        int numOfPlayers = ThreadLocalRandom.current().nextInt(2, 5);
+        int numOfPlayers = ThreadLocalRandom.current().nextInt(4, 5);
         Vector<Player> testPlayers = new Vector<>();
         for (int i = 0; i < numOfPlayers; i++) {
-            testPlayers.add(new Player(String.valueOf(i), String.valueOf(i * 5)));
-            testPlayers.get(i).setMakiCount(ThreadLocalRandom.current().nextInt(0, 7));
+            testPlayers.add(new Player(String.valueOf(i), String.valueOf((i + 1) * 2)));
+            testPlayers.get(i).setDumplingCount(i + 1 + 1 + 1);
         }
 
-        calculateMakiPoints(testPlayers);
         for (Player playa : testPlayers) {
-            System.out.println("Name: " + playa.getName() + " IP: " + playa.getIP() + " MakiCount: " + playa.getMakiCount()
-                    + " Points: " + playa.getRoundPoints());
+            playa.calculateDumplingPoints();
+            System.out.println(playa);
         }
 
     }

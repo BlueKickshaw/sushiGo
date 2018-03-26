@@ -39,11 +39,11 @@ public class Hand {
         this.playerHand = playerHand;
     }
 
-    public void removeCard(Card c){
+    public void removeCard(Card c) {
         cards.remove(c);
     }
 
-    public void addCard(Card c){
+    public void addCard(Card c) {
         cards.add(c);
     }
 }

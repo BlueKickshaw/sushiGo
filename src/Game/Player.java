@@ -3,18 +3,18 @@ package Game;
 import Cards.Card;
 //import com.sun.xml.internal.bind.v2.TODO;
 
-import java.util.Vector;
-
 
 public class Player {
 
     private String name;
     private String IP;
-    private Hand playerHand, rotatingHand;
-    private int roundPoints = 0;
-    private int totalPoints = 0;
-    private int pudding = 0;
-    private int makiCount = 0;
+    private Hand hand;
+    private Hand rotatingHand;
+    private int roundPoints;
+    private int totalPoints;
+    private int puddingCount;
+    private int dumplingCount;
+    private int makiCount;
 
     public Player(String name, String IP) {
         this.name = name;
@@ -38,7 +38,7 @@ public class Player {
     }
 
     public Hand getPlayerHand() {
-        return playerHand;
+        return hand;
     }
 
     public Hand getRotatingHand() {
@@ -61,19 +61,37 @@ public class Player {
         this.totalPoints += points;
     }
 
-    public int getPudding() {
-        return pudding;
+    public int getPuddingCount() {
+        return puddingCount;
     }
 
+
+    public void setDumplingCount(int dumplingCount) {
+        this.dumplingCount = dumplingCount;
+    }
+
+    public void incrementDumplingCount() {
+        this.dumplingCount++;
+    }
 
     public void chooseCard(Card c) {
         rotatingHand.removeCard(c);
-        playerHand.addCard(c);
+        hand.addCard(c);
     }
 
-    public int dumplingPoints() {
-        return 0;
-        //TODO
+    public void calculateDumplingPoints() {
+        if (this.dumplingCount >= 5) {
+            this.setRoundPoints(15);
+        } else if (this.dumplingCount == 4) {
+            this.setRoundPoints(10);
+        } else if (this.dumplingCount == 3) {
+            this.setRoundPoints(6);
+        } else if (this.dumplingCount == 2) {
+            this.setRoundPoints((3));
+        } else if (this.dumplingCount == 1) {
+            this.setRoundPoints(1);
+        }
+        this.setDumplingCount(0);
     }
 
     public int nigiriPoints() {
@@ -89,5 +107,13 @@ public class Player {
     public int tempuraPoints() {
         return 0;
         //TODO
+    }
+
+    public String toString() {
+        return ("Name: " + this.name +
+                " IP: " + this.IP +
+                " MakiCount: " + this.makiCount +
+                " DumplingCount: " + this.dumplingCount
+                + " Points: " + this.roundPoints);
     }
 }

@@ -54,7 +54,7 @@ public class Deck {
         }
     }
 
-    public Card[] getCards(int num)  {
+    public Card[] getCards(int num) {
         Card[] tmp = new Card[num];
         for (int i = 0; i < num; i++) {
             tmp[i] = deck.pop();
