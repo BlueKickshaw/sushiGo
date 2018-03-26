@@ -1,16 +1,15 @@
 package Cards;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 
-public class Dumpling extends Card{
+public class Dumpling extends Card {
 
+    private String imagePath = "/CardImages/Dumpling.jpg";
 
-//    public Dumpling() throws IOException {
-//        super("Dumpling", ImageIO.read(new File("../CardImages/Dumpling.jpg")));
-//    }
-    public Dumpling(String a){
-        super(a);
+    public Dumpling(String name) {
+        super(name);
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }

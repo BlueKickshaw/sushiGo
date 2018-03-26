@@ -1,11 +1,21 @@
 package Cards;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
+public class MakiRoll1 extends Card {
 
-public class MakiRoll1 extends Card{
-    public MakiRoll1() throws IOException {
-        super("Maki Rolls 1", ImageIO.read(new File("\"../CardImages/Maki_Roll_1.jpg\"")));
+    private String imagePath = "/CardImages/Maki_Roll_1.jpg";
+    private int makiCount = 1;
+
+
+    public MakiRoll1(String name) {
+        super(name);
+    }
+
+    public int getMakiCount() {
+        return makiCount;
+    }
+
+    public String getImagePath() {
+
+        return imagePath;
     }
 }
