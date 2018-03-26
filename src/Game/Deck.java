@@ -8,7 +8,7 @@ public class Deck {
 
     private Stack<Card> deck = new Stack<>();
 
-    Deck(){
+    Deck() {
         // create a vector, shuffle it, then populate the stack
         Vector<Card> tmp = new Vector<>();
         for (int i = 0; i < 4; i++) {
@@ -49,14 +49,14 @@ public class Deck {
         }
 
         Collections.shuffle(tmp);
-        for (Card card: tmp) {
+        for (Card card : tmp) {
             deck.push(card);
         }
     }
 
-    public Card[] getCards(int num) throws EmptyStackException {
+    public Card[] getCards(int num)  {
         Card[] tmp = new Card[num];
-        for (int i = 0; i < num; i++){
+        for (int i = 0; i < num; i++) {
             tmp[i] = deck.pop();
         }
         return tmp;
