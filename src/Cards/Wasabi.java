@@ -4,6 +4,7 @@ package Cards;
 public class Wasabi extends Card {
 
     private String imagePath = "/CardImages/SquidNigiri.jpg";
+    private boolean isUsed = false;
 
     public Wasabi(String name) {
         super(name);
@@ -12,4 +13,13 @@ public class Wasabi extends Card {
     public String getImagePath() {
         return imagePath;
     }
+
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    public void setUsed(boolean used) {
+        isUsed = used;
+    }
+
 }
