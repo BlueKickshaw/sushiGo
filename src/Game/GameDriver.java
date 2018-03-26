@@ -105,6 +105,7 @@ public class GameDriver {
 
         for (int i = 0; i < playerList.size(); i++) {
             if (i + 1 == tmpPlayerList.size()) {
+                makiRollPlayers.add(tmpPlayerList.get(i));
                 if (firstPlaceGiven) {
                     for (Player player : makiRollPlayers) {
                         player.setRoundPoints(3 / makiRollPlayers.size());
