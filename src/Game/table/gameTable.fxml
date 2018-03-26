@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <ImageView id="brick.jpg" fitHeight="500.0" fitWidth="500.0" layoutX="0.0" layoutY="0.0">
+      <image>
+        <Image url="@brick.jpg" preserveRatio="true" smooth="true" />
+      </image>
+    </ImageView>
+    <ImageView id="wood.jpg" fitHeight="250.0" fitWidth="250.0" layoutX="125.0" layoutY="125.0">
+      <image>
+        <Image url="@wood.jpg" preserveRatio="true" smooth="true" />
+      </image>
+    </ImageView>
+    <ImageView id="shadow.jpeg" blendMode="MULTIPLY" fitHeight="297.0" fitWidth="291.9999084472656" layoutX="103.0" layoutY="109.0">
+      <image>
+        <Image url="@shadow.jpeg" preserveRatio="true" smooth="true" />
+      </image>
+    </ImageView>
+    <ImageView id="Cardback.jpg" fitHeight="104.0" fitWidth="69.0" layoutX="135.0" layoutY="189.0">
+      <image>
+        <Image url="@../../CardImages/Cardback.jpg" preserveRatio="true" smooth="true" />
+      </image>
+    </ImageView>
+  </children>
+</AnchorPane>

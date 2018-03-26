@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class RequestManager {
     Network network;
@@ -104,16 +105,17 @@ public class RequestManager {
                             success = true;
                             lobby.playerCount++;
                             lobby.ipList.add(socket.getInetAddress().toString());
-                            lobby.playerNames.add(network.getNextString(socket));
+                            String username = network.getNextString(socket);
+                            lobby.playerNames.add(username);
+                            network.clientConnectionManager.lobbies.put(lobby,username);
 
-                            for (String s : lobby.ipList) {
-                                try {
-                                    Socket connection = new Socket(InetAddress.getByName(s), network.port);
-                                    network.sendRequest(connection,"testCase".getBytes());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                            // We attempt to send a message to everyone in the lobby now... here goes:
+                                for (String player : lobby.playerNames){
+                                    network.sendRequest(
+                                            network.clientConnectionManager.clients.get(player),
+                                            "testCase".getBytes()
+                                    );
                                 }
-                            }
                             break;
                         }
                         break;
@@ -161,6 +163,7 @@ public class RequestManager {
                 boolean success = network.server.accounts.verifyAccount(name,password);
                 if (success) {
                     network.sendRequest(socket,"loginSuccessful".getBytes());
+                    network.clientConnectionManager.clients.put(name,socket);
                     Platform.runLater(() -> Network.fxmlController.updateUserCount(1));
                 } else {
                     network.sendRequest(socket,"loginFailed".getBytes());

@@ -3,9 +3,13 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Server {
+    // When we convert the host to the new server owner, we want to store the new users here
+    public ArrayList<Socket> lobbyUsers = new ArrayList<>();
     ServerSocket serverSocket;
+
     int port;
     public AccountLists accounts = new AccountLists();
 

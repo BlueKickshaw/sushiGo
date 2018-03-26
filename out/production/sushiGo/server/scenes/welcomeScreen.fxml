@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="server.FXMLController">
+  <children>
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="radial-gradient(focus-angle 0.0deg, focus-distance 0.0% , center 180.0px 280.0px, radius 500.0px, 0xff0000ff 0.0%, 0xff0000ff 30.0%, 0x000000ff 100.0%)" height="500.0" layoutX="0.0" layoutY="0.0" stroke="BLACK" strokeType="INSIDE" width="300.0" />
+    <Button id="welcomeCreateLobby" fx:id="welcomeCreateLobbyBtn" layoutX="89.0" layoutY="134.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#welcomeCreateLobby" text="Create a Lobby" />
+    <Button id="welcomeJoinLobby" fx:id="welcomeShowLobbyBtn" layoutX="89.0" layoutY="161.0" mnemonicParsing="false" onAction="#welcomeShowLobby" prefWidth="122.0" text="Show Lobbies" />
+    <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="55.0" prefWidth="272.0" text="Welcome &lt;USER_NAME&gt;!" textFill="WHITE">
+      <font>
+        <Font size="20.0" />
+      </font>
+    </Label>
+    <Text fx:id="welcomeNameText" fill="WHITE" fontSmoothingType="LCD" layoutX="34.0" layoutY="114.0" strikethrough="false" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="1.1" text="&lt;SERVER NAME&gt;">
+      <font>
+        <Font size="26.0" />
+      </font>
+    </Text>
+    <ImageView id="sushi_go_logo.jpg" blendMode="MULTIPLY" fitHeight="200.0" fitWidth="200.0" focusTraversable="false" layoutX="62.0" layoutY="179.0">
+      <image>
+        <Image url="@resources/sushi_go_logo.jpg" preserveRatio="true" smooth="true" />
+      </image>
+    </ImageView>
+    <TextArea fx:id="welcomeMOTD" disable="false" editable="false" layoutX="14.0" layoutY="390.0" prefHeight="96.0" prefWidth="272.0" wrapText="true" />
+    <Label layoutX="16.0" layoutY="373.0" text="Server Message of the Day:" textFill="WHITE" />
+  </children>
+</AnchorPane>

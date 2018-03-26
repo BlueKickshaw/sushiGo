@@ -13,6 +13,7 @@ public class Network {
     public static FXMLController fxmlController;
 
     public LobbyManager lobbyManager = new LobbyManager(this);
+    public ClientConnectionManager clientConnectionManager;
 
     private String address = "localhost";
 
@@ -26,7 +27,7 @@ public class Network {
             // TODO: the address is hardcoded to the localhost, this should be changed
             socket = new Socket(address,port);
             // Create a connectionManager to listen for the server's responses
-            new ClientConnectionManager(this, socket);
+            clientConnectionManager = new ClientConnectionManager(this, socket);
             System.out.println(Thread.currentThread().getName()
                     +": Created connection to "+ InetAddress.getByName(address));
         } catch (IOException e) {
