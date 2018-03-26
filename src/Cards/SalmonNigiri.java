@@ -1,11 +1,11 @@
 package Cards;
 
 
-public class SalmonNigiri extends Card{
+public class SalmonNigiri extends Card {
 
     private String imagePath = "/CardImages/SalmonNigiri.jpg";
 
-    public SalmonNigiri(String name){
+    public SalmonNigiri(String name) {
         super(name);
     }
 

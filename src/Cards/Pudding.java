@@ -1,11 +1,11 @@
 package Cards;
 
 
-public class Pudding extends Card{
+public class Pudding extends Card {
 
     private String imagePath = "/CardImages/Pudding.jpg";
 
-    public Pudding(String name){
+    public Pudding(String name) {
         super(name);
     }
 

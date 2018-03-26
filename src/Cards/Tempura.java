@@ -1,11 +1,11 @@
 package Cards;
 
 
-public class Tempura extends Card{
+public class Tempura extends Card {
 
     private String imagePath = "/CardImages/Tempura.jpg";
 
-    public Tempura(String name){
+    public Tempura(String name) {
         super(name);
     }
 

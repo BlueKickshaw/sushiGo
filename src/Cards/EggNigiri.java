@@ -1,11 +1,11 @@
 package Cards;
 
 
-public class EggNigiri extends Card{
+public class EggNigiri extends Card {
 
     private String imagePath = "/CardImages/EggNigiri.jpg";
 
-    public EggNigiri(String name){
+    public EggNigiri(String name) {
         super(name);
     }
 

@@ -1,11 +1,11 @@
 package Cards;
 
 
-public class Sashimi extends Card{
+public class Sashimi extends Card {
 
     private String imagePath = "/CardImages/Sashimi.jpg";
 
-    public Sashimi(String name){
+    public Sashimi(String name) {
         super(name);
     }
 

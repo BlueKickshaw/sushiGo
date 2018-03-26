@@ -1,15 +1,15 @@
 package Cards;
 
-public abstract class Card{
+public abstract class Card {
 
     private String cardBackImagePath = "/CardImages/Cardback.jpg";
     private String name;
 
-   public Card(String name) {
+    public Card(String name) {
         this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
