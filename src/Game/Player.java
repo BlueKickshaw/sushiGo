@@ -16,9 +16,19 @@ public class Player implements Runnable {
     private int dumplingCount;
     private int makiCount;
 
+
+
+
     public Player(String name, String IP) {
         this.name = name;
         this.IP = IP;
+        this.hand = new Hand();
+        this.rotatingHand = null;
+        this.roundPoints = 0;
+        this.totalPoints = 0;
+        this.puddingCount = 0;
+        this.dumplingCount = 0;
+        this.makiCount = 0;
     }
 
     public void setHand(Vector<Card> cards) {
