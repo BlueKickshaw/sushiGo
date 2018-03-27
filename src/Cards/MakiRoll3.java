@@ -6,6 +6,10 @@ public class MakiRoll3 extends Card {
     private int makiCount = 3;
 
 
+    public MakiRoll3() {
+        super("Maki Roll");
+    }
+
     public MakiRoll3(String name) {
         super(name);
     }

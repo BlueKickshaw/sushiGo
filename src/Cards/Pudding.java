@@ -5,6 +5,10 @@ public class Pudding extends Card {
 
     private String imagePath = "/CardImages/Pudding.jpg";
 
+    public Pudding() {
+        super("Pudding");
+    }
+
     public Pudding(String name) {
         super(name);
     }
