@@ -133,6 +133,7 @@ public class RequestManager {
                 if (success) {
                     network.sendRequest(socket,"joinSuccessful".getBytes());
                 } else {
+                    network.purge(socket);
                     network.sendRequest(socket,"joinFailed".getBytes());
                 }
             } break;

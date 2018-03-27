@@ -63,6 +63,20 @@ public class Network {
         return null;
     }
 
+    // Sometimes we receive a lot of data from a socket, but we want to cut it short and disregard the rest.
+    // This is how we do that
+    public void purge(Socket socket) {
+        DataInputStream dis;
+        try {
+            dis = new DataInputStream(socket.getInputStream());
+            while (dis.available() > 0){
+               dis.read();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public byte[] getNextBytes(Socket socket){
         DataInputStream dis;
         try {
