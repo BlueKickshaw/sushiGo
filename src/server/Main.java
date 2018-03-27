@@ -2,6 +2,9 @@ package server;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,7 +27,6 @@ public class Main extends Application {
             Platform.exit();
             System.exit(0);
         });
-
     }
 
     public static void main(String[] args) {

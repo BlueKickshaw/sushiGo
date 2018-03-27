@@ -54,20 +54,25 @@ public class RequestManager {
                 break;
 
             // Received a request to host a lobby
-            case "host":
-                name = network.getNextString(socket);
-                password = network.getNextString(socket);
-                Lobby l = network.lobbyManager.createLobby(socket.getInetAddress().toString(),name,password);
-                if (l != null) {
-                    network.sendRequest(socket,"hostSuccess".getBytes());
+            case "host": {
+                    String lobbyName = network.getNextString(socket);
+                    password = network.getNextString(socket);
+                    Lobby l = network.lobbyManager.createLobby(socket.getInetAddress().toString(), lobbyName, password);
+                    String username = network.getNextString(socket);
+                    l.playerNames.add(username);
+                    l.ipList.add(socket.getInetAddress().toString());
+                    l.host = socket.getInetAddress().toString();
+                    if (l != null) {
+                        network.sendRequest(socket, "hostSuccess".getBytes());
 
-                    // We need to run this on the main thread where the FXML loader resides, that's why
-                    // we use runLater
-                    Platform.runLater(() ->
-                            network.fxmlController.updateServerLobbyDisplay(network.lobbyManager.lobbyList,
-                                    true));
-                } else {
-                    network.sendRequest(socket,"hostFailed".getBytes());
+                        // We need to run this on the main thread where the FXML loader resides, that's why
+                        // we use runLater
+                        Platform.runLater(() ->
+                                network.fxmlController.updateServerLobbyDisplay(network.lobbyManager.lobbyList,
+                                        true));
+                    } else {
+                        network.sendRequest(socket, "hostFailed".getBytes());
+                    }
                 }
                 break;
 
@@ -93,6 +98,7 @@ public class RequestManager {
 
             // Received a request to join a lobby
             case "joinLobby": {
+                network.sendRequest("joinSuccessful");
                 String lobbyName = network.getNextString(socket);
                 String lobbyPassword = network.getNextString(socket);
                 System.out.println("User requesting to join lobby '" + lobbyName + ":" + lobbyPassword + "'");
@@ -107,14 +113,16 @@ public class RequestManager {
                             lobby.ipList.add(socket.getInetAddress().toString());
                             String username = network.getNextString(socket);
                             lobby.playerNames.add(username);
-                            network.clientConnectionManager.lobbies.put(lobby,username);
 
                             // We attempt to send a message to everyone in the lobby now... here goes:
                                 for (String player : lobby.playerNames){
-                                    network.sendRequest(
-                                            network.clientConnectionManager.clients.get(player),
-                                            "testCase".getBytes()
-                                    );
+                                    Socket client =
+                                            network.clientConnectionManager.clients.get(player).getSocket();
+                                    network.sendRequest(client,"updateLobbyPlayers".getBytes());
+                                    network.sendRequest(client,
+                                            network.serializeObject(lobby));
+                                    //network.sendRequest(client,
+                                    //        network.serializeObject(lobby.playerNames));
                                 }
                             break;
                         }
@@ -143,14 +151,9 @@ public class RequestManager {
                 break;
 
             case "joinSuccessful": {
-                URL url = getClass().getResource("scenes/hostLobbyScreen.fxml");
                 Platform.runLater(() -> {
-                    try {
-                        Network.fxmlController.loadScene(url);
+                        Network.fxmlController.loadLobbyScene();
                         Network.fxmlController.removeStartLobbyBtn();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 });
             }
 
@@ -163,7 +166,7 @@ public class RequestManager {
                 boolean success = network.server.accounts.verifyAccount(name,password);
                 if (success) {
                     network.sendRequest(socket,"loginSuccessful".getBytes());
-                    network.clientConnectionManager.clients.put(name,socket);
+                    network.clientConnectionManager.clients.put(name,new Client(socket,name));
                     Platform.runLater(() -> Network.fxmlController.updateUserCount(1));
                 } else {
                     network.sendRequest(socket,"loginFailed".getBytes());

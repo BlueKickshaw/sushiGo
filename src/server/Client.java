@@ -6,10 +6,15 @@ public class Client {
     private Socket socket;
     private Lobby lobby;
     private String name;
+    private boolean loggedIn = false;
 
     public Client(Socket socket, String name){
         this.socket = socket;
         this.name = name;
+    }
+
+    public Socket getSocket(){
+        return socket;
     }
 
     public Lobby getLobby() {
@@ -22,5 +27,13 @@ public class Client {
 
     public void setSocket(Socket socket) {
         this.socket = socket;
+    }
+
+    public void setLoggedIn(boolean status){
+        loggedIn = status;
+    }
+
+    public boolean isLoggedIn(){
+        return loggedIn;
     }
 }

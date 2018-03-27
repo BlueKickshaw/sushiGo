@@ -1,19 +1,14 @@
 package server;
 
-import javafx.application.Platform;
-
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ClientConnectionManager {
     private Network network;
     private boolean running = true;
-    public static HashMap<String,Socket> clients = new HashMap<>();
-    public static HashMap<Lobby,String> lobbies = new HashMap<>();
+    public static HashMap<String,Client> clients = new HashMap<>();
 
     // Creates something to manage the connections, and starts a listener thread
     public ClientConnectionManager(Network network){
