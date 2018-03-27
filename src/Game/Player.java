@@ -122,15 +122,15 @@ public class Player implements Runnable {
 
     }
 
-    private void turn(){
-       Card selectedCard = null;
+    private void turn() {
+        Card selectedCard = null;
         boolean cardConfirmed = false;
         long startTime = System.nanoTime();
         // wait 40 seconds (4e10) for a player to take their turn (currently 4e9 = 4 seconds for testing)
-        while (!cardConfirmed && System.nanoTime() - startTime < 4e9){
+        while (!cardConfirmed && System.nanoTime() - startTime < 4e9) {
 
-            if(selectedCard != null && cardConfirmed){
-                if (selectedCard.getName().equals("Chopsticks")){
+            if (selectedCard != null && cardConfirmed) {
+                if (selectedCard.getName().equals("Chopsticks")) {
                     this.useChopstickcs();
                 }
                 cardConfirmed = true;
@@ -138,17 +138,17 @@ public class Player implements Runnable {
             }
 
         }
-        if (!cardConfirmed){
+        if (!cardConfirmed) {
 
         }
 
     }
 
-    private void useChopstickcs(){
+    private void useChopstickcs() {
         //TODO
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Player a = new Player("Jon", "17");
         a.turn();
     }

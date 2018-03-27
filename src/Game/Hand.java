@@ -16,10 +16,6 @@ public class Hand {
     }
 
 
-    public void setCards(Vector<Card> cards) {
-        this.cards = cards;
-    }
-
     public Card getCard(int i) {
         return cards.get(i);
     }
