@@ -54,11 +54,11 @@ public class Deck {
         }
     }
 
-    public Card[] getCards(int num) {
-        Card[] tmp = new Card[num];
+    public Vector<Card> drawCards(int num) {
+        Vector<Card> drawnCards = new Vector<>();
         for (int i = 0; i < num; i++) {
-            tmp[i] = deck.pop();
+            drawnCards.add(deck.pop());
         }
-        return tmp;
+        return drawnCards;
     }
 }
