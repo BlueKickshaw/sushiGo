@@ -22,9 +22,6 @@ public class GameDriver {
         //create a deck
         Deck deck = new Deck();
 
-
-
-
         //deal the hands
         for (int i = 0; i <numOfPlayers; i++) {
             for (int j = 0; j < handSize; j++) {
@@ -35,6 +32,12 @@ public class GameDriver {
 
     public void chooseCard(Player player, Card c){
         player.chooseCard(c);
+    }
+
+
+    //if no card is chosen in time it will automatically take the left most card.
+    public void chooseCard(Player player){
+        player.chooseCard(player.getRotatingHand().getCards().firstElement());
     }
 
 
