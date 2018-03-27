@@ -8,7 +8,7 @@ public class Player implements Runnable {
 
     private String name;
     private String IP;
-    private Hand hand = new Hand();
+    private Hand hand;
     private Hand rotatingHand;
     private int roundPoints;
     private int totalPoints;
@@ -53,6 +53,10 @@ public class Player implements Runnable {
 
     public Hand getHand() {
         return hand;
+    }
+
+    public void clearHand() {
+        this.hand.clearCards();
     }
 
     public Hand getRotatingHand() {
@@ -227,9 +231,8 @@ public class Player implements Runnable {
     public String toString() {
         return ("Name: " + this.name +
                 " IP: " + this.IP +
-                " MakiCount: " + this.makiCount +
-                " DumplingCount: " + this.dumplingCount
-                + " Points: " + this.roundPoints);
+                " Round Points: " + this.roundPoints
+                + " Total Points: " + this.totalPoints);
     }
 
     @Override

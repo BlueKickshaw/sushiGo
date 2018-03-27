@@ -19,6 +19,10 @@ public class Hand {
         return cards;
     }
 
+    public void clearCards() {
+        cards = new Vector<>();
+    }
+
     public void setCards(Vector<Card> cards){
         this.cards = cards;
     }

@@ -10,15 +10,15 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GameDriver {
 
     //create the hands
-    private Vector<Player> playerList;
-    private int playerCount = 4;
-    private Deck deck;
-    private int roundNum = 0;
+    private static Vector<Player> playerList;
+    private static int playerCount = 4;
+    private static Deck deck;
+    private static int roundNum = 0;
 
-    public void initialize(int playerCountArg, String[] playerNames, String[] playerIPs) {
+    public static void initialize(int playerCountArg, String[] playerNames, String[] playerIPs) {
         //choose players and hand size
-        this.playerCount = playerCountArg;
-        this.playerCount = 4;
+        playerCount = playerCountArg;
+        playerCount = 4;
 
         deck = new Deck();
         playerList = new Vector<>(playerCount);
@@ -28,10 +28,11 @@ public class GameDriver {
 
     }
 
-    public void startOfRound() {
+    public static void startOfRound() {
         roundNum++;
         for (Player player : playerList) {
-            player.drawHand(deck, playerCount);
+            player.clearHand();//clears player hand
+            player.drawHand(deck, playerCount);//populates rotating hand
         }
     }
 
@@ -167,36 +168,26 @@ public class GameDriver {
 
 
     public static void main(String[] args) {
-
-        int playerCount = ThreadLocalRandom.current().nextInt(4, 5);
-        Vector<Player> testPlayers = new Vector<>();
-        Vector<Card> testCards1 = new Vector<>();
-        Vector<Card> testCards2 = new Vector<>();
-        Vector<Card> testCards3 = new Vector<>();
-        Vector<Card> testCards4 = new Vector<>();
-        testCards1.add(new EggNigiri());
-        testCards1.add(new Wasabi());
-        testCards1.add(new SalmonNigiri());
-        testCards1.add(new Wasabi());
-        testCards1.add(new SquidNigiri());
-        testCards1.add(new Wasabi());
-        testCards1.add(new EggNigiri());
-
-        for (int i = 0; i < playerCount; i++) {
-            testPlayers.add(new Player(String.valueOf(i), String.valueOf((i + 1) * 2)));
-            testPlayers.get(i).setHand(testCards1);
+        String[] names = new String[]{"0","1","2","3"};
+        String[] IPs = new String[]{"0","2","4","6"};
+        initialize(4, names, IPs);
+        startOfRound();
+        for(Player player: playerList){
+            player.getHand().setCards(player.getRotatingHand().getCards());
         }
+        calculatePoints(playerList, roundNum);
+        startOfRound();
+        for(Player player: playerList){
+            player.getHand().setCards(player.getRotatingHand().getCards());
+        }
+        calculatePoints(playerList, roundNum);
+        startOfRound();
+        for(Player player: playerList){
+            player.getHand().setCards(player.getRotatingHand().getCards());
+        }
+        calculatePoints(playerList, roundNum);
 
-
-        calculatePoints(testPlayers, 1);
-        testCards2.add(new Pudding());
-        testPlayers.get(0).setHand(testCards2);
-        calculatePoints(testPlayers, 2);
-        testCards2.add(new Pudding());
-        testCards2.add(new Pudding());
-        testPlayers.get(0).setHand(testCards2);
-        calculatePoints(testPlayers, 3);
-        for (Player playa : testPlayers) {
+        for (Player playa : playerList) {
 
             System.out.println(playa);
         }
