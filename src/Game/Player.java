@@ -59,12 +59,19 @@ public class Player {
         return totalPoints;
     }
 
+    public void clearRoundPoints() {this.roundPoints = 0;}
+
     public void setRoundPoints(int points) {
         this.roundPoints = points;
     }
 
     public void addRoundPoints(int points) {
         this.roundPoints += points;
+    }
+
+
+    public void addRoundPointsToTotal() {
+        this.totalPoints += this.roundPoints;
     }
 
     public void addTotalPoints(int points) {
@@ -82,7 +89,6 @@ public class Player {
     public int getPuddingCount() {
         return puddingCount;
     }
-
 
 
     public void setDumplingCount(int dumplingCount) {
@@ -113,7 +119,7 @@ public class Player {
         this.setDumplingCount(0);
     }
 
-    public void calculateNigiriPoints() {
+    public void calculateNigiriPoints() {//points from wasabi are calculated separately
         for (Card card : hand.getCards()) {
             if (card instanceof EggNigiri) {
                 this.roundPoints += 1;
@@ -147,7 +153,7 @@ public class Player {
         this.roundPoints += (count / 2) * 5;
     }
 
-    public void calculateWasabiPoints() {
+    public void calculateWasabiPoints() {//the base points from nigirs are calculated separately
         int wasabis = 0;//tracks number of unused wasabis
         for (Card card : hand.getCards()) {
             if (card instanceof Wasabi) {
@@ -168,13 +174,22 @@ public class Player {
 
     }
 
+    public void updatePuddingCount(){
+        for (Card card: hand.getCards()) {
+            if(card instanceof Pudding){
+                puddingCount++;
+            }
+        }
+    }
+
     public String toString() {
         return ("Name: " + this.name +
                 " IP: " + this.IP +
                 " MakiCount: " + this.makiCount +
-                " DumplingCount: " + this.dumplingCount
-                + " Round Points: " + this.roundPoints
-                + " Total Points: " + this.totalPoints);
+                " DumplingCount: " + this.dumplingCount +
+                " PuddingCounnt: " + this.puddingCount +
+                " Round Points: " + this.roundPoints +
+                " Total Points: " + this.totalPoints);
     }
 
 }

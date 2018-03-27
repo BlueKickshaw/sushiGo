@@ -39,20 +39,27 @@ public class GameDriver {
 
 
 
-    public void calculatePoints(Vector<Player> playerList, int roundNum) {
-        int points = 0;
-
-        calculateMakiPoints(playerList);
-        for (int i = 0; i < numOfPlayers; i++) {
-            playerList.get(i).calculateDumplingPoints();
-            Player currentPLayer = playerList.get(i);
-            currentPLayer.calculateNigiriPoints();
-            currentPLayer.calculateSashimiPoints();
-            currentPLayer.calculateTempuraPoints();
+    public static void calculatePoints(Vector<Player> playerList, int roundNum) {
+        for (Player player: playerList){
+            player.clearRoundPoints();
+            player.updatePuddingCount();
         }
+
+
         if (roundNum == 3) {
             calculatePuddingPoints(playerList);
         }
+        calculateMakiPoints(playerList);
+        for (Player player: playerList) {
+            player.calculateDumplingPoints();
+            player.calculateNigiriPoints();
+            player.calculateTempuraPoints();
+            player.calculateSashimiPoints();
+            player.calculateWasabiPoints();
+            player.addRoundPointsToTotal();
+        }
+
+
     }
 
 
@@ -91,11 +98,11 @@ public class GameDriver {
 
         points = 6 / highPlayer.size();
         for (Player aHighPlayer : highPlayer) {
-            aHighPlayer.addTotalPoints(points);
+            aHighPlayer.addRoundPoints(points);
         }
         points = -6/ lowPlayer.size();
         for (Player aLowPlayer : lowPlayer) {
-            aLowPlayer.addTotalPoints(points);
+            aLowPlayer.addRoundPoints(points);
         }
     }
 
@@ -177,10 +184,16 @@ public class GameDriver {
 
 
 
-
+        calculatePoints(testPlayers, 1);
+        testCards2.add(new Pudding());
+        testPlayers.get(0).setHand(testCards2);
+        calculatePoints(testPlayers, 2);
+        testCards2.add(new Pudding());
+        testCards2.add(new Pudding());
+        testPlayers.get(0).setHand(testCards2);
+        calculatePoints(testPlayers, 3);
         for (Player playa : testPlayers) {
-            playa.calculateNigiriPoints();
-            playa.calculateWasabiPoints();
+
             System.out.println(playa);
         }
 
