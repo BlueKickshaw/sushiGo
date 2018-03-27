@@ -144,16 +144,19 @@ public class GameDriver {
         }
     }
 
+
     public static void main(String[] args) {
 
-        int numOfPlayers = ThreadLocalRandom.current().nextInt(4, 5);
+        int numOfPlayers = ThreadLocalRandom.current().nextInt(2, 5);
+        Deck deck = new Deck();
         Vector<Player> testPlayers = new Vector<>();
         for (int i = 0; i < numOfPlayers; i++) {
-            testPlayers.add(new Player(String.valueOf(i), String.valueOf((i + 1) * 2)));
-            testPlayers.get(i).setDumplingCount(i + 1 + 1 + 1);
+            testPlayers.add(new Player(String.valueOf(i), String.valueOf(i+1)));
+            testPlayers.get(i).drawHand(deck, numOfPlayers);
         }
 
         for (Player playa : testPlayers) {
+            System.out.println(playa.getRotatingHand());
             playa.calculateDumplingPoints();
             System.out.println(playa);
         }
