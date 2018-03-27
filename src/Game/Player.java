@@ -114,14 +114,24 @@ public class Player {
         }
     }
 
-    public int calculateSashimiPoints() {
-        return 0;
-        //TODO
+    public void calculateSashimiPoints() {
+        int count = 0;
+        for (Card card:hand.getCards()){
+            if(card instanceof Sashimi){
+                count += 1;
+            }
+        }
+        this.roundPoints += (count/3)*10;
     }
 
-    public int calculateTempuraPoints() {
-        return 0;
-        //TODO
+    public void calculateTempuraPoints() {
+        int count = 0;
+        for (Card card:hand.getCards()){
+            if(card instanceof Tempura){
+                count += 1;
+            }
+        }
+        this.roundPoints += (count/2)*5;
     }
 
     public String toString() {
@@ -132,45 +142,6 @@ public class Player {
                 + " Points: " + this.roundPoints);
     }
 
-
-    //every dumpling is worth one more point that the last
-    //points 1, 3, 6, 10, 15
-    public int getDumplingPoints() {
-        int points=0;
-        int count=1;
-        for (Card card: hand.getCards()) {
-            if(card.getName().equals("Dumpling")){
-                points += count;
-                count += 1;
-            }
-        }
-        if(points>15){
-            return 15;
-        }
-        return points;
-    }
-
-
-
-    public int getSashimiPoints() {
-        int count =0;
-        for (Card card:hand.getCards()){
-            if(card.getName().equals("Sashimi")){
-                count += 1;
-            }
-        }
-        return count/3;
-    }
-
-    public int getTempuraPoints() {
-        int count =0;
-        for (Card card:hand.getCards()){
-            if(card.getName().equals("Tempura")){
-                count += 1;
-            }
-        }
-        return count/2;
-    }
 
     public int getWasabiPoints(){
         int points =0;

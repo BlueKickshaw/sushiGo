@@ -56,48 +56,7 @@ public class GameDriver {
     }
 
 
-    public void calculatePuddingPoints(Vector<Player> playerList){//TODO either move this to player or move all points methods to the driver
-        int points;
-        int high=-1;
-        int low=1000;
-        Vector<Player> highPlayer = new Vector<>();
-        Vector<Player> lowPlayer = new Vector<>();
-
-        //find highest and lowest amount of puddings
-        for (int i = 0; i < numOfPlayers; i++) {
-            Player currentPlayer = playerList.get(i);
-            int puddings = playerList.get(i).getPuddingCount();
-            if(puddings>high){
-                highPlayer.clear();
-                highPlayer.add(currentPlayer);
-                high = puddings;
-            }else if (puddings==high){
-                highPlayer.add(currentPlayer);
-            }
-
-            if(puddings<low){
-                lowPlayer.clear();
-                lowPlayer.add(currentPlayer);
-                low = puddings;
-            }else if (puddings==low){
-                lowPlayer.add(currentPlayer);
-            }
-        }
-
-
-
-        if(highPlayer.size()==numOfPlayers){//everyone had the same amount of pudding
-            return;
-        }
-
-        points = 6 / highPlayer.size();
-        for (Player aHighPlayer : highPlayer) {
-            aHighPlayer.setTotalPoints(points);
-        }
-        points = -6/ highPlayer.size();
-        for (Player aLowPlayer : lowPlayer) {
-            aLowPlayer.setTotalPoints(points);
-        }
+    public static void calculatePuddingPoints(Vector<Player> playerList){
     }
 
 
@@ -159,17 +118,25 @@ public class GameDriver {
 
         int numOfPlayers = ThreadLocalRandom.current().nextInt(4, 5);
         Vector<Player> testPlayers = new Vector<>();
-        Vector<Card> testCards = new Vector<>();
-        testCards.add(new EggNigiri());
-        testCards.add(new SalmonNigiri());
-        testCards.add(new SquidNigiri());
+        Vector<Card> testCards1 = new Vector<>();
+        Vector<Card> testCards2 = new Vector<>();
+        Vector<Card> testCards3 = new Vector<>();
+        Vector<Card> testCards4 = new Vector<>();
+        testCards1.add(new Pudding());
+        testCards1.add(new Pudding());
+        testCards1.add(new Pudding());
         for (int i = 0; i < numOfPlayers; i++) {
             testPlayers.add(new Player(String.valueOf(i), String.valueOf((i + 1) * 2)));
-            testPlayers.get(i).setHand(testCards);
+            testPlayers.get(i).setHand(testCards1);
         }
 
+        testCards2.add(new Pudding());
+        testCards2.add(new Pudding());
+
+        testPlayers.get(0).setHand(testCards2);
+
         for (Player playa : testPlayers) {
-            playa.calculateNigiriPoints();
+            calculatePuddingPoints(testPlayers);
             System.out.println(playa);
         }
 
