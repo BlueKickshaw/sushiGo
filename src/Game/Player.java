@@ -1,13 +1,14 @@
 package Game;
 
 import Cards.Card;
+import Cards.Chopsticks;
 
 
 public class Player implements Runnable {
 
     private String name;
     private String IP;
-    private Hand hand;
+    private Hand hand = new Hand();
     private Hand rotatingHand;
     private int roundPoints;
     private int totalPoints;
@@ -36,7 +37,7 @@ public class Player implements Runnable {
         return makiCount;
     }
 
-    public Hand getPlayerHand() {
+    public Hand getHand() {
         return hand;
     }
 
@@ -62,6 +63,20 @@ public class Player implements Runnable {
 
     public int getPuddingCount() {
         return puddingCount;
+    }
+
+    public void drawHand(Deck deck, int playerCount) {
+        switch (playerCount) {
+            case 2:
+                this.rotatingHand = new Hand(deck.drawCards(10));
+                break;
+            case 3:
+                this.rotatingHand = new Hand(deck.drawCards(9));
+                break;
+            case 4:
+                this.rotatingHand = new Hand(deck.drawCards(8));
+                break;
+        }
     }
 
 
@@ -130,8 +145,13 @@ public class Player implements Runnable {
         while (!cardConfirmed && System.nanoTime() - startTime < 4e9) {
 
             if (selectedCard != null && cardConfirmed) {
-                if (selectedCard.getName().equals("Chopsticks")) {
-                    this.useChopstickcs();
+                if (selectedCard instanceof Chopsticks) {
+                    this.useChopsticks();
+                }else{
+                    hand.addCard(rotatingHand.selectAndRemoveCard(selectedCard));
+                    switch (selectedCard.getName()){
+                        case "Dumpling": this.dumplingCount++;
+                    }
                 }
                 cardConfirmed = true;
                 break;
@@ -144,13 +164,9 @@ public class Player implements Runnable {
 
     }
 
-    private void useChopstickcs() {
+    private void useChopsticks() {
         //TODO
     }
 
-    public static void main(String[] args) {
-        Player a = new Player("Jon", "17");
-        a.turn();
-    }
 
 }
