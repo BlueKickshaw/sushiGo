@@ -8,47 +8,129 @@ import java.util.Vector;
 
 public class Player {
 
-    public void setPoints(int points) {
-        this.points = points;
+    private String name;
+    private String IP;
+    private Hand hand;
+    private Hand rotatingHand;
+    private int roundPoints;
+    private int totalPoints;
+    private int puddingCount;
+    private int dumplingCount;
+    private int makiCount;
+
+    public Player(String name, String IP) {
+        this.name = name;
+        this.IP = IP;
     }
 
-    public void addPoints(int points) {
-        this.points += points;
+    public void setHand(Vector<Card> cards){
+        this.hand = new Hand(cards);
     }
 
-    private String name, IP;
-    private Hand playerHand, rotatingHand;
-    private int points = 0;
-    private int pudding = 0;
+    public String getName() {
+        return name;
+    }
 
-    public Player(int numOfPlayers){
-        playerHand = new Hand (8, true);//TODO handsize not hard coded
-        rotatingHand = new Hand(8, false);
+    public String getIP() {
+        return IP;
+    }
+
+    public void setMakiCount(int makiCount) {
+        this.makiCount = makiCount;
+    }
+
+    public int getMakiCount() {
+        return makiCount;
     }
 
     public Hand getPlayerHand() {
-        return playerHand;
+        return hand;
     }
 
     public Hand getRotatingHand() {
         return rotatingHand;
     }
 
-    public int getPoints() {
-        return points;
+    public int getRoundPoints() {
+        return roundPoints;
     }
 
-    public int getPudding() {
-        return pudding;
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    public void setRoundPoints(int points) {
+        this.roundPoints += points;
+    }
+
+    public void setTotalPoints(int points) {
+        this.totalPoints += points;
+    }
+
+    public int getPuddingCount() {
+        return puddingCount;
     }
 
 
-    public void chooseCard(Card card){
-        rotatingHand.removeCard(card);
-        playerHand.addCard(card);
+    public void setDumplingCount(int dumplingCount) {
+        this.dumplingCount = dumplingCount;
     }
 
+    public void incrementDumplingCount() {
+        this.dumplingCount++;
+    }
 
+    public void chooseCard(Card c) {
+        rotatingHand.removeCard(c);
+        hand.addCard(c);
+    }
+
+    public void calculateDumplingPoints() {
+        if (this.dumplingCount >= 5) {
+            this.setRoundPoints(15);
+        } else if (this.dumplingCount == 4) {
+            this.setRoundPoints(10);
+        } else if (this.dumplingCount == 3) {
+            this.setRoundPoints(6);
+        } else if (this.dumplingCount == 2) {
+            this.setRoundPoints((3));
+        } else if (this.dumplingCount == 1) {
+            this.setRoundPoints(1);
+        }
+        this.setDumplingCount(0);
+    }
+
+    public void calculateNigiriPoints() {
+        for (Card card: hand.getCards()) {
+            if (card instanceof EggNigiri) {
+                this.roundPoints += 1;
+
+            } else if (card instanceof SalmonNigiri) {
+                this.roundPoints += 2;
+
+            } else if (card instanceof  SquidNigiri) {
+                this.roundPoints += 3;
+            }
+        }
+    }
+
+    public int calculateSashimiPoints() {
+        return 0;
+        //TODO
+    }
+
+    public int calculateTempuraPoints() {
+        return 0;
+        //TODO
+    }
+
+    public String toString() {
+        return ("Name: " + this.name +
+                " IP: " + this.IP +
+                " MakiCount: " + this.makiCount +
+                " DumplingCount: " + this.dumplingCount
+                + " Points: " + this.roundPoints);
+    }
 
 
     //every dumpling is worth one more point that the last
@@ -56,7 +138,7 @@ public class Player {
     public int getDumplingPoints() {
         int points=0;
         int count=1;
-        for (Card card: playerHand.getCards()) {
+        for (Card card: hand.getCards()) {
             if(card.getName().equals("Dumpling")){
                 points += count;
                 count += 1;
@@ -68,87 +150,11 @@ public class Player {
         return points;
     }
 
-    @SuppressWarnings("Duplicates")
-    public int getMakiRollPoints(Vector<Player> playerList) {//TODO change the way maki roll class is created
-        int points =0;
-        int mostRolls = -1;
-        int secondMostRolls = -1;
-        Vector<Player> mostRollPlayers = new Vector<>();
-        Vector<Player> secondMostRollPlayers = new Vector<>();
-        for (Player player :playerList) {
-            int rolls = 0;
-            for (Card card :player.getPlayerHand().getCards()) {
-                switch (card.getName()) {
-                    case "Maki Rolls 1":
-                        rolls++;
-                        break;
-                    case "Maki Rolls 2":
-                        rolls += 2;
-                        break;
-                    case "Maki Rolls 3":
-                        rolls += 3;
-                        break;
-                }
-            }
-            if(rolls>mostRolls){
-                mostRollPlayers.clear();
-                mostRollPlayers.add(player);
-                mostRolls = rolls;
-            }else if(rolls == mostRolls){
-                mostRollPlayers.add(player);
-            }
-            else if(rolls>secondMostRolls){
-                secondMostRollPlayers.clear();
-                secondMostRollPlayers.add(player);
-                secondMostRolls = rolls;
-            }else if(rolls == secondMostRolls){
-                secondMostRollPlayers.add(player);
-            }
-        }
-        /*
-        if(mostRollPlayers.size()>0) {
-            for (Player player : mostRollPlayers) {
-                int pointsGiven = 6 / mostRollPlayers.size();
-                player.points += pointsGiven;
-            }
-        }
 
-        //if more than one player tied for most rolls, no points for second
-        if(mostRollPlayers.size()==1){
-            for (Player player : secondMostRollPlayers) {
-                int pointsGiven = 3 / secondMostRollPlayers.size();
-                player.points += pointsGiven;
-            }
-        }*/
-        if(mostRollPlayers.contains(this)){
-            return 6/mostRollPlayers.size();
-        }else if(mostRollPlayers.size()==1&&secondMostRollPlayers.contains(this)){
-            return  3/secondMostRollPlayers.size();
-        }
-        return 0;
-    }
-
-    public int getNigiriPoints() {//also calculates wasabi points
-        int points=0;
-        for (Card card: playerHand.getCards()) {
-            switch (card.getName()) {
-                case "Egg Nigiri":
-                    points += 3;
-                    break;
-                case "Salmon Nigiri":
-                    points += 2;
-                    break;
-                case "Squid Nigiri":
-                    points += 1;
-                    break;
-            }
-        }
-        return points;
-    }
 
     public int getSashimiPoints() {
         int count =0;
-        for (Card card:playerHand.getCards()){
+        for (Card card:hand.getCards()){
             if(card.getName().equals("Sashimi")){
                 count += 1;
             }
@@ -158,7 +164,7 @@ public class Player {
 
     public int getTempuraPoints() {
         int count =0;
-        for (Card card:playerHand.getCards()){
+        for (Card card:hand.getCards()){
             if(card.getName().equals("Tempura")){
                 count += 1;
             }
@@ -169,7 +175,7 @@ public class Player {
     public int getWasabiPoints(){
         int points =0;
         int wasabis = 0;//tracks number of unused wasabis
-        for (Card card:playerHand.getCards()){
+        for (Card card:hand.getCards()){
             if(card.getName().equals("Wasabi")){
                 wasabis += 1;
             }else if(wasabis>1) {

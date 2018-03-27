@@ -1,8 +1,11 @@
 package Game;
 
-import Cards.Card;
+import Cards.*;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GameDriver {
 
@@ -35,21 +38,23 @@ public class GameDriver {
     }
 
 
-    public void calculatePoints(Vector<Player> playerList, int roundNum){
-        int points =0;
-        for (Player player: playerList) {
-            points += player.getDumplingPoints();
-            points += player.getMakiRollPoints(playerList);
-            points += player.getNigiriPoints();
-            points += player.getSashimiPoints();
-            points += player.getTempuraPoints();
-            points += player.getWasabiPoints();
-            player.addPoints(points);
+
+    public void calculatePoints(Vector<Player> playerList, int roundNum) {
+        int points = 0;
+
+        calculateMakiPoints(playerList);
+        for (int i = 0; i < numOfPlayers; i++) {
+            playerList.get(i).calculateDumplingPoints();
+            Player currentPLayer = playerList.get(i);
+            currentPLayer.calculateNigiriPoints();
+            currentPLayer.calculateSashimiPoints();
+            currentPLayer.calculateTempuraPoints();
         }
-        if(roundNum == 3){
+        if (roundNum == 3) {
             calculatePuddingPoints(playerList);
         }
     }
+
 
     public void calculatePuddingPoints(Vector<Player> playerList){//TODO either move this to player or move all points methods to the driver
         int points;
@@ -61,7 +66,7 @@ public class GameDriver {
         //find highest and lowest amount of puddings
         for (int i = 0; i < numOfPlayers; i++) {
             Player currentPlayer = playerList.get(i);
-            int puddings = playerList.get(i).getPudding();
+            int puddings = playerList.get(i).getPuddingCount();
             if(puddings>high){
                 highPlayer.clear();
                 highPlayer.add(currentPlayer);
@@ -79,18 +84,95 @@ public class GameDriver {
             }
         }
 
+
+
         if(highPlayer.size()==numOfPlayers){//everyone had the same amount of pudding
             return;
         }
 
         points = 6 / highPlayer.size();
         for (Player aHighPlayer : highPlayer) {
-            aHighPlayer.addPoints(points);
+            aHighPlayer.setTotalPoints(points);
         }
         points = -6/ highPlayer.size();
         for (Player aLowPlayer : lowPlayer) {
-            aLowPlayer.addPoints(points);
+            aLowPlayer.setTotalPoints(points);
         }
+    }
+
+
+
+
+
+    protected static void calculateMakiPoints(Vector<Player> playerList) {
+
+        Vector<Player> tmpPlayerList = (Vector) playerList.clone();
+        Collections.sort(tmpPlayerList, Comparator.comparingInt(Player::getMakiCount));
+        Collections.reverse(tmpPlayerList);
+        Vector<Player> makiRollPlayers = new Vector<>();
+        boolean firstPlaceGiven = false;
+
+        for (int i = 0; i < playerList.size(); i++) {
+            if (i + 1 == tmpPlayerList.size()) {
+                makiRollPlayers.add(tmpPlayerList.get(i));
+                if (firstPlaceGiven) {
+                    for (Player player : makiRollPlayers) {
+                        player.setRoundPoints(3 / makiRollPlayers.size());
+                    }
+                    break;
+                } else {
+                    for (Player player : makiRollPlayers) {
+                        player.setRoundPoints(6 / makiRollPlayers.size());
+                    }
+                    break;
+                }
+            }
+            if (tmpPlayerList.get(i).getMakiCount() > tmpPlayerList.get(i + 1).getMakiCount()) {
+                makiRollPlayers.add(tmpPlayerList.get(i));
+                if (!firstPlaceGiven && makiRollPlayers.size() > 0) {
+                    for (Player player : makiRollPlayers) {
+                        player.setRoundPoints(6 / makiRollPlayers.size());
+                    }
+                    firstPlaceGiven = true;
+                    if (makiRollPlayers.size() > 1) {
+                        break;
+                    }
+                    makiRollPlayers.clear();
+                } else if (firstPlaceGiven) {
+                    for (Player player : makiRollPlayers) {
+                        player.setRoundPoints(3 / makiRollPlayers.size());
+                    }
+                    break;
+                }
+            } else if (tmpPlayerList.get(i).getMakiCount() == tmpPlayerList.get(i + 1).getMakiCount()) {
+                makiRollPlayers.add(tmpPlayerList.get(i));
+            }
+
+        }
+        for (Player player : tmpPlayerList) {
+            player.setMakiCount(0);
+        }
+    }
+
+
+    public static void main(String[] args) {
+
+        int numOfPlayers = ThreadLocalRandom.current().nextInt(4, 5);
+        Vector<Player> testPlayers = new Vector<>();
+        Vector<Card> testCards = new Vector<>();
+        testCards.add(new EggNigiri());
+        testCards.add(new SalmonNigiri());
+        testCards.add(new SquidNigiri());
+        for (int i = 0; i < numOfPlayers; i++) {
+            testPlayers.add(new Player(String.valueOf(i), String.valueOf((i + 1) * 2)));
+            testPlayers.get(i).setHand(testCards);
+        }
+
+        for (Player playa : testPlayers) {
+            playa.calculateNigiriPoints();
+            System.out.println(playa);
+        }
+
     }
 
 }
