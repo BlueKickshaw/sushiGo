@@ -1,5 +1,8 @@
 package server;
 
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -27,12 +31,14 @@ public class FXMLController implements Initializable {
     public static FXMLLoader loader;
 
     public static Network network;
+    private static Parent loadedRoot;
 
     // URL list (screen locations)
     URL loginScreen = getClass().getResource("scenes/loginScreen.fxml");
     URL serverScreen = getClass().getResource("scenes/serverScreen.fxml");
     URL hostScreen = getClass().getResource("scenes/hostScreen.fxml");
     URL browserScreen = getClass().getResource("scenes/browserScreen.fxml");
+    URL hostLobbyScreen = getClass().getResource("scenes/hostLobbyScreen.fxml");
 
 
     @FXML
@@ -75,6 +81,7 @@ public class FXMLController implements Initializable {
         network.sendRequest("host");
         network.sendRequest(hostLobbyNameText.getText());
         network.sendRequest(hostPasswordText.getText());
+        network.sendRequest(network.username);  // We need to tell the server who we are
     }
 
     @FXML private TextField loginNameText;
@@ -97,9 +104,19 @@ public class FXMLController implements Initializable {
         network.sendRequest(loginPasswordText.getText());
     }
 
-    // Load the scene, get the stage from the button pressed
     @FXML
-    public void loadScene(ActionEvent e, URL url) throws IOException {
+    public void loadLobbyScene(){
+        try {
+            loadedRoot = loadScene(hostLobbyScreen);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Load the scene, get the stage from the button pressed; we return the root if we need to add
+    // elements in certain instances
+    @FXML
+    public Parent loadScene(ActionEvent e, URL url) throws IOException {
         Parent root = loader.load(url);
         Scene newScene = new Scene(root, screenWidth, screenHeight);
         Stage s = (Stage)((Node)e.getSource()).getScene().getWindow();
@@ -107,15 +124,18 @@ public class FXMLController implements Initializable {
         s.show();
 
         stage = s;
+        return root;
     }
 
     // When we call this from other methods, we refer to the saved event
     @FXML
-    public void loadScene(URL url) throws IOException {
-        Parent root = FXMLLoader.load(url);
+    public Parent loadScene(URL url) throws IOException {
+        Parent root = loader.load(url);
         Scene newScene = new Scene(root, screenWidth, screenHeight);
         stage.setScene(newScene);
         stage.show();
+
+        return root;
     }
 
     public String promptForPassword(){
@@ -140,14 +160,55 @@ public class FXMLController implements Initializable {
         hostStartLobbyBtn.setDisable(true);
     }
 
-    @FXML private GridPane hostPlayerGridPane;
+    @FXML private GridPane lobbyPlayerGrid;
     @FXML public void updatePlayerGrid(Lobby lobby){
+        if (lobbyPlayerGrid == null){
+            // This will get happen when the player joins the server; not when another player joins. They need
+            // time to load the scene since JavaFX is slower than the server is
+            new Thread(() -> {
+                try {
+                    Thread.currentThread().sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Platform.runLater(() -> network.fxmlController.updatePlayerGrid(lobby));
+            }).start();
+
+
+            System.err.println("Updating the grid before the scene has loaded");
+            return;
+        }
+        hostLobbyNameText.setText(lobby.name);
         int i = 0;
-        for (String name : lobby.playerNames) {
-            hostPlayerGridPane.addRow(i++,new Label(name));
+        lobbyPlayerGrid.getChildren().clear();
+        for (String s : lobby.playerNames){
+            Color playerColor;
+            switch (i) {
+                case 0:
+                    playerColor = Color.RED;
+                    break;
+                case 1:
+                    playerColor = Color.BLUE;
+                    break;
+                case 2:
+                    playerColor = Color.CYAN;
+                    break;
+                case 3:
+                    playerColor = Color.PURPLE;
+                    break;
+                default:
+                    playerColor = Color.BLACK;
+            }
+
+            Label label = new Label(s);
+            label.setTextFill(playerColor);
+            Label number = new Label(""+(i+1));
+            number.setTextFill(Color.WHITESMOKE);
+            lobbyPlayerGrid.addRow(i,number,label);
+            i++;
         }
     }
-
 
     @FXML private TextField serverUserCountField;
     @FXML public void updateUserCount(int i){
@@ -206,7 +267,6 @@ public class FXMLController implements Initializable {
                     network.sendRequest("joinLobby");
                     network.sendRequest(l.name);
                     network.sendRequest(password);
-                    // We want to tell the server who's joining as well
                     network.sendRequest(network.username);
                 });
 
