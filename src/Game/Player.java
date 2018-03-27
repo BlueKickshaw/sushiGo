@@ -59,7 +59,9 @@ public class Player {
         return totalPoints;
     }
 
-    public void clearRoundPoints() {this.roundPoints = 0;}
+    public void clearRoundPoints() {
+        this.roundPoints = 0;
+    }
 
     public void setRoundPoints(int points) {
         this.roundPoints = points;
@@ -93,10 +95,6 @@ public class Player {
 
     public void setDumplingCount(int dumplingCount) {
         this.dumplingCount = dumplingCount;
-    }
-
-    public void incrementDumplingCount() {
-        this.dumplingCount++;
     }
 
     public void chooseCard(Card c) {
@@ -174,10 +172,32 @@ public class Player {
 
     }
 
-    public void updatePuddingCount(){
-        for (Card card: hand.getCards()) {
-            if(card instanceof Pudding){
+    public void updatePuddingCount() {
+        for (Card card : hand.getCards()) {
+            if (card instanceof Pudding) {
                 puddingCount++;
+            }
+        }
+    }
+
+    public void updateMakiCount() {
+        for (Card card : hand.getCards()) {
+            if (card instanceof MakiRoll1) {
+                makiCount++;
+            }
+            else if (card instanceof MakiRoll2) {
+                makiCount += 2;
+            }
+            else if (card instanceof MakiRoll3) {
+                makiCount += 3;
+            }
+        }
+    }
+
+    public void updateDumplingCount() {
+        for (Card card : hand.getCards()) {
+            if (card instanceof Dumpling) {
+                dumplingCount++;
             }
         }
     }
