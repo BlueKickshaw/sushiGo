@@ -10,40 +10,44 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GameDriver {
 
     //create the hands
-    private  Vector<Player> playerList;
-    private int numOfPlayers = 4;
+    private Vector<Player> playerList;
+    private int playerCount = 4;
+    private Deck deck;
+    private int roundNum = 0;
 
-    public void initialize(int numOfPlayers){
+    public void initialize(int playerCountArg, String[] playerNames, String[] playerIPs) {
         //choose players and hand size
-        numOfPlayers = 4;
-        int handSize = 8;
+        this.playerCount = playerCountArg;
+        this.playerCount = 4;
 
-        playerList = new Vector<>(numOfPlayers);
-        //create a deck
-        Deck deck = new Deck();
+        deck = new Deck();
+        playerList = new Vector<>(playerCount);
+        for (int i = 0; i < playerCount; i++) {//create players but doesn't deal hands
+            playerList.add(new Player(playerNames[i], playerIPs[i]));
+        }
 
-        //deal the hands
-        for (int i = 0; i <numOfPlayers; i++) {
-            for (int j = 0; j < handSize; j++) {
-//                playerList.get(i).getPlayerHand().addCard(deck.deal());
-            }
+    }
+
+    public void startOfRound() {
+        roundNum++;
+        for (Player player : playerList) {
+            player.drawHand(deck, playerCount);
         }
     }
 
-    public void chooseCard(Player player, Card c){
+    public void chooseCard(Player player, Card c) {
         player.chooseCard(c);
     }
 
 
     //if no card is chosen in time it will automatically take the left most card.
-    public void chooseCard(Player player){
+    public void chooseCard(Player player) {
         player.chooseCard(player.getRotatingHand().getCards().firstElement());
     }
 
 
-
     public static void calculatePoints(Vector<Player> playerList, int roundNum) {
-        for (Player player: playerList){
+        for (Player player : playerList) {
             player.clearRoundPoints();
             player.updatePuddingCount();
             player.updateDumplingCount();
@@ -55,7 +59,7 @@ public class GameDriver {
         if (roundNum == 3) {
             calculatePuddingPoints(playerList);
         }
-        for (Player player: playerList) {
+        for (Player player : playerList) {
             player.calculateDumplingPoints();
             player.calculateNigiriPoints();
             player.calculateTempuraPoints();
@@ -68,10 +72,10 @@ public class GameDriver {
     }
 
 
-    public static void calculatePuddingPoints(Vector<Player> playerList){
+    public static void calculatePuddingPoints(Vector<Player> playerList) {
         int points;
-        int high=-1;
-        int low=1000;
+        int high = -1;
+        int low = 1000;
         Vector<Player> highPlayer = new Vector<>();
         Vector<Player> lowPlayer = new Vector<>();
 
@@ -96,8 +100,7 @@ public class GameDriver {
         }
 
 
-
-        if(highPlayer.size()==playerList.size()){//everyone had the same amount of pudding
+        if (highPlayer.size() == playerList.size()) {//everyone had the same amount of pudding
             return;
         }
 
@@ -105,14 +108,11 @@ public class GameDriver {
         for (Player aHighPlayer : highPlayer) {
             aHighPlayer.addRoundPoints(points);
         }
-        points = -6/ lowPlayer.size();
+        points = -6 / lowPlayer.size();
         for (Player aLowPlayer : lowPlayer) {
             aLowPlayer.addRoundPoints(points);
         }
     }
-
-
-
 
 
     protected static void calculateMakiPoints(Vector<Player> playerList) {
@@ -168,7 +168,7 @@ public class GameDriver {
 
     public static void main(String[] args) {
 
-        int numOfPlayers = ThreadLocalRandom.current().nextInt(4, 5);
+        int playerCount = ThreadLocalRandom.current().nextInt(4, 5);
         Vector<Player> testPlayers = new Vector<>();
         Vector<Card> testCards1 = new Vector<>();
         Vector<Card> testCards2 = new Vector<>();
@@ -182,11 +182,10 @@ public class GameDriver {
         testCards1.add(new Wasabi());
         testCards1.add(new EggNigiri());
 
-        for (int i = 0; i < numOfPlayers; i++) {
+        for (int i = 0; i < playerCount; i++) {
             testPlayers.add(new Player(String.valueOf(i), String.valueOf((i + 1) * 2)));
             testPlayers.get(i).setHand(testCards1);
         }
-
 
 
         calculatePoints(testPlayers, 1);
