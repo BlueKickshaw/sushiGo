@@ -57,6 +57,46 @@ public class GameDriver {
 
 
     public static void calculatePuddingPoints(Vector<Player> playerList){
+        int points;
+        int high=-1;
+        int low=1000;
+        Vector<Player> highPlayer = new Vector<>();
+        Vector<Player> lowPlayer = new Vector<>();
+
+        //find highest and lowest amount of puddings
+        for (Player currentPlayer : playerList) {
+            int puddings = currentPlayer.getPuddingCount();
+            if (puddings > high) {
+                highPlayer.clear();
+                highPlayer.add(currentPlayer);
+                high = puddings;
+            } else if (puddings == high) {
+                highPlayer.add(currentPlayer);
+            }
+
+            if (puddings < low) {
+                lowPlayer.clear();
+                lowPlayer.add(currentPlayer);
+                low = puddings;
+            } else if (puddings == low) {
+                lowPlayer.add(currentPlayer);
+            }
+        }
+
+
+
+        if(highPlayer.size()==playerList.size()){//everyone had the same amount of pudding
+            return;
+        }
+
+        points = 6 / highPlayer.size();
+        for (Player aHighPlayer : highPlayer) {
+            aHighPlayer.addTotalPoints(points);
+        }
+        points = -6/ lowPlayer.size();
+        for (Player aLowPlayer : lowPlayer) {
+            aLowPlayer.addTotalPoints(points);
+        }
     }
 
 
@@ -76,12 +116,12 @@ public class GameDriver {
                 makiRollPlayers.add(tmpPlayerList.get(i));
                 if (firstPlaceGiven) {
                     for (Player player : makiRollPlayers) {
-                        player.setRoundPoints(3 / makiRollPlayers.size());
+                        player.addRoundPoints(3 / makiRollPlayers.size());
                     }
                     break;
                 } else {
                     for (Player player : makiRollPlayers) {
-                        player.setRoundPoints(6 / makiRollPlayers.size());
+                        player.addRoundPoints(6 / makiRollPlayers.size());
                     }
                     break;
                 }
@@ -90,7 +130,7 @@ public class GameDriver {
                 makiRollPlayers.add(tmpPlayerList.get(i));
                 if (!firstPlaceGiven && makiRollPlayers.size() > 0) {
                     for (Player player : makiRollPlayers) {
-                        player.setRoundPoints(6 / makiRollPlayers.size());
+                        player.addRoundPoints(6 / makiRollPlayers.size());
                     }
                     firstPlaceGiven = true;
                     if (makiRollPlayers.size() > 1) {
@@ -99,7 +139,7 @@ public class GameDriver {
                     makiRollPlayers.clear();
                 } else if (firstPlaceGiven) {
                     for (Player player : makiRollPlayers) {
-                        player.setRoundPoints(3 / makiRollPlayers.size());
+                        player.addRoundPoints(3 / makiRollPlayers.size());
                     }
                     break;
                 }
@@ -122,21 +162,25 @@ public class GameDriver {
         Vector<Card> testCards2 = new Vector<>();
         Vector<Card> testCards3 = new Vector<>();
         Vector<Card> testCards4 = new Vector<>();
-        testCards1.add(new Pudding());
-        testCards1.add(new Pudding());
-        testCards1.add(new Pudding());
+        testCards1.add(new EggNigiri());
+        testCards1.add(new Wasabi());
+        testCards1.add(new SalmonNigiri());
+        testCards1.add(new Wasabi());
+        testCards1.add(new SquidNigiri());
+        testCards1.add(new Wasabi());
+        testCards1.add(new EggNigiri());
+
         for (int i = 0; i < numOfPlayers; i++) {
             testPlayers.add(new Player(String.valueOf(i), String.valueOf((i + 1) * 2)));
             testPlayers.get(i).setHand(testCards1);
         }
 
-        testCards2.add(new Pudding());
-        testCards2.add(new Pudding());
 
-        testPlayers.get(0).setHand(testCards2);
+
 
         for (Player playa : testPlayers) {
-            calculatePuddingPoints(testPlayers);
+            playa.calculateNigiriPoints();
+            playa.calculateWasabiPoints();
             System.out.println(playa);
         }
 
