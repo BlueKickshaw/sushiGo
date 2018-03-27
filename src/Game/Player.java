@@ -1,10 +1,9 @@
 package Game;
 
 import Cards.Card;
-//import com.sun.xml.internal.bind.v2.TODO;
 
 
-public class Player {
+public class Player implements Runnable {
 
     private String name;
     private String IP;
@@ -91,7 +90,7 @@ public class Player {
         } else if (this.dumplingCount == 1) {
             this.setRoundPoints(1);
         }
-        this.setDumplingCount(0);
+//        this.setDumplingCount(0);
     }
 
     public int nigiriPoints() {
@@ -116,4 +115,42 @@ public class Player {
                 " DumplingCount: " + this.dumplingCount
                 + " Points: " + this.roundPoints);
     }
+
+    @Override
+    public void run() {
+
+
+    }
+
+    private void turn(){
+       Card selectedCard = null;
+        boolean cardConfirmed = false;
+        long startTime = System.nanoTime();
+        // wait 40 seconds (4e10) for a player to take their turn (currently 4e9 = 4 seconds for testing)
+        while (!cardConfirmed && System.nanoTime() - startTime < 4e9){
+
+            if(selectedCard != null && cardConfirmed){
+                if (selectedCard.getName().equals("Chopsticks")){
+                    this.useChopstickcs();
+                }
+                cardConfirmed = true;
+                break;
+            }
+
+        }
+        if (!cardConfirmed){
+
+        }
+
+    }
+
+    private void useChopstickcs(){
+        //TODO
+    }
+
+    public static void main(String[] args){
+        Player a = new Player("Jon", "17");
+        a.turn();
+    }
+
 }
