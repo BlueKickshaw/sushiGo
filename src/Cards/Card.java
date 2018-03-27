@@ -1,5 +1,7 @@
 package Cards;
 
+import java.util.Objects;
+
 public abstract class Card {
 
     private String cardBackImagePath = "/CardImages/Cardback.jpg";
@@ -16,6 +18,8 @@ public abstract class Card {
     public String getCardBackImagePath() {
         return cardBackImagePath;
     }
+
+
 }
 
 

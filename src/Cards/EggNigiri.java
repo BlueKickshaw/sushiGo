@@ -5,6 +5,10 @@ public class EggNigiri extends Card {
 
     private String imagePath = "/CardImages/EggNigiri.jpg";
 
+    public EggNigiri() {
+        super("Egg Nigiri");
+    }
+
     public EggNigiri(String name) {
         super(name);
     }

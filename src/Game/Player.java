@@ -1,7 +1,9 @@
 package Game;
 
-import Cards.Card;
+import Cards.*;
 //import com.sun.xml.internal.bind.v2.TODO;
+
+import java.util.Vector;
 
 
 public class Player {
@@ -19,6 +21,10 @@ public class Player {
     public Player(String name, String IP) {
         this.name = name;
         this.IP = IP;
+    }
+
+    public void setHand(Vector<Card> cards){
+        this.hand = new Hand(cards);
     }
 
     public String getName() {
@@ -94,17 +100,26 @@ public class Player {
         this.setDumplingCount(0);
     }
 
-    public int nigiriPoints() {
+    public void calculateNigiriPoints() {
+        for (Card card: hand.getCards()) {
+            if (card instanceof EggNigiri) {
+                this.roundPoints += 1;
+
+            } else if (card instanceof SalmonNigiri) {
+                this.roundPoints += 2;
+
+            } else if (card instanceof  SquidNigiri) {
+                this.roundPoints += 3;
+            }
+        }
+    }
+
+    public int calculateSashimiPoints() {
         return 0;
         //TODO
     }
 
-    public int sashimiPoints() {
-        return 0;
-        //TODO
-    }
-
-    public int tempuraPoints() {
+    public int calculateTempuraPoints() {
         return 0;
         //TODO
     }
@@ -115,5 +130,67 @@ public class Player {
                 " MakiCount: " + this.makiCount +
                 " DumplingCount: " + this.dumplingCount
                 + " Points: " + this.roundPoints);
+    }
+
+
+    //every dumpling is worth one more point that the last
+    //points 1, 3, 6, 10, 15
+    public int getDumplingPoints() {
+        int points=0;
+        int count=1;
+        for (Card card: hand.getCards()) {
+            if(card.getName().equals("Dumpling")){
+                points += count;
+                count += 1;
+            }
+        }
+        if(points>15){
+            return 15;
+        }
+        return points;
+    }
+
+
+
+    public int getSashimiPoints() {
+        int count =0;
+        for (Card card:hand.getCards()){
+            if(card.getName().equals("Sashimi")){
+                count += 1;
+            }
+        }
+        return count/3;
+    }
+
+    public int getTempuraPoints() {
+        int count =0;
+        for (Card card:hand.getCards()){
+            if(card.getName().equals("Tempura")){
+                count += 1;
+            }
+        }
+        return count/2;
+    }
+
+    public int getWasabiPoints(){
+        int points =0;
+        int wasabis = 0;//tracks number of unused wasabis
+        for (Card card:hand.getCards()){
+            if(card.getName().equals("Wasabi")){
+                wasabis += 1;
+            }else if(wasabis>1) {
+                if(card.getName().equals("Egg Nigiri")) {
+                    points+=2;
+                    wasabis--;
+                } else if(card.getName().equals("Salmon Nigiri")) {
+                    points+=4;
+                    wasabis--;
+                } else if(card.getName().equals("Squid Nigiri")) {
+                    points+=6;
+                    wasabis--;
+                }
+            }
+        }
+        return points;
     }
 }

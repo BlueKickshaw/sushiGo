@@ -6,6 +6,10 @@ public class MakiRoll2 extends Card {
     private int makiCount = 2;
 
 
+    public MakiRoll2() {
+        super("Maki Roll");
+    }
+
     public MakiRoll2(String name) {
         super(name);
     }
@@ -17,4 +21,7 @@ public class MakiRoll2 extends Card {
     public String getImagePath() {
         return imagePath;
     }
+
+
+
 }

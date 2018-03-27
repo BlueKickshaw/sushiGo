@@ -1,16 +1,21 @@
 package Game;
 
 import Cards.Card;
+import Cards.Wasabi;
 
 import java.util.Vector;
 
 public class Hand {
     private Vector<Card> cards;
-    private boolean playerHand;
+    private boolean playerHand = true;
 
     public Hand(Vector<Card> cards, boolean playerHand) {
         this.cards = cards;
         this.playerHand = playerHand;
+    }
+
+    public Hand(Vector<Card> cards) {
+        this.cards = cards;
     }
 
     public Hand(int handSize, boolean playerHand) {
