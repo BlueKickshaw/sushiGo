@@ -43,13 +43,15 @@ public class GameDriver {
         for (Player player: playerList){
             player.clearRoundPoints();
             player.updatePuddingCount();
+            player.updateDumplingCount();
+            player.updateMakiCount();
         }
 
 
+        calculateMakiPoints(playerList);
         if (roundNum == 3) {
             calculatePuddingPoints(playerList);
         }
-        calculateMakiPoints(playerList);
         for (Player player: playerList) {
             player.calculateDumplingPoints();
             player.calculateNigiriPoints();
