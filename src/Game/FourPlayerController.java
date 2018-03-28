@@ -1,30 +1,27 @@
 package Game;
 
-import Cards.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
+import Cards.Card;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.awt.event.MouseEvent;
-import java.util.Collection;
-import java.util.EventListener;
+import java.util.Optional;
 import java.util.Vector;
 
+enum CardType {
+    None,
+    Maki,
+    Tempura,
+    Chopsticks
+}
 
-public class FourPlayerController {
+public class FourPlayerController implements Runnable {
 
     @FXML
     GridPane primaryPlayerGrid;
@@ -69,7 +66,28 @@ public class FourPlayerController {
     Player player = new Player("Jon", "123");
     Deck deck = new Deck();
     int roundCount = 0;
-    Pane pane = new Pane();
+
+    private Card selectedCard = null;
+    private boolean cardConfirmed = false;
+    double turnTimeLimit = 4e9;
+
+    private void turn() {
+        long startTime = System.nanoTime();
+        while (!cardConfirmed) {
+
+        }
+        System.out.println("Card confirmed!");
+
+    }
+
+    public void run() {
+
+    }
+
+    public void startTurn(ActionEvent event) {
+        Thread primaryPlayerTurnThread = new Thread(player, player.getName());
+        primaryPlayerTurnThread.start();
+    }
 
 
     public void initialize() {
@@ -91,16 +109,21 @@ public class FourPlayerController {
         buttons.add(paneButton04);
         buttons.add(paneButton03);
 
-
     }
 
-    public void testButton(ActionEvent event) {
-        player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(0));
-        buttons.get(roundCount).setDisable(true);
+
+    public void incrementRound(ActionEvent event) {
+        player.getRotatingHand().setCards(deck.drawCards(7 - roundCount));
+
+
+        // re-enable all buttons to that will be populated by card images this round
+        enableAppropiateButtons();
+        System.out.println(player.getHand());
+
         roundCount++;
     }
 
-    public void testButton2(ActionEvent event) {
+    public void getRotatingHand(ActionEvent event) {
 
         for (ImageView iv : imageViews) {
             iv.setImage(null);
@@ -109,42 +132,127 @@ public class FourPlayerController {
             Card tmp = player.getRotatingHand().getCard(i);
             Image image = new Image(tmp.getImagePath());
             imageViews.get(i).setImage(image);
-            primaryPlayerGrid.getChildren().get(i).setUserData(player.getRotatingHand().getCard(0));
         }
 
 
     }
 
+
     public void button00Clicked(ActionEvent event) {
-        System.out.println("0");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+        alert.setTitle("Confirm Card Pick");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            disableButtons();
+            System.out.println("0");
+            player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(7)));
+        } else {
+            System.out.println("cancelled");
+        }
     }
 
     public void button01Clicked(ActionEvent event) {
-        System.out.println("1");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+        alert.setTitle("Confirm Card Pick");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            disableButtons();
+            System.out.println("1");
+            player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(5)));
+        } else {
+            System.out.println("cancelled");
+        }
     }
 
     public void button02Clicked(ActionEvent event) {
-        System.out.println("2");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+        alert.setTitle("Confirm Card Pick");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            disableButtons();
+            System.out.println("2");
+            player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(2)));
+        } else {
+            System.out.println("cancelled");
+        }
     }
 
     public void button03Clicked(ActionEvent event) {
-        System.out.println("3");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+        alert.setTitle("Confirm Card Pick");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            disableButtons();
+            System.out.println("3");
+            cardConfirmed = true;
+            player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(0)));
+        } else {
+            System.out.println("cancelled");
+        }
     }
 
     public void button04Clicked(ActionEvent event) {
-        System.out.println("4");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+        alert.setTitle("Confirm Card Pick");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            disableButtons();
+            System.out.println("4");
+            player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(1)));
+        } else {
+            System.out.println("cancelled");
+        }
     }
 
     public void button05Clicked(ActionEvent event) {
-        System.out.println("5");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+        alert.setTitle("Confirm Card Pick");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            disableButtons();
+            System.out.println("5");
+            player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(3)));
+        } else {
+            System.out.println("cancelled");
+        }
     }
 
     public void button06Clicked(ActionEvent event) {
-        System.out.println("6");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+        alert.setTitle("Confirm Card Pick");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            disableButtons();
+            System.out.println("6");
+            player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(4)));
+        } else {
+            System.out.println("cancelled");
+        }
     }
 
     public void button07Clicked(ActionEvent event) {
-        System.out.println("7");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+        alert.setTitle("Confirm Card Pick");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            disableButtons();
+            System.out.println("7");
+            player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(6)));
+        } else {
+            System.out.println("cancelled");
+        }
+    }
+
+    private void disableButtons() {
+        for (int i = 0; i < buttons.size(); i++) {
+            buttons.get(i).setDisable(true);
+        }
+    }
+
+    private void enableAppropiateButtons() {
+        for (int i = 7; i > roundCount; i--) {
+            buttons.get(i).setDisable(false);
+        }
     }
 
 }
