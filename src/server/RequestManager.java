@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -32,6 +33,23 @@ public class RequestManager {
                                 ButtonType.OK).show();
                     }
                 });
+                break;
+
+            case "connectToHost": {
+                int newPort = Integer.parseInt(network.getNextString(socket));
+                // From here we're safe to disconnect
+                network.sendRequest("disconnect");
+
+                // We can get our lobby from here
+                InetAddress inetAddress;
+                try {
+                    inetAddress = InetAddress.getByName(network.client.getLobby().host);
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+                network.setServerAddress(network.client.getLobby().host);
+                network.connectToServer();
+            }
                 break;
 
             case "createAccount":
@@ -98,7 +116,7 @@ public class RequestManager {
 
             // Received a request to join a lobby
             case "joinLobby": {
-                network.sendRequest("joinSuccessful");
+                network.sendRequest(socket,"joinSuccessful".getBytes());
                 String lobbyName = network.getNextString(socket);
                 String lobbyPassword = network.getNextString(socket);
                 System.out.println("User requesting to join lobby '" + lobbyName + ":" + lobbyPassword + "'");
@@ -114,15 +132,19 @@ public class RequestManager {
                             String username = network.getNextString(socket);
                             lobby.playerNames.add(username);
 
-                            // We attempt to send a message to everyone in the lobby now... here goes:
+                            // Update the clients lobby
+                            Client client = network.clientConnectionManager.clients.get(username);
+                            network.clientConnectionManager.clients.remove(client);
+                            client.setLobby(lobby);
+                            network.clientConnectionManager.clients.put(username,client); // is there an easier way?
+
+                            // We send a message to everyone in the lobby
                                 for (String player : lobby.playerNames){
-                                    Socket client =
+                                    Socket clientSocket =
                                             network.clientConnectionManager.clients.get(player).getSocket();
-                                    network.sendRequest(client,"updateLobbyPlayers".getBytes());
-                                    network.sendRequest(client,
+                                    network.sendRequest(clientSocket,"updateLobbyPlayers".getBytes());
+                                    network.sendRequest(clientSocket,
                                             network.serializeObject(lobby));
-                                    //network.sendRequest(client,
-                                    //        network.serializeObject(lobby.playerNames));
                                 }
                             break;
                         }
@@ -130,19 +152,11 @@ public class RequestManager {
                     }
                 }
 
-                if (success) {
-                    network.sendRequest(socket,"joinSuccessful".getBytes());
-                } else {
+                if (!success) {
                     network.purge(socket);
                     network.sendRequest(socket,"joinFailed".getBytes());
                 }
             } break;
-
-            case "testCase": {
-                System.out.println("TESTCASE");
-                break;
-            }
-
 
             case "joinFailed":
                 Platform.runLater(() -> {
@@ -155,19 +169,23 @@ public class RequestManager {
                 Platform.runLater(() -> {
                         Network.fxmlController.loadLobbyScene();
                         Network.fxmlController.removeStartLobbyBtn();
-                });
-            }
-
+                    });
+                }
                 break;
 
             // Received a request to login
             case "login":
                 name = network.getNextString(socket);
                 password = network.getNextString(socket);
+                network.client = new Client(socket,name);
                 boolean success = network.server.accounts.verifyAccount(name,password);
                 if (success) {
                     network.sendRequest(socket,"loginSuccessful".getBytes());
-                    network.clientConnectionManager.clients.put(name,new Client(socket,name));
+
+                    // We create a reference to the client for later calls
+                    network.client = new Client(socket,name);
+                    network.clientConnectionManager.clients.put(name,network.client);
+
                     Platform.runLater(() -> Network.fxmlController.updateUserCount(1));
                 } else {
                     network.sendRequest(socket,"loginFailed".getBytes());
@@ -192,6 +210,31 @@ public class RequestManager {
                     }
                 });
                 break;
+
+            // The host has started their server and is accepting connections, and disconnected from the server
+            // We want to disconnect from the server and migrate over now!
+            case "migrate": {
+
+                // We send the name of the host so that we can get a reference to the client and thus lobby
+                String hostName = network.getNextString(socket);
+                String newPort = network.getNextString(socket);
+
+                Lobby lobby =
+                        (Lobby)network.deserializeObject(network.getNextBytes(socket));
+
+
+                for (String user :  lobby.playerNames) {
+                    Client client = network.clientConnectionManager.clients.get(user);
+                    network.sendRequest(client.getSocket(),"test".getBytes());
+                }
+                network.purge(socket);
+                break;
+            }
+
+            case "test":{
+                System.out.println("TEST");
+                break;
+            }
 
             case "receivedLobbyList":
                 network.lobbyManager.lobbyList =

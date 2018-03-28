@@ -20,12 +20,15 @@ public class Server {
         // Load the accounts before we start the server, or else we might run in to errors at login
         accounts.loadAccounts();
 
+
         try {
             serverSocket = new ServerSocket(port);
+            serverSocket.setReuseAddress(true);
             System.out.println(Thread.currentThread().getName()+": Started server over port "+port);
             new ClientConnectionManager(network);
         } catch (IOException e) {
             System.err.println(Thread.currentThread().getName()+": Unable to start server over port "+port);
+            e.printStackTrace();
         }
     }
 }

@@ -8,6 +8,7 @@ import java.util.HashMap;
 public class ClientConnectionManager {
     private Network network;
     private boolean running = true;
+    // Username, Client
     public static HashMap<String,Client> clients = new HashMap<>();
 
     // Creates something to manage the connections, and starts a listener thread

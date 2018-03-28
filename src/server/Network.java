@@ -4,11 +4,11 @@ import java.io.*;
 import java.net.*;
 
 public class Network {
+    public Client client;
     public int port;
     public Socket socket;
     public Server server;
     public String username;
-
 
     public static FXMLController fxmlController;
 
@@ -100,6 +100,19 @@ public class Network {
         return new String(getNextBytes(socket));
     }
 
+    public int getOpenPort() {
+        int freePort = 0;
+        ServerSocket socket = null;
+        try {
+            socket = new ServerSocket(0);
+            socket.close();
+            freePort = socket.getLocalPort();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return freePort;
+    }
+
     // Sends the size of the request, then the request itself (in bytes)
     public void sendRequest(String request){
         System.out.println(Thread.currentThread().getName()+": sending ['"+request+"']");
@@ -111,7 +124,9 @@ public class Network {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NullPointerException e){
+            e.printStackTrace();
             System.err.println("Null Socket; did you use the wrong Send Request to communicate to the client?");
+            System.err.println("["+request+"]");
         }
     }
 
@@ -160,7 +175,8 @@ public class Network {
     }
 
     // Start the server over the given port
-    public void startServer(Network network) {
+    public int startServer(Network network) {
         server = new Server(network, port);
+        return port;
     }
 }
