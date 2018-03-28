@@ -2,3 +2,7 @@
 .idea
 **/.idea
 /out/
+*.iml
+modules.xml
+idea/misc.xml
+*.ipr
