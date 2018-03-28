@@ -3,7 +3,7 @@ package Cards;
 
 public class Dumpling extends Card {
 
-    private String imagePath = "/CardImages/Dumpling.jpg";
+    private String imagePath = "/Game/CardImages/Dumpling.jpg";
 
     public Dumpling() {
         super("Dumpling");

@@ -3,7 +3,7 @@ package Cards;
 
 public class Wasabi extends Card {
 
-    private String imagePath = "/CardImages/SquidNigiri.jpg";
+    private String imagePath = "/Game/CardImages/Wasabi.jpg";
     private boolean isUsed = false;
 
     public Wasabi() {

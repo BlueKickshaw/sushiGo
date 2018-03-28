@@ -11,7 +11,7 @@ public class Hand {
         this.cards = cards;
     }
 
-    public Hand(){
+    public Hand() {
         this.cards = new Vector<>();
     }
 
@@ -19,7 +19,7 @@ public class Hand {
         return cards;
     }
 
-    public void setCards(Vector<Card> cards){
+    public void setCards(Vector<Card> cards) {
         this.cards = cards;
     }
 
@@ -28,13 +28,12 @@ public class Hand {
         return cards.get(i);
     }
 
-    public Card selectAndRemoveCard(Card card){
-        int cardindex = this.cards.indexOf(card);
-        Card selectedCard = this.cards.remove(cardindex);
+    public Card selectAndRemoveCard(Card card) {
+        int cardIndex = this.cards.indexOf(card);
+        Card selectedCard = this.cards.remove(cardIndex);
         return selectedCard;
 
     }
-
 
 
     public void removeCard(Card c) {
@@ -45,10 +44,10 @@ public class Hand {
         cards.add(c);
     }
 
-    public String toString(){
+    public String toString() {
         String contents = "";
-        for (int i = 0; i < cards.size(); i++){
-            contents += cards.get(i).getName() + " ";
+        for (int i = 0; i < cards.size(); i++) {
+            contents += cards.get(i).getName() + " \t ";
         }
         return contents;
     }

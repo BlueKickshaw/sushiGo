@@ -3,6 +3,7 @@ package Game;
 import Cards.*;
 
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Player implements Runnable {
 
@@ -15,8 +16,6 @@ public class Player implements Runnable {
     private int puddingCount;
     private int dumplingCount;
     private int makiCount;
-
-
 
 
     public Player(String name, String IP) {
@@ -206,11 +205,9 @@ public class Player implements Runnable {
         for (Card card : hand.getCards()) {
             if (card instanceof MakiRoll1) {
                 makiCount++;
-            }
-            else if (card instanceof MakiRoll2) {
+            } else if (card instanceof MakiRoll2) {
                 makiCount += 2;
-            }
-            else if (card instanceof MakiRoll3) {
+            } else if (card instanceof MakiRoll3) {
                 makiCount += 3;
             }
         }
@@ -234,40 +231,76 @@ public class Player implements Runnable {
 
     @Override
     public void run() {
-
+        turn();
+        System.out.println("Name: " + name + " Hand: " + hand);
 
     }
 
     private void turn() {
+
         Card selectedCard = null;
         boolean cardConfirmed = false;
         long startTime = System.nanoTime();
-        // wait 40 seconds (4e10) for a player to take their turn (currently 4e9 = 4 seconds for testing)
-        while (!cardConfirmed && System.nanoTime() - startTime < 4e9) {
-
+        double turnTimeLimit = 2e9;
+        // wait 40 seconds (4e10) for a player to take their turn
+        while (!cardConfirmed && System.nanoTime() - startTime < turnTimeLimit) {
             if (selectedCard != null && cardConfirmed) {
                 if (selectedCard instanceof Chopsticks) {
-                    this.useChopsticks();
-                }else{
+                    useChopsticks(selectedCard, System.nanoTime() - startTime, turnTimeLimit);
+                } else {
                     hand.addCard(rotatingHand.selectAndRemoveCard(selectedCard));
-                    switch (selectedCard.getName()){
-                        case "Dumpling": this.dumplingCount++;
-                    }
+                    System.out.println(selectedCard.getName());
                 }
                 cardConfirmed = true;
                 break;
+            } else if (selectedCard != null) {
+
             }
 
         }
         if (!cardConfirmed) {
+            System.out.println(name + " timer ran out");
+            hand.addCard(rotatingHand.selectAndRemoveCard(rotatingHand.getCard(0)));
 
+//            System.out.println(hand.selectAndRemoveCard(rotatingHand.getCard(0));)
         }
 
     }
 
-    private void useChopsticks() {
-        //TODO
+    private boolean useChopsticks(Card chopsticks, long elapsedTime, double turnTimeLimit) {
+
+        rotatingHand.addCard(hand.selectAndRemoveCard(chopsticks));
+        boolean firstCardConfirmed = false;
+        boolean secondCardConfirmed = false;
+
+        while (!firstCardConfirmed && !secondCardConfirmed && System.nanoTime() - elapsedTime < turnTimeLimit) {
+            System.out.println(this.name);
+        }
+        return false;
     }
+
+    public static void main(String[] args){
+        int playerCount = ThreadLocalRandom.current().nextInt(2, 3);
+        Vector<Player> testPlayerList = new Vector<>();
+        Deck deck = new Deck();
+
+        for (int i = 0; i < playerCount; i++){
+            testPlayerList.add(new Player(String.valueOf(i), String.valueOf(i+1)));
+            testPlayerList.get(i).drawHand(deck, playerCount);
+            System.out.println(testPlayerList.get(i).getName() + " " + testPlayerList.get(i).getRotatingHand());
+        }
+        for (Player playa: testPlayerList
+                ) {
+            Thread playerTurnThread = new Thread(playa, playa.getName());
+            playerTurnThread.start();
+            try {
+                playerTurnThread.join();
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }System.out.println(playa.getRotatingHand());
+        }
+    }
+
 
 
 }

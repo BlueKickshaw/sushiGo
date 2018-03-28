@@ -168,39 +168,6 @@ public class GameDriver {
 
     public static void main(String[] args) {
 
-        int playerCount = ThreadLocalRandom.current().nextInt(4, 5);
-        Vector<Player> testPlayers = new Vector<>();
-        Vector<Card> testCards1 = new Vector<>();
-        Vector<Card> testCards2 = new Vector<>();
-        Vector<Card> testCards3 = new Vector<>();
-        Vector<Card> testCards4 = new Vector<>();
-        testCards1.add(new EggNigiri());
-        testCards1.add(new Wasabi());
-        testCards1.add(new SalmonNigiri());
-        testCards1.add(new Wasabi());
-        testCards1.add(new SquidNigiri());
-        testCards1.add(new Wasabi());
-        testCards1.add(new EggNigiri());
-
-        for (int i = 0; i < playerCount; i++) {
-            testPlayers.add(new Player(String.valueOf(i), String.valueOf((i + 1) * 2)));
-            testPlayers.get(i).setHand(testCards1);
-        }
-
-
-        calculatePoints(testPlayers, 1);
-        testCards2.add(new Pudding());
-        testPlayers.get(0).setHand(testCards2);
-        calculatePoints(testPlayers, 2);
-        testCards2.add(new Pudding());
-        testCards2.add(new Pudding());
-        testPlayers.get(0).setHand(testCards2);
-        calculatePoints(testPlayers, 3);
-        for (Player playa : testPlayers) {
-
-            System.out.println(playa);
-        }
-
     }
 
 }
