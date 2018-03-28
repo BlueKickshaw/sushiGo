@@ -14,12 +14,6 @@ import javafx.scene.layout.Pane;
 import java.util.Optional;
 import java.util.Vector;
 
-enum CardType {
-    None,
-    Maki,
-    Tempura,
-    Chopsticks
-}
 
 public class FourPlayerController implements Runnable {
 
@@ -244,8 +238,8 @@ public class FourPlayerController implements Runnable {
     }
 
     private void disableButtons() {
-        for (int i = 0; i < buttons.size(); i++) {
-            buttons.get(i).setDisable(true);
+        for (Button button : buttons) {
+            button.setDisable(true);
         }
     }
 
