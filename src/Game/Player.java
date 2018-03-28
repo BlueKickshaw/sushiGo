@@ -16,6 +16,8 @@ public class Player implements Runnable {
     private int puddingCount;
     private int dumplingCount;
     private int makiCount;
+    public Boolean firstCardPicked = false;
+    public Boolean secondCardPicked = false;
 
 
     public Player(String name, String IP) {

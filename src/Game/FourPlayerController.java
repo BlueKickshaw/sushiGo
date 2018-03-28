@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.Vector;
 
 
-public class FourPlayerController implements Runnable {
+public class FourPlayerController /*implements Runnable*/ {
 
     @FXML
     GridPane primaryPlayerGrid;
@@ -60,27 +60,25 @@ public class FourPlayerController implements Runnable {
     Player player = new Player("Jon", "123");
     Deck deck = new Deck();
     int roundCount = 0;
+    Turn turn = new Turn(player);
 
     private Card selectedCard = null;
     private boolean cardConfirmed = false;
     double turnTimeLimit = 4e9;
 
     private void turn() {
-        long startTime = System.nanoTime();
-        while (!cardConfirmed) {
-
+        Thread turnHandler = new Thread(turn, player.getName());
+        turnHandler.start();
         }
-        System.out.println("Card confirmed!");
 
-    }
-
-    public void run() {
-
-    }
+//    public void run() {
+//
+//    }
 
     public void startTurn(ActionEvent event) {
-        Thread primaryPlayerTurnThread = new Thread(player, player.getName());
-        primaryPlayerTurnThread.start();
+//        Thread primaryPlayerTurnThread = new Thread(player, player.getName());
+//        primaryPlayerTurnThread.start();
+        turn();
     }
 
 
@@ -113,7 +111,7 @@ public class FourPlayerController implements Runnable {
         // re-enable all buttons to that will be populated by card images this round
         enableAppropiateButtons();
         System.out.println(player.getHand());
-
+        player.firstCardPicked = true;
         roundCount++;
     }
 
