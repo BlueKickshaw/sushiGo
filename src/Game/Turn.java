@@ -1,5 +1,7 @@
 package Game;
 
+import static Game.FourPlayerController.disableButtons;
+
 public class Turn implements Runnable {
 
     private Player player;
@@ -12,19 +14,21 @@ public class Turn implements Runnable {
 
     public void run() {
         long startTime = System.nanoTime();
-        System.out.println(this.player.getRotatingHand());
-        while (!this.player.firstCardPicked && (System.nanoTime() - startTime < timeLimit)) {
+        System.out.println(player.getRotatingHand());
+        while (!player.firstCardPicked && (System.nanoTime() - startTime < timeLimit)) {
 
         }
-        if (this.player.firstCardPicked) {
-            System.out.println(this.player.getSelectedCard());
-            this.player.getHand().addCard(this.player.getRotatingHand().selectAndRemoveCard(this.player.getSelectedCard()));
+        if (player.firstCardPicked) {
+            disableButtons();
+            System.out.println(player.getSelectedCard());
+            player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getSelectedCard()));
         } else if (!player.firstCardPicked) {
-            this.player.getHand().addCard(this.player.getRotatingHand().selectAndRemoveCard(this.player.getRotatingHand().getCard(0)));
-            System.out.println("Automatically selected card: " + this.player.getHand().getCard(this.player.getHand().getCards().size() - 1));
+            disableButtons();
+            player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(0)));
+            System.out.println("Automatically selected card: " + player.getHand().getCard(player.getHand().getCards().size() - 1));
         }
-        this.player.setSelectedCard(null);
-        this.player.firstCardPicked = false;
+        player.setSelectedCard(null);
+        player.firstCardPicked = false;
     }
 
 }

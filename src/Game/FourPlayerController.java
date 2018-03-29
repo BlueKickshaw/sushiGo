@@ -37,7 +37,7 @@ public class FourPlayerController {
     @FXML
     ImageView playerCard07 = new ImageView();
     @FXML
-    Vector<ImageView> imageViews = new Vector<>();
+    static Vector<ImageView> imageViews = new Vector<>();
     Player player = new Player("Jon", "123");
     Deck deck = new Deck();
     int roundCount = 0;
@@ -90,7 +90,7 @@ public class FourPlayerController {
                 alert.setTitle("Confirm Card Pick");
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    disableButtons();
+
                     player.firstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(7));
                 }
@@ -103,7 +103,7 @@ public class FourPlayerController {
                 alert.setTitle("Confirm Card Pick");
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    disableButtons();
+
                     player.firstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(5));
                 }
@@ -116,7 +116,7 @@ public class FourPlayerController {
                 alert.setTitle("Confirm Card Pick");
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    disableButtons();
+
                     player.firstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(2));
                 }
@@ -129,7 +129,7 @@ public class FourPlayerController {
                 alert.setTitle("Confirm Card Pick");
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    disableButtons();
+
                     player.firstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(0));
                 }
@@ -142,7 +142,7 @@ public class FourPlayerController {
                 alert.setTitle("Confirm Card Pick");
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    disableButtons();
+
                     player.firstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(1));
                 }
@@ -155,7 +155,7 @@ public class FourPlayerController {
                 alert.setTitle("Confirm Card Pick");
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    disableButtons();
+
                     player.firstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(3));
                 }
@@ -168,7 +168,7 @@ public class FourPlayerController {
                 alert.setTitle("Confirm Card Pick");
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    disableButtons();
+
                     player.firstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(4));
                 }
@@ -181,7 +181,7 @@ public class FourPlayerController {
                 alert.setTitle("Confirm Card Pick");
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    disableButtons();
+
                     player.firstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(6));
                 }
@@ -190,7 +190,7 @@ public class FourPlayerController {
     }
 
 
-    private void disableButtons() {
+    public static void disableButtons() {
         for (ImageView buttonClick : imageViews) {
             buttonClick.setDisable(true);
         }
