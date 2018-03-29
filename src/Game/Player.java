@@ -18,6 +18,17 @@ public class Player {
     private int makiCount;
     public Boolean firstCardPicked = false;
     public Boolean secondCardPicked = false;
+    public Card selectedCard;
+
+
+    public Card getSelectedCard() {
+        return selectedCard;
+    }
+
+    public void setSelectedCard(Card selectedCard) {
+
+        this.selectedCard = selectedCard;
+    }
 
 
     public Player(String name, String IP) {

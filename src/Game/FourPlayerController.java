@@ -37,12 +37,7 @@ public class FourPlayerController {
     @FXML
     ImageView playerCard07 = new ImageView();
     @FXML
-
-
     Vector<ImageView> imageViews = new Vector<>();
-
-
-
     Player player = new Player("Jon", "123");
     Deck deck = new Deck();
     int roundCount = 0;
@@ -52,12 +47,26 @@ public class FourPlayerController {
         Turn turn = new Turn(player);
         Thread turnHandler = new Thread(turn);
         turnHandler.start();
-        }
+    }
 
     public void startTurn(ActionEvent event) {
-//        Thread primaryPlayerTurnThread = new Thread(player, player.getName());
-//        primaryPlayerTurnThread.start();
         turn();
+    }
+
+    public void incrementRound(ActionEvent event) {
+
+        player.getRotatingHand().setCards(deck.drawCards(8 - roundCount));
+        populateImages();
+
+        // re-enable all buttons to that will be populated by card images this round
+        enableAppropriateButtons();
+        roundCount++;
+    }
+
+    public void getHands(ActionEvent event) {
+        System.out.println("Rotating: " + player.getRotatingHand());
+        System.out.println("Selected: " + player.getHand());
+
     }
 
 
@@ -83,9 +92,7 @@ public class FourPlayerController {
                 if (result.get() == ButtonType.OK) {
                     disableButtons();
                     player.firstCardPicked = true;
-                    player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(7)));
-                } else {
-                    System.out.println("cancelled");
+                    player.setSelectedCard(player.getRotatingHand().getCard(7));
                 }
             }
         });
@@ -98,9 +105,7 @@ public class FourPlayerController {
                 if (result.get() == ButtonType.OK) {
                     disableButtons();
                     player.firstCardPicked = true;
-                    player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(5)));
-                } else {
-                    System.out.println("cancelled");
+                    player.setSelectedCard(player.getRotatingHand().getCard(5));
                 }
             }
         });
@@ -113,9 +118,7 @@ public class FourPlayerController {
                 if (result.get() == ButtonType.OK) {
                     disableButtons();
                     player.firstCardPicked = true;
-                    player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(2)));
-                } else {
-                    System.out.println("cancelled");
+                    player.setSelectedCard(player.getRotatingHand().getCard(2));
                 }
             }
         });
@@ -128,9 +131,7 @@ public class FourPlayerController {
                 if (result.get() == ButtonType.OK) {
                     disableButtons();
                     player.firstCardPicked = true;
-                    player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(0)));
-                } else {
-                    System.out.println("cancelled");
+                    player.setSelectedCard(player.getRotatingHand().getCard(0));
                 }
             }
         });
@@ -143,9 +144,7 @@ public class FourPlayerController {
                 if (result.get() == ButtonType.OK) {
                     disableButtons();
                     player.firstCardPicked = true;
-                    player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(1)));
-                } else {
-                    System.out.println("cancelled");
+                    player.setSelectedCard(player.getRotatingHand().getCard(1));
                 }
             }
         });
@@ -158,9 +157,7 @@ public class FourPlayerController {
                 if (result.get() == ButtonType.OK) {
                     disableButtons();
                     player.firstCardPicked = true;
-                    player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(3)));
-                } else {
-                    System.out.println("cancelled");
+                    player.setSelectedCard(player.getRotatingHand().getCard(3));
                 }
             }
         });
@@ -173,9 +170,7 @@ public class FourPlayerController {
                 if (result.get() == ButtonType.OK) {
                     disableButtons();
                     player.firstCardPicked = true;
-                    player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(4)));
-                } else {
-                    System.out.println("cancelled");
+                    player.setSelectedCard(player.getRotatingHand().getCard(4));
                 }
             }
         });
@@ -188,50 +183,33 @@ public class FourPlayerController {
                 if (result.get() == ButtonType.OK) {
                     disableButtons();
                     player.firstCardPicked = true;
-                    player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(6)));
-                } else {
-                    System.out.println("cancelled");
+                    player.setSelectedCard(player.getRotatingHand().getCard(6));
                 }
             }
         });
     }
 
 
-    public void incrementRound(ActionEvent event) {
-
-        player.getRotatingHand().setCards(deck.drawCards(8 - roundCount));
-        populateImages();
-        // re-enable all buttons to that will be populated by card images this round
-        enableAppropriateButtons();
-        System.out.println(player.getHand());
-        roundCount++;
-    }
-
-    public void getRotatingHand(ActionEvent event) {
-
-    }
-
     private void disableButtons() {
-        for (ImageView buttonClick: imageViews) {
+        for (ImageView buttonClick : imageViews) {
             buttonClick.setDisable(true);
         }
     }
 
     private void enableAppropriateButtons() {
-        for (int i = roundCount; i < imageViews.size(); i++){
+        for (int i = roundCount; i < imageViews.size(); i++) {
             imageViews.get(i).setDisable(false);
         }
     }
 
-    private void populateImages(){
+    private void populateImages() {
         for (ImageView iv : imageViews) {
             iv.setImage(null);
         }
 
-        // I'm too much of a dummy to figure out how to use i and do a for loop going backwards =(
         Vector<ImageView> reverseImageViews = (Vector) imageViews.clone();
         Collections.reverse(reverseImageViews);
-        for(int i = 0; i < player.getRotatingHand().getCards().size(); i++){
+        for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
             Card tmp = player.getRotatingHand().getCard(i);
             Image image = new Image(tmp.getImagePath());
             reverseImageViews.get(i).setImage(image);

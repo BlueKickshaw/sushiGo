@@ -233,7 +233,7 @@
          </padding>
       </GridPane>
       <Button layoutX="209.0" layoutY="290.0" mnemonicParsing="false" onAction="#incrementRound" prefHeight="52.0" prefWidth="139.0" text="Increment Round" />
-      <Button layoutX="379.0" layoutY="289.0" mnemonicParsing="false" onAction="#getRotatingHand" prefHeight="52.0" prefWidth="139.0" text="Rotate Hand" />
+      <Button layoutX="379.0" layoutY="289.0" mnemonicParsing="false" onAction="#getHands" prefHeight="52.0" prefWidth="139.0" text="Rotate Hand" />
       <Button fx:id="startTurnButton" layoutX="614.0" layoutY="275.0" mnemonicParsing="false" onAction="#startTurn" prefHeight="73.0" prefWidth="152.0" text="Start Turn" />
    </children>
 </AnchorPane>

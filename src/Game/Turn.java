@@ -1,32 +1,31 @@
 package Game;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-
-
-
-import java.util.Vector;
-
 public class Turn implements Runnable {
 
-    private Player primaryPlayer;
-    private Button btn;
-    private ImageView imgView;
-    private double timeLimit = 5e9;
+    private Player player;
+    private long timeLimit = (long) 5e9;
 
     Turn(Player player) {
-        this.primaryPlayer = player;
+        this.player = player;
     }
 
 
     public void run() {
         long startTime = System.nanoTime();
-        while (!primaryPlayer.firstCardPicked && System.nanoTime() - startTime < timeLimit){
-
+        System.out.println(this.player.getRotatingHand());
+        while (!this.player.firstCardPicked && (System.nanoTime() - startTime < timeLimit)) {
+            // Seems to work only 'as intended' if this is included, not sure why
+            System.out.println();
         }
+        if (this.player.firstCardPicked) {
+            System.out.println(this.player.getSelectedCard());
+            this.player.getHand().addCard(this.player.getRotatingHand().selectAndRemoveCard(this.player.getSelectedCard()));
+        } else if (!player.firstCardPicked) {
+            this.player.getHand().addCard(this.player.getRotatingHand().selectAndRemoveCard(this.player.getRotatingHand().getCard(0)));
+            System.out.println("Automatically selected card: " + this.player.getHand().getCard(this.player.getHand().getCards().size() - 1));
+        }
+        this.player.setSelectedCard(null);
+        this.player.firstCardPicked = false;
     }
 
 }
