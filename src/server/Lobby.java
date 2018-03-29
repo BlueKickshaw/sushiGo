@@ -1,6 +1,7 @@
 package server;
 
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class Lobby implements Serializable {
@@ -9,13 +10,13 @@ public class Lobby implements Serializable {
     transient String password;
     boolean hasPassword = false;
 
-    String host;
+    InetAddress host;
     int playerCount;
     ArrayList<String> ipList = new ArrayList<>();
     ArrayList<String> playerNames = new ArrayList<>();
 
 
-    public Lobby(String host, String name, String password){
+    public Lobby(InetAddress host, String name, String password){
         this.host = host;
         this.name = name;
         this.password = password;

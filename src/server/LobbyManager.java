@@ -1,5 +1,6 @@
 package server;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class LobbyManager {
@@ -10,7 +11,7 @@ public class LobbyManager {
         this.network = network;
     }
 
-    public Lobby createLobby(String host, String name, String password){
+    public Lobby createLobby(InetAddress host, String name, String password){
         for (Lobby l : lobbyList){
             if (l.name.equals(name)){
                 return null;
@@ -18,7 +19,7 @@ public class LobbyManager {
         }
         Lobby lobby = new Lobby(host,name,password);
         lobbyList.add(lobby);
-        lobby.ipList.add(host);
+        lobby.ipList.add(host.getHostAddress());
         System.out.println(host+": created lobby ["+name+":"+password+"]");
         return lobby;
     }

@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class RequestManager {
@@ -36,18 +37,21 @@ public class RequestManager {
                 break;
 
             case "connectToHost": {
+                InetAddress address = (InetAddress)network.deserializeObject(network.getNextBytes(socket));
                 int newPort = Integer.parseInt(network.getNextString(socket));
                 // From here we're safe to disconnect
                 network.sendRequest("disconnect");
 
-                // We can get our lobby from here
-                InetAddress inetAddress;
                 try {
-                    inetAddress = InetAddress.getByName(network.client.getLobby().host);
-                } catch (UnknownHostException e) {
+                    network.socket.close();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-                network.setServerAddress(network.client.getLobby().host);
+
+                // We can get our lobby from here
+                InetAddress inetAddress = address;
+                network.setServerAddress(network.client.getLobby().host.getHostAddress());
+                network.port = newPort;
                 network.connectToServer();
             }
                 break;
@@ -75,11 +79,11 @@ public class RequestManager {
             case "host": {
                     String lobbyName = network.getNextString(socket);
                     password = network.getNextString(socket);
-                    Lobby l = network.lobbyManager.createLobby(socket.getInetAddress().toString(), lobbyName, password);
+                    Lobby l = network.lobbyManager.createLobby(socket.getInetAddress(), lobbyName, password);
                     String username = network.getNextString(socket);
                     l.playerNames.add(username);
                     l.ipList.add(socket.getInetAddress().toString());
-                    l.host = socket.getInetAddress().toString();
+                    l.host = socket.getInetAddress();
                     if (l != null) {
                         network.sendRequest(socket, "hostSuccess".getBytes());
 
@@ -217,15 +221,22 @@ public class RequestManager {
 
                 // We send the name of the host so that we can get a reference to the client and thus lobby
                 String hostName = network.getNextString(socket);
+                InetAddress hostAddress = socket.getInetAddress();
                 String newPort = network.getNextString(socket);
 
                 Lobby lobby =
                         (Lobby)network.deserializeObject(network.getNextBytes(socket));
 
 
+
                 for (String user :  lobby.playerNames) {
-                    Client client = network.clientConnectionManager.clients.get(user);
-                    network.sendRequest(client.getSocket(),"test".getBytes());
+                    // This is a lengthy way of finding out of we're comparing the host....
+                    if (!user.equals(hostName)) {
+                        Client client = network.clientConnectionManager.clients.get(user);
+                        network.sendRequest(client.getSocket(), "connectToHost".getBytes());
+                        network.sendRequest(client.getSocket(), hostAddress);
+                        network.sendRequest(client.getSocket(), newPort.getBytes());
+                    }
                 }
                 network.purge(socket);
                 break;
@@ -245,7 +256,7 @@ public class RequestManager {
             case "showLobbyList":
                 System.out.println("Serializing/sending lobby list");
                 network.sendRequest(socket, "receivedLobbyList".getBytes());
-                network.sendRequest(socket, network.serializeObject(network.lobbyManager.lobbyList));
+                network.sendRequest(socket,network.lobbyManager.lobbyList);
                 break;
 
             case "updateLobbyPlayers": {

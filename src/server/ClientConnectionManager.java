@@ -76,6 +76,9 @@ public class ClientConnectionManager {
                 } catch (IOException e) {
                     running = false;
                     e.printStackTrace();
+                    if (bytes.length < 20) {
+                        System.err.println("error sending: " + new String(bytes));
+                    }
                 }
             }
         }

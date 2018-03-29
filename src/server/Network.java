@@ -96,10 +96,6 @@ public class Network {
         return null;
     }
 
-    public String getNextString(Socket socket){
-        return new String(getNextBytes(socket));
-    }
-
     public int getOpenPort() {
         int freePort = 0;
         ServerSocket socket = null;
@@ -131,7 +127,11 @@ public class Network {
     }
 
     public void sendRequest(byte[] request){
-        System.out.println(Thread.currentThread().getName()+": sending ['"+new String(request)+"']");
+        if (request.length < 20) {
+            System.out.println(Thread.currentThread().getName() + ": sending ['" + new String(request) + "']");
+        } else {
+            System.out.println(Thread.currentThread().getName() + ": sending [EXCEEDS_MESSAGE_PRINT_SIZE]");
+        }
         DataOutputStream dos;
         try {
             dos = new DataOutputStream(socket.getOutputStream());
@@ -153,6 +153,19 @@ public class Network {
             e.printStackTrace();
         }
     }
+    // Various types of send requests
+    public void sendRequest(Socket dest, int request){
+        sendRequest(dest, new String("" + request).getBytes());
+    }
+
+    public void sendRequest(Socket dest, Object o){
+        sendRequest(dest, serializeObject(o));
+    }
+
+    public String getNextString(Socket socket){
+        return new String(getNextBytes(socket));
+    }
+
 
     public byte[] serializeObject(Object o){
         ObjectOutputStream oos;
