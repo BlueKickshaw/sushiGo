@@ -14,8 +14,7 @@ public class Turn implements Runnable {
         long startTime = System.nanoTime();
         System.out.println(this.player.getRotatingHand());
         while (!this.player.firstCardPicked && (System.nanoTime() - startTime < timeLimit)) {
-            // Seems to work only 'as intended' if this is included, not sure why
-            System.out.println();
+
         }
         if (this.player.firstCardPicked) {
             System.out.println(this.player.getSelectedCard());
