@@ -3,7 +3,7 @@ package Cards;
 
 public class SquidNigiri extends Card {
 
-    private String imagePath = "/CardImages/SquidNigiri.jpg";
+    private String imagePath = "/Game/CardImages/Squid_Nigiri.jpg";
 
     public SquidNigiri() {
         super("Squid Nigiri");

@@ -3,7 +3,7 @@ package Cards;
 
 public class Chopsticks extends Card {
 
-    private String imagePath = "/CardImages/Chopsticks.jpg";
+    private String imagePath = "/Game/CardImages/Chopsticks.jpg";
 
     public Chopsticks() {
         super("Chopsticks");

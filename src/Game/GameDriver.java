@@ -10,15 +10,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GameDriver {
 
     //create the hands
-    private static Vector<Player> playerList;
-    private static int playerCount = 4;
-    private static Deck deck;
-    private static int roundNum = 0;
+    private Vector<Player> playerList;
+    private int playerCount = 4;
+    private Deck deck;
+    private int roundNum = 0;
 
-    public static void initialize(int playerCountArg, String[] playerNames, String[] playerIPs) {
-        //choose players and hand size
+    public void initialize(int playerCountArg, String[] playerNames, String[] playerIPs) {
         playerCount = playerCountArg;
-        playerCount = 4;
 
         deck = new Deck();
         playerList = new Vector<>(playerCount);
@@ -28,7 +26,7 @@ public class GameDriver {
 
     }
 
-    public static void startOfRound() {
+    public void startOfRound() {
         roundNum++;
         for (Player player : playerList) {
             player.clearHand();//clears player hand
@@ -168,26 +166,37 @@ public class GameDriver {
 
 
     public static void main(String[] args) {
+        GameDriver gameDriver = new GameDriver();
         String[] names = new String[]{"0","1","2","3"};
         String[] IPs = new String[]{"0","2","4","6"};
-        initialize(4, names, IPs);
-        startOfRound();
-        for(Player player: playerList){
+        gameDriver.initialize(4, names, IPs);
+        gameDriver.startOfRound();
+        for(Player player: gameDriver.playerList){
             player.getHand().setCards(player.getRotatingHand().getCards());
         }
-        calculatePoints(playerList, roundNum);
-        startOfRound();
-        for(Player player: playerList){
-            player.getHand().setCards(player.getRotatingHand().getCards());
-        }
-        calculatePoints(playerList, roundNum);
-        startOfRound();
-        for(Player player: playerList){
-            player.getHand().setCards(player.getRotatingHand().getCards());
-        }
-        calculatePoints(playerList, roundNum);
+        calculatePoints(gameDriver.playerList, gameDriver.roundNum);
 
-        for (Player playa : playerList) {
+        for (Player playa : gameDriver.playerList) {
+
+            System.out.println(playa);
+        }
+        gameDriver.startOfRound();
+        for(Player player: gameDriver.playerList){
+            player.getHand().setCards(player.getRotatingHand().getCards());
+        }
+        calculatePoints(gameDriver.playerList, gameDriver.roundNum);;
+
+        for (Player playa : gameDriver.playerList) {
+
+            System.out.println(playa);
+        }
+        gameDriver.startOfRound();
+        for(Player player: gameDriver.playerList){
+            player.getHand().setCards(player.getRotatingHand().getCards());
+        }
+        calculatePoints(gameDriver.playerList, gameDriver.roundNum);
+
+        for (Player playa : gameDriver.playerList) {
 
             System.out.println(playa);
         }
