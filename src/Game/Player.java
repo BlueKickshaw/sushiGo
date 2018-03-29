@@ -3,8 +3,9 @@ package Game;
 import Cards.*;
 
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class Player implements Runnable {
+public class Player {
 
     private String name;
     private String IP;
@@ -15,8 +16,19 @@ public class Player implements Runnable {
     private int puddingCount;
     private int dumplingCount;
     private int makiCount;
+    public volatile Boolean firstCardPicked = false;
+    public volatile Boolean secondCardPicked = false;
+    public Card selectedCard;
 
 
+    public Card getSelectedCard() {
+        return selectedCard;
+    }
+
+    public void setSelectedCard(Card selectedCard) {
+
+        this.selectedCard = selectedCard;
+    }
 
 
     public Player(String name, String IP) {
@@ -210,11 +222,9 @@ public class Player implements Runnable {
         for (Card card : hand.getCards()) {
             if (card instanceof MakiRoll1) {
                 makiCount++;
-            }
-            else if (card instanceof MakiRoll2) {
+            } else if (card instanceof MakiRoll2) {
                 makiCount += 2;
-            }
-            else if (card instanceof MakiRoll3) {
+            } else if (card instanceof MakiRoll3) {
                 makiCount += 3;
             }
         }
@@ -234,43 +244,4 @@ public class Player implements Runnable {
                 " Round Points: " + this.roundPoints
                 + " Total Points: " + this.totalPoints);
     }
-
-    @Override
-    public void run() {
-
-
-    }
-
-    private void turn() {
-        Card selectedCard = null;
-        boolean cardConfirmed = false;
-        long startTime = System.nanoTime();
-        // wait 40 seconds (4e10) for a player to take their turn (currently 4e9 = 4 seconds for testing)
-        while (!cardConfirmed && System.nanoTime() - startTime < 4e9) {
-
-            if (selectedCard != null && cardConfirmed) {
-                if (selectedCard instanceof Chopsticks) {
-                    this.useChopsticks();
-                }else{
-                    hand.addCard(rotatingHand.selectAndRemoveCard(selectedCard));
-                    switch (selectedCard.getName()){
-                        case "Dumpling": this.dumplingCount++;
-                    }
-                }
-                cardConfirmed = true;
-                break;
-            }
-
-        }
-        if (!cardConfirmed) {
-
-        }
-
-    }
-
-    private void useChopsticks() {
-        //TODO
-    }
-
-
 }

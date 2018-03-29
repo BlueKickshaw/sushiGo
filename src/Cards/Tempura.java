@@ -3,7 +3,7 @@ package Cards;
 
 public class Tempura extends Card {
 
-    private String imagePath = "/CardImages/Tempura.jpg";
+    private String imagePath = "/Game/CardImages/Tempura.jpg";
 
     public Tempura() {
         super("Tempura");

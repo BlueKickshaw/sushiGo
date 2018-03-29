@@ -1,15 +1,15 @@
 package Cards;
 
-import java.util.Objects;
-
 public abstract class Card {
 
-    private String cardBackImagePath = "/CardImages/Cardback.jpg";
+    private String cardBackImagePath = "/Game/CardImages/Cardback.jpg";
     private String name;
 
     public Card(String name) {
         this.name = name;
     }
+
+    public abstract String getImagePath();
 
     public String getName() {
         return this.name;

@@ -1,10 +1,8 @@
 package Cards;
 
-import java.util.Objects;
-
 public class MakiRoll1 extends Card {
 
-    private String imagePath = "/CardImages/Maki_Roll_1.jpg";
+    private String imagePath = "/Game/CardImages/Maki_Roll_1.jpg";
     private int makiCount = 1;
 
 
