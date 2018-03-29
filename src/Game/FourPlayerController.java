@@ -113,9 +113,6 @@ public class FourPlayerController {
         populateCardBacks(opponent0CardBacks, cardBack);
         populateCardBacks(leftOpponent0CardBacks, rotatedCardBack);
         populateCardBacks(rightOpponent0CardBacks, rotatedCardBack);
-//        leftOpponent0CardBacks.get(1).setImage(cardBack);
-        // re-enable all buttons to that will be populated by card images this round
-        enableAppropriateButtons();
         roundCount++;
         turn();
     }
@@ -279,12 +276,6 @@ public class FourPlayerController {
         }
     }
 
-    private void enableAppropriateButtons() {
-        for (int i = roundCount; i < playerCardImages.size(); i++) {
-            playerCardImages.get(i).setDisable(false);
-        }
-    }
-
     private void populateImages(Vector<ImageView> images) {
         for (ImageView iv : images) {
             iv.setImage(null);
@@ -295,6 +286,7 @@ public class FourPlayerController {
         for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
             Card tmp = player.getRotatingHand().getCard(i);
             Image image = new Image(tmp.getImagePath());
+            reverseImageViews.get(i).setDisable(false);
             reverseImageViews.get(i).setImage(image);
         }
 
