@@ -18,83 +18,92 @@ import java.util.Vector;
 
 public class FourPlayerController {
 
-    @FXML
-    GridPane primaryPlayerGrid;
-    @FXML
-    ImageView playerCard00 = new ImageView();
-    @FXML
-    ImageView playerCard01 = new ImageView();
-    @FXML
-    ImageView playerCard02 = new ImageView();
-    @FXML
-    ImageView playerCard03 = new ImageView();
-    @FXML
-    ImageView playerCard04 = new ImageView();
-    @FXML
-    ImageView playerCard05 = new ImageView();
-    @FXML
-    ImageView playerCard06 = new ImageView();
-    @FXML
-    ImageView playerCard07 = new ImageView();
-    @FXML
+    @FXML    GridPane primaryPlayerGrid;
+    @FXML    ImageView playerCard00 = new ImageView();
+    @FXML    ImageView playerCard01 = new ImageView();
+    @FXML    ImageView playerCard02 = new ImageView();
+    @FXML    ImageView playerCard03 = new ImageView();
+    @FXML    ImageView playerCard04 = new ImageView();
+    @FXML    ImageView playerCard05 = new ImageView();
+    @FXML    ImageView playerCard06 = new ImageView();
+    @FXML    ImageView playerCard07 = new ImageView();
     static Vector<ImageView> playerCardImages = new Vector<>();
-    @FXML
-    ImageView opponent0Card00 = new ImageView();
-    @FXML
-    ImageView opponent0Card01 = new ImageView();
-    @FXML
-    ImageView opponent0Card02 = new ImageView();
-    @FXML
-    ImageView opponent0Card03 = new ImageView();
-    @FXML
-    ImageView opponent0Card04  = new ImageView();
-    @FXML
-    ImageView opponent0Card05  = new ImageView();
-    @FXML
-    ImageView opponent0Card06  = new ImageView();
-    @FXML
-    ImageView opponent0Card07  = new ImageView();
-    Vector<ImageView> opponent0CardBacks = new Vector<>();
-    @FXML
-    ImageView leftOpponent0Card00 = new ImageView();
-    @FXML
-    ImageView leftOpponent0Card01 = new ImageView();
-    @FXML
-    ImageView leftOpponent0Card02 = new ImageView();
-    @FXML
-    ImageView leftOpponent0Card03 = new ImageView();
-    @FXML
-    ImageView leftOpponent0Card04  = new ImageView();
-    @FXML
-    ImageView leftOpponent0Card05  = new ImageView();
-    @FXML
-    ImageView leftOpponent0Card06  = new ImageView();
-    @FXML
-    ImageView leftOpponent0Card07  = new ImageView();
-    Vector<ImageView> leftOpponent0CardBacks = new Vector<>();
-    @FXML
-    ImageView rightOpponent0Card00 = new ImageView();
-    @FXML
-    ImageView rightOpponent0Card01 = new ImageView();
-    @FXML
-    ImageView rightOpponent0Card02 = new ImageView();
-    @FXML
-    ImageView rightOpponent0Card03 = new ImageView();
-    @FXML
-    ImageView rightOpponent0Card04  = new ImageView();
-    @FXML
-    ImageView rightOpponent0Card05  = new ImageView();
-    @FXML
-    ImageView rightOpponent0Card06  = new ImageView();
-    @FXML
-    ImageView rightOpponent0Card07  = new ImageView();
-    Vector<ImageView> rightOpponent0CardBacks = new Vector<>();
+    @FXML    ImageView playerHandCard00 = new ImageView();
+    @FXML    ImageView playerHandCard01 = new ImageView();
+    @FXML    ImageView playerHandCard02 = new ImageView();
+    @FXML    ImageView playerHandCard03 = new ImageView();
+    @FXML    ImageView playerHandCard04 = new ImageView();
+    @FXML    ImageView playerHandCard05 = new ImageView();
+    @FXML    ImageView playerHandCard06 = new ImageView();
+    @FXML    ImageView playerHandCard07 = new ImageView();
+    Vector<ImageView> handCardImages = new Vector<>();
+
+    @FXML    ImageView topOpponentCard00 = new ImageView();
+    @FXML    ImageView topOpponentCard01 = new ImageView();
+    @FXML    ImageView topOpponentCard02 = new ImageView();
+    @FXML    ImageView topOpponentCard03 = new ImageView();
+    @FXML    ImageView topOpponentCard04 = new ImageView();
+    @FXML    ImageView topOpponentCard05 = new ImageView();
+    @FXML    ImageView topOpponentCard06 = new ImageView();
+    @FXML    ImageView topOpponentCard07 = new ImageView();
+    Vector<ImageView> topOpponentCardBacks = new Vector<>();
+    @FXML    ImageView topPlayerHandCard00 = new ImageView();
+    @FXML    ImageView topPlayerHandCard01 = new ImageView();
+    @FXML    ImageView topPlayerHandCard02 = new ImageView();
+    @FXML    ImageView topPlayerHandCard03 = new ImageView();
+    @FXML    ImageView topPlayerHandCard04 = new ImageView();
+    @FXML    ImageView topPlayerHandCard05 = new ImageView();
+    @FXML    ImageView topPlayerHandCard06 = new ImageView();
+    @FXML    ImageView topPlayerHandCard07 = new ImageView();
+    Vector<ImageView> topOpponentHandCardImages = new Vector<>();
+
+    @FXML    ImageView leftOpponentCard00 = new ImageView();
+    @FXML    ImageView leftOpponentCard01 = new ImageView();
+    @FXML    ImageView leftOpponentCard02 = new ImageView();
+    @FXML    ImageView leftOpponentCard03 = new ImageView();
+    @FXML    ImageView leftOpponentCard04 = new ImageView();
+    @FXML    ImageView leftOpponentCard05 = new ImageView();
+    @FXML    ImageView leftOpponentCard06 = new ImageView();
+    @FXML    ImageView leftOpponentCard07 = new ImageView();
+    Vector<ImageView> leftOpponentCardBacks = new Vector<>();
+    @FXML    ImageView leftPlayerHandCard00 = new ImageView();
+    @FXML    ImageView leftPlayerHandCard01 = new ImageView();
+    @FXML    ImageView leftPlayerHandCard02 = new ImageView();
+    @FXML    ImageView leftPlayerHandCard03 = new ImageView();
+    @FXML    ImageView leftPlayerHandCard04 = new ImageView();
+    @FXML    ImageView leftPlayerHandCard05 = new ImageView();
+    @FXML    ImageView leftPlayerHandCard06 = new ImageView();
+    @FXML    ImageView leftPlayerHandCard07 = new ImageView();
+    Vector<ImageView> leftOpponentHandCardImages = new Vector<>();
+
+    @FXML    ImageView rightOpponentCard00 = new ImageView();
+    @FXML    ImageView rightOpponentCard01 = new ImageView();
+    @FXML    ImageView rightOpponentCard02 = new ImageView();
+    @FXML    ImageView rightOpponentCard03 = new ImageView();
+    @FXML    ImageView rightOpponentCard04 = new ImageView();
+    @FXML    ImageView rightOpponentCard05 = new ImageView();
+    @FXML    ImageView rightOpponentCard06 = new ImageView();
+    @FXML    ImageView rightOpponentCard07 = new ImageView();
+    Vector<ImageView> rightOpponentCardBacks = new Vector<>();
+    @FXML    ImageView rightPlayerHandCard00 = new ImageView();
+    @FXML    ImageView rightPlayerHandCard01 = new ImageView();
+    @FXML    ImageView rightPlayerHandCard02 = new ImageView();
+    @FXML    ImageView rightPlayerHandCard03 = new ImageView();
+    @FXML    ImageView rightPlayerHandCard04 = new ImageView();
+    @FXML    ImageView rightPlayerHandCard05 = new ImageView();
+    @FXML    ImageView rightPlayerHandCard06 = new ImageView();
+    @FXML    ImageView rightPlayerHandCard07 = new ImageView();
+    Vector<ImageView> rightOpponentHandCardImages = new Vector<>();
 
 
     Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
-    Image rotatedCardBack = new Image ("/Game/CardImages/Cardback_Rotated.jpg");
+    Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
 
     Player player = new Player("Jon", "123");
+    Player topOpponent = new Player("dummy", "321");
+    Player leftOpponent = new Player ("lefty", "555");
+    Player rightOpponent = new Player("righty", "777");
+
     Deck deck = new Deck();
     int roundCount = 0;
 
@@ -110,16 +119,32 @@ public class FourPlayerController {
 
         player.getRotatingHand().setCards(deck.drawCards(8 - roundCount));
         populateImages(playerCardImages);
-        populateCardBacks(opponent0CardBacks, cardBack);
-        populateCardBacks(leftOpponent0CardBacks, rotatedCardBack);
-        populateCardBacks(rightOpponent0CardBacks, rotatedCardBack);
+        populateCardBacks(topOpponentCardBacks, cardBack);
+        populateCardBacks(leftOpponentCardBacks, rotatedCardBack);
+        populateCardBacks(rightOpponentCardBacks, rotatedCardBack);
         roundCount++;
+        if (roundCount > 0) {
+            setHandImages(player, handCardImages);
+            setHandImages(topOpponent, topOpponentHandCardImages);
+            setHandImages(leftOpponent, leftOpponentHandCardImages);
+            setHandImages(rightOpponent, rightOpponentHandCardImages);
+            topOpponent.getHand().addCard(deck.drawCards(1).firstElement());
+            leftOpponent.getHand().addCard(deck.drawCards(1).firstElement());
+            rightOpponent.getHand().addCard(deck.drawCards(1).firstElement());
+        }
         turn();
     }
 
     public void getHands(ActionEvent event) {
-        System.out.println("Rotating: " + player.getRotatingHand());
-        System.out.println("Selected: " + player.getHand());
+        System.out.println(player.getName());
+        System.out.println("\tRotating: " + player.getRotatingHand());
+        System.out.println("\tSelected: " + player.getHand());
+        System.out.println(topOpponent.getName());
+        System.out.println("\tSelected: " + topOpponent.getHand());
+        System.out.println(leftOpponent.getName());
+        System.out.println("\tSelected: " + leftOpponent.getHand());
+        System.out.println(rightOpponent.getName());
+        System.out.println("\tSelected: " + rightOpponent.getHand());
 
     }
 
@@ -134,30 +159,66 @@ public class FourPlayerController {
         playerCardImages.add(playerCard02);
         playerCardImages.add(playerCard04);
         playerCardImages.add(playerCard03);
-        opponent0CardBacks.add(opponent0Card00);
-        opponent0CardBacks.add(opponent0Card07);
-        opponent0CardBacks.add(opponent0Card01);
-        opponent0CardBacks.add(opponent0Card06);
-        opponent0CardBacks.add(opponent0Card05);
-        opponent0CardBacks.add(opponent0Card02);
-        opponent0CardBacks.add(opponent0Card04);
-        opponent0CardBacks.add(opponent0Card03);
-        leftOpponent0CardBacks.add(leftOpponent0Card00);
-        leftOpponent0CardBacks.add(leftOpponent0Card07);
-        leftOpponent0CardBacks.add(leftOpponent0Card01);
-        leftOpponent0CardBacks.add(leftOpponent0Card06);
-        leftOpponent0CardBacks.add(leftOpponent0Card05);
-        leftOpponent0CardBacks.add(leftOpponent0Card02);
-        leftOpponent0CardBacks.add(leftOpponent0Card04);
-        leftOpponent0CardBacks.add(leftOpponent0Card03);
-        rightOpponent0CardBacks.add(rightOpponent0Card00);
-        rightOpponent0CardBacks.add(rightOpponent0Card07);
-        rightOpponent0CardBacks.add(rightOpponent0Card01);
-        rightOpponent0CardBacks.add(rightOpponent0Card06);
-        rightOpponent0CardBacks.add(rightOpponent0Card05);
-        rightOpponent0CardBacks.add(rightOpponent0Card02);
-        rightOpponent0CardBacks.add(rightOpponent0Card04);
-        rightOpponent0CardBacks.add(rightOpponent0Card03);
+        topOpponentCardBacks.add(topOpponentCard00);
+        topOpponentCardBacks.add(topOpponentCard07);
+        topOpponentCardBacks.add(topOpponentCard01);
+        topOpponentCardBacks.add(topOpponentCard06);
+        topOpponentCardBacks.add(topOpponentCard05);
+        topOpponentCardBacks.add(topOpponentCard02);
+        topOpponentCardBacks.add(topOpponentCard04);
+        topOpponentCardBacks.add(topOpponentCard03);
+        leftOpponentCardBacks.add(leftOpponentCard00);
+        leftOpponentCardBacks.add(leftOpponentCard07);
+        leftOpponentCardBacks.add(leftOpponentCard01);
+        leftOpponentCardBacks.add(leftOpponentCard06);
+        leftOpponentCardBacks.add(leftOpponentCard05);
+        leftOpponentCardBacks.add(leftOpponentCard02);
+        leftOpponentCardBacks.add(leftOpponentCard04);
+        leftOpponentCardBacks.add(leftOpponentCard03);
+        rightOpponentCardBacks.add(rightOpponentCard00);
+        rightOpponentCardBacks.add(rightOpponentCard07);
+        rightOpponentCardBacks.add(rightOpponentCard01);
+        rightOpponentCardBacks.add(rightOpponentCard06);
+        rightOpponentCardBacks.add(rightOpponentCard05);
+        rightOpponentCardBacks.add(rightOpponentCard02);
+        rightOpponentCardBacks.add(rightOpponentCard04);
+        rightOpponentCardBacks.add(rightOpponentCard03);
+
+        handCardImages.add(playerHandCard00);
+        handCardImages.add(playerHandCard01);
+        handCardImages.add(playerHandCard02);
+        handCardImages.add(playerHandCard03);
+        handCardImages.add(playerHandCard04);
+        handCardImages.add(playerHandCard05);
+        handCardImages.add(playerHandCard06);
+        handCardImages.add(playerHandCard07);
+
+        topOpponentHandCardImages.add(topPlayerHandCard00);
+        topOpponentHandCardImages.add(topPlayerHandCard01);
+        topOpponentHandCardImages.add(topPlayerHandCard02);
+        topOpponentHandCardImages.add(topPlayerHandCard03);
+        topOpponentHandCardImages.add(topPlayerHandCard04);
+        topOpponentHandCardImages.add(topPlayerHandCard05);
+        topOpponentHandCardImages.add(topPlayerHandCard06);
+        topOpponentHandCardImages.add(topPlayerHandCard07);
+
+        leftOpponentHandCardImages.add(leftPlayerHandCard00);
+        leftOpponentHandCardImages.add(leftPlayerHandCard01);
+        leftOpponentHandCardImages.add(leftPlayerHandCard02);
+        leftOpponentHandCardImages.add(leftPlayerHandCard03);
+        leftOpponentHandCardImages.add(leftPlayerHandCard04);
+        leftOpponentHandCardImages.add(leftPlayerHandCard05);
+        leftOpponentHandCardImages.add(leftPlayerHandCard06);
+        leftOpponentHandCardImages.add(leftPlayerHandCard07);
+
+        rightOpponentHandCardImages.add(rightPlayerHandCard00);
+        rightOpponentHandCardImages.add(rightPlayerHandCard01);
+        rightOpponentHandCardImages.add(rightPlayerHandCard02);
+        rightOpponentHandCardImages.add(rightPlayerHandCard03);
+        rightOpponentHandCardImages.add(rightPlayerHandCard04);
+        rightOpponentHandCardImages.add(rightPlayerHandCard05);
+        rightOpponentHandCardImages.add(rightPlayerHandCard06);
+        rightOpponentHandCardImages.add(rightPlayerHandCard07);
 
 
         player.drawHand(deck, 4);
@@ -292,7 +353,7 @@ public class FourPlayerController {
 
     }
 
-    private void populateCardBacks(Vector<ImageView> oppCardsView, Image back){
+    private void populateCardBacks(Vector<ImageView> oppCardsView, Image back) {
         for (ImageView iv : oppCardsView) {
             iv.setImage(null);
         }
@@ -300,6 +361,18 @@ public class FourPlayerController {
         Collections.reverse(reverseImageViews);
         for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
             reverseImageViews.get(i).setImage(back);
+        }
+
+    }
+
+    private void setHandImages(Player player, Vector<ImageView> images) {
+        for (ImageView img : images) {
+            img.setImage(null);
+        }
+
+        for (int i = 0; i < player.getHand().getCards().size(); i++) {
+            Image tmp = new Image(player.getHand().getCard(i).getImagePath());
+            images.get(i).setImage(tmp);
         }
 
     }
