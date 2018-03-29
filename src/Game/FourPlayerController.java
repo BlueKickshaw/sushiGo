@@ -49,9 +49,7 @@ public class FourPlayerController {
         turnHandler.start();
     }
 
-    public void startTurn(ActionEvent event) {
-        turn();
-    }
+
 
     public void incrementRound(ActionEvent event) {
 
@@ -61,6 +59,7 @@ public class FourPlayerController {
         // re-enable all buttons to that will be populated by card images this round
         enableAppropriateButtons();
         roundCount++;
+        turn();
     }
 
     public void getHands(ActionEvent event) {
