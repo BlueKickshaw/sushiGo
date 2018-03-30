@@ -26,6 +26,13 @@ public class GameDriver {
 
     }
 
+    public GameDriver(Vector<Player> playerList) {
+        if(playerList != null && playerList.size()>0 && playerList.size()<=4) {
+            playerCount = playerList.size();
+            deck = new Deck();
+        }
+    }
+
     public void startOfRound() {
         roundNum++;
         for (Player player : playerList) {
