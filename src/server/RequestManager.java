@@ -99,7 +99,7 @@ public class RequestManager {
                 break;
 
             case "hostSuccess": {
-                    URL url = getClass().getResource("scenes/hostLobbyScreen.fxml");
+                    URL url = getClass().getResource("serverScenes/hostLobbyScreen.fxml");
                     Platform.runLater(() -> {
                         try {
                             Network.fxmlController.loadScene(url);
@@ -205,7 +205,7 @@ public class RequestManager {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        URL url = getClass().getResource("scenes/welcomeScreen.fxml");
+                        URL url = getClass().getResource("serverScenes/welcomeScreen.fxml");
                         try {
                             network.fxmlController.loadScene(url);
                         } catch (IOException e) {

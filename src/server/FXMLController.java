@@ -30,17 +30,17 @@ public class FXMLController implements Initializable {
     public static Network network;
 
     // URL list (screen locations)
-    URL loginScreen = getClass().getResource("scenes/loginScreen.fxml");
-    URL serverScreen = getClass().getResource("scenes/serverScreen.fxml");
-    URL hostScreen = getClass().getResource("scenes/hostScreen.fxml");
-    URL browserScreen = getClass().getResource("scenes/browserScreen.fxml");
-    URL hostLobbyScreen = getClass().getResource("scenes/hostLobbyScreen.fxml");
+    URL loginScreen = getClass().getResource("serverScenes/loginScreen.fxml");
+    URL serverScreen = getClass().getResource("serverScenes/serverScreen.fxml");
+    URL hostScreen = getClass().getResource("serverScenes/hostScreen.fxml");
+    URL browserScreen = getClass().getResource("serverScenes/browserScreen.fxml");
+    URL hostLobbyScreen = getClass().getResource("serverScenes/hostLobbyScreen.fxml");
 
 
     @FXML
     // The user presses a button indicating they want to go back to the welcome screen
     private void toWelcomeBtn(ActionEvent e){
-        URL url = getClass().getResource("scenes/welcomeScreen.fxml");
+        URL url = getClass().getResource("serverScenes/welcomeScreen.fxml");
         try {
             loadScene(e, url);
         } catch (IOException e1) {
@@ -247,7 +247,7 @@ public class FXMLController implements Initializable {
         int i = 0;
         for (Lobby l : list){
             // Create a new imageview; cannot reuse it every time because we get duplicate node errors
-            ImageView iv = new ImageView(String.valueOf(getClass().getResource("scenes/resources/lock.png")));
+            ImageView iv = new ImageView(String.valueOf(getClass().getResource("serverScenes/resources/lock.png")));
 
             iv.setFitHeight(15);
             iv.setFitWidth(15);
