@@ -13,7 +13,6 @@ public class Turn implements Runnable {
     private Vector<ImageView> playerCardImages;
 
     Turn(Player player,Vector<ImageView> playerCardImages) {
-
         this.player = player;
         this.playerCardImages = playerCardImages;
     }

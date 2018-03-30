@@ -1,21 +1,26 @@
 package Game;
 
 import Cards.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.sql.Time;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-public class GameDriver {
+public class GameDriver implements Runnable{
 
     //create the hands
-    private Vector<Player> playerList;
+    private Vector<Player> playerList = null;
     private int playerCount;
     private Deck deck;
-    private int roundNum = 0;
+    private volatile int roundNum = 0;
     private Player headPlayer;
-
+    private Vector<Vector<ImageView>> gameImages = new Vector<>();
+    private Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
+    private Turn turn;
+    private Thread turnHandler;
 
     public GameDriver(int playerCountArg, String[] playerNames, String[] playerIPs) {
         playerCount = playerCountArg;
@@ -28,14 +33,46 @@ public class GameDriver {
 
     }
 
-    public GameDriver(Vector<Player> playerList) {
+    public GameDriver(Vector<Player> playerList, Vector<Vector<ImageView>> gameImages) {
+        this.playerList = playerList;
         headPlayer = playerList.get(0);//TODO not hardcoded
-        if(playerList != null && playerList.size()>0 && playerList.size()<=4) {
-            playerCount = playerList.size();
+        this.gameImages = gameImages;
+        if(this.playerList != null && this.playerList.size()>0 && this.playerList.size()<=4) {
+            playerCount = this.playerList.size();
             deck = new Deck();
         }else{
             System.err.println("Invalid Vector");
         }
+    }
+
+    private void turn() {
+        turn = new Turn(headPlayer, gameImages.get(0));
+        turnHandler = new Thread(turn);
+        turnHandler.start();
+    }
+
+    public void run(){
+
+        while(roundNum < 4) {
+            startOfRound();
+            populateImages(gameImages.get(0));
+            for (int i = 1; i < gameImages.size(); i += 3) {
+                populateCardBacks(gameImages.get(i));
+            }
+            turn();
+
+            try {
+                turnHandler.join();
+            }catch  (InterruptedException e){
+                e.printStackTrace();
+                System.out.println("Game run thread broken");
+            }
+            
+
+
+        }
+
+
     }
 
     public void startOfRound() {
@@ -181,7 +218,7 @@ public class GameDriver {
     }
 
     protected void populateCardBacks(Vector<ImageView> images){
-        headPlayer.populateImages(images);
+        headPlayer.populateCardBacks(images, cardBack);
     }
 
    /* updateScore(){

@@ -68,6 +68,7 @@ public class TwoPlayerController {
     @FXML    ImageView topPlayerHandCard08 = new ImageView();
     @FXML    ImageView topPlayerHandCard09 = new ImageView();
     Vector<ImageView> topOpponentHandCardImages = new Vector<>();
+    Vector<Vector<ImageView>> gameImages = new Vector<>();
 
     @FXML    Label firstPlaceText = new Label();
     @FXML    Label secondPlaceText = new Label();
@@ -107,24 +108,20 @@ public class TwoPlayerController {
     }
 
     public void getHands(ActionEvent event) {
-        GameDriver.calculatePoints(playerList, 0);
-        updateScores(playerList);
-        System.out.println(player.getName());
-        System.out.println("\tRotating: " + player.getRotatingHand());
-        System.out.println("\tSelected: " + player.getHand());
-        System.out.println(topOpponent.getName());
-        System.out.println("\tSelected: " + topOpponent.getHand());
+        Thread gameHandler = new Thread(driver);
+        gameHandler.start();
+//        GameDriver.calculatePoints(playerList, 0);
+//        updateScores(playerList);
+//        System.out.println(player.getName());
+//        System.out.println("\tRotating: " + player.getRotatingHand());
+//        System.out.println("\tSelected: " + player.getHand());
+//        System.out.println(topOpponent.getName());
+//        System.out.println("\tSelected: " + topOpponent.getHand());
 
     }
 
 
     public void initialize() {
-        //TODO make players based on info given
-        playerList.add(player);
-        playerList.add(topOpponent);
-
-        driver = new GameDriver(playerList);
-
         playerCardImages.add(playerCard08);
         playerCardImages.add(playerCard09);
         playerCardImages.add(playerCard00);
@@ -168,6 +165,11 @@ public class TwoPlayerController {
         topOpponentHandCardImages.add(topPlayerHandCard07);
         topOpponentHandCardImages.add(topPlayerHandCard08);
         topOpponentHandCardImages.add(topPlayerHandCard09);
+
+        gameImages.add(playerCardImages);
+        gameImages.add(topOpponentCardBacks);
+        gameImages.add(handCardImages);
+        gameImages.add(topOpponentHandCardImages);
 
 
 
@@ -304,6 +306,11 @@ public class TwoPlayerController {
                 }
             }
         });
+        //TODO make players based on info given
+        playerList.add(player);
+        playerList.add(topOpponent);
+
+        driver = new GameDriver(playerList, gameImages);
     }
 
     private void updateScores(Vector<Player> players){
