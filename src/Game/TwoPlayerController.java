@@ -6,12 +6,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.Vector;
 
@@ -66,12 +68,16 @@ public class TwoPlayerController {
     @FXML    ImageView topPlayerHandCard09 = new ImageView();
     Vector<ImageView> topOpponentHandCardImages = new Vector<>();
 
+    @FXML    Label firstPlaceText = new Label();
+    @FXML    Label secondPlaceText = new Label();
+
 
     Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
     Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
 
     Player player = new Player("Jon", "123");
     Player topOpponent = new Player("dummy", "321");
+    Vector<Player> playerList = new Vector<>();
 
     Deck deck = new Deck();
     int roundCount = 0;
@@ -99,6 +105,8 @@ public class TwoPlayerController {
     }
 
     public void getHands(ActionEvent event) {
+        GameDriver.calculatePoints(playerList, 0);
+        updateScores(playerList);
         System.out.println(player.getName());
         System.out.println("\tRotating: " + player.getRotatingHand());
         System.out.println("\tSelected: " + player.getHand());
@@ -109,6 +117,9 @@ public class TwoPlayerController {
 
 
     public void initialize() {
+
+        playerList.add(player);
+        playerList.add(topOpponent);
 
         playerCardImages.add(playerCard08);
         playerCardImages.add(playerCard09);
@@ -332,6 +343,13 @@ public class TwoPlayerController {
             images.get(i).setImage(tmp);
         }
 
+    }
+    private void updateScores(Vector<Player> players){
+        Vector<Player> clonePlayerList = (Vector) players.clone();
+        clonePlayerList.sort(Comparator.comparingInt(Player::getTotalPoints));
+        Collections.reverse(clonePlayerList);
+        firstPlaceText.setText(clonePlayerList.get(0).getName() + "     " + clonePlayerList.get(0).getTotalPoints() + " Total Points");
+        secondPlaceText.setText(clonePlayerList.get(1).getName() + "     " + clonePlayerList.get(1).getTotalPoints() + " Total Points");
     }
 
 
