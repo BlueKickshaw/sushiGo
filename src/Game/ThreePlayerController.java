@@ -214,7 +214,7 @@ public class ThreePlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(7));
                 }
             }
@@ -227,7 +227,7 @@ public class ThreePlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(5));
                 }
             }
@@ -240,7 +240,7 @@ public class ThreePlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(2));
                 }
             }
@@ -253,7 +253,7 @@ public class ThreePlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(0));
                 }
             }
@@ -266,7 +266,7 @@ public class ThreePlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(1));
                 }
             }
@@ -279,7 +279,7 @@ public class ThreePlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(3));
                 }
             }
@@ -292,7 +292,7 @@ public class ThreePlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(4));
                 }
             }
@@ -305,7 +305,7 @@ public class ThreePlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(6));
                 }
             }
@@ -318,7 +318,7 @@ public class ThreePlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(8));
                 }
             }

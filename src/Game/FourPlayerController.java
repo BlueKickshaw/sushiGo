@@ -1,15 +1,10 @@
 package Game;
 
 import Cards.Card;
-import javafx.beans.InvalidationListener;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -249,7 +244,7 @@ public class FourPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(7));
                 }
             }
@@ -262,7 +257,7 @@ public class FourPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(5));
                 }
             }
@@ -275,7 +270,7 @@ public class FourPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(2));
                 }
             }
@@ -288,7 +283,7 @@ public class FourPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(0));
                 }
             }
@@ -301,7 +296,7 @@ public class FourPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(1));
                 }
             }
@@ -314,7 +309,7 @@ public class FourPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(3));
                 }
             }
@@ -327,7 +322,7 @@ public class FourPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(4));
                 }
             }
@@ -340,7 +335,7 @@ public class FourPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(6));
                 }
             }

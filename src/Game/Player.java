@@ -18,7 +18,7 @@ public class Player {
     private int puddingCount;
     private int dumplingCount;
     private int makiCount;
-    public volatile Boolean firstCardPicked = false;
+    public volatile Boolean isFirstCardPicked = false;
     public Card selectedCard;
 
 

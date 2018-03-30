@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-public class GameDriver implements Runnable{
+public class GameDriver implements Runnable {
 
     //create the hands
     private Vector<Player> playerList = null;
@@ -17,10 +17,13 @@ public class GameDriver implements Runnable{
     private Deck deck;
     private volatile int roundNum = 0;
     private Player headPlayer;
-    private Vector<Vector<ImageView>> gameImages = new Vector<>();
+    private Vector<Vector<ImageView>> rotatingImages = new Vector<>();
+    private Vector<Vector<ImageView>> handImages = new Vector<>();
     private Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
+    Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
     private Turn turn;
     private Thread turnHandler;
+    boolean flag = false;
 
     public GameDriver(int playerCountArg, String[] playerNames, String[] playerIPs) {
         playerCount = playerCountArg;
@@ -33,42 +36,51 @@ public class GameDriver implements Runnable{
 
     }
 
-    public GameDriver(Vector<Player> playerList, Vector<Vector<ImageView>> gameImages) {
+    public GameDriver(Vector<Player> playerList, Vector<Vector<ImageView>> rotatingImages,
+                      Vector<Vector<ImageView>> handImages) {
         this.playerList = playerList;
         headPlayer = playerList.get(0);//TODO not hardcoded
-        this.gameImages = gameImages;
-        if(this.playerList != null && this.playerList.size()>0 && this.playerList.size()<=4) {
+        this.rotatingImages = rotatingImages;
+        this.handImages = handImages;
+        if (this.playerList != null && this.playerList.size() > 0 && this.playerList.size() <= 4) {
             playerCount = this.playerList.size();
             deck = new Deck();
-        }else{
+        } else {
             System.err.println("Invalid Vector");
         }
     }
 
     private void turn() {
-        turn = new Turn(headPlayer, gameImages.get(0));
+        turn = new Turn(headPlayer, rotatingImages.get(0));
         turnHandler = new Thread(turn);
         turnHandler.start();
     }
 
-    public void run(){
 
-        while(roundNum < 4) {
+    public void run() {
+
+        if (!flag) {
             startOfRound();
-            populateImages(gameImages.get(0));
-            for (int i = 1; i < gameImages.size(); i += 3) {
-                populateCardBacks(gameImages.get(i));
-            }
-            turn();
+            flag = true;
+        }
+        populateImages(rotatingImages.get(0));
+        for (int i = 1; i < rotatingImages.size(); i++) {
+            populateCardBacks(rotatingImages.get(i), cardBack);
+        }
+        turn();
 
-            try {
-                turnHandler.join();
-            }catch  (InterruptedException e){
-                e.printStackTrace();
-                System.out.println("Game run thread broken");
-            }
-            
-
+        try {
+            turnHandler.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("Game run thread broken");
+        }
+        populateImages(rotatingImages.get(0));
+        populateCardBacks(rotatingImages.get(1), cardBack);
+        playerList.get(1).getHand().addCard(playerList.get(1).getRotatingHand().selectAndRemoveCard(playerList.get(1).getRotatingHand().getCard(0)));
+        int tmpIndex = 0;
+        for (Player player : playerList) {
+            player.setHandImages(player, handImages.get(tmpIndex++));
 
         }
 
@@ -217,18 +229,18 @@ public class GameDriver implements Runnable{
         headPlayer.populateImages(images);
     }
 
-    protected void populateCardBacks(Vector<ImageView> images){
-        headPlayer.populateCardBacks(images, cardBack);
+    protected void populateCardBacks(Vector<ImageView> images, Image cardBackType) {
+        headPlayer.populateCardBacks(images, cardBackType);
     }
 
-   /* updateScore(){
-        Vector<Player> clonePlayerList = (Vector) players.clone();
-        clonePlayerList.sort(Comparator.comparingInt(Player::getTotalPoints));
-        Collections.reverse(clonePlayerList);
-        firstPlaceText.setText(clonePlayerList.get(0).getName() + "     " + clonePlayerList.get(0).getTotalPoints() + " Total Points");
-        secondPlaceText.setText(clonePlayerList.get(1).getName() + "     " + clonePlayerList.get(1).getTotalPoints() + " Total Points");
+    /* updateScore(){
+         Vector<Player> clonePlayerList = (Vector) players.clone();
+         clonePlayerList.sort(Comparator.comparingInt(Player::getTotalPoints));
+         Collections.reverse(clonePlayerList);
+         firstPlaceText.setText(clonePlayerList.get(0).getName() + "     " + clonePlayerList.get(0).getTotalPoints() + " Total Points");
+         secondPlaceText.setText(clonePlayerList.get(1).getName() + "     " + clonePlayerList.get(1).getTotalPoints() + " Total Points");
 
-    }*/
+     }*/
     public static void main(String[] args) {
 
     }
