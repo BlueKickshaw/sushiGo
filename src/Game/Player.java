@@ -290,4 +290,28 @@ public class Player {
         }
 
     }
+
+    protected void populateCardBacks(Vector<ImageView> oppCardsView, Image back) {
+        for (ImageView iv : oppCardsView) {
+            iv.setImage(null);
+        }
+        Vector<ImageView> reverseImageViews = (Vector) oppCardsView.clone();
+        Collections.reverse(reverseImageViews);
+        for (int i = 0; i < this.getRotatingHand().getCards().size(); i++) {
+            reverseImageViews.get(i).setImage(back);
+        }
+
+    }
+
+    protected void setHandImages(Player player, Vector<ImageView> images) {
+        for (ImageView img : images) {
+            img.setImage(null);
+        }
+
+        for (int i = 0; i < player.getHand().getCards().size(); i++) {
+            Image tmp = new Image(player.getHand().getCard(i).getImagePath());
+            images.get(i).setImage(tmp);
+        }
+
+    }
 }

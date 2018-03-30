@@ -95,12 +95,12 @@ public class TwoPlayerController {
     public void incrementRound(ActionEvent event) {
 
         player.getRotatingHand().setCards(deck.drawCards(10 - roundCount));
-        driver.populateImages(playerCardImages);
-        populateCardBacks(topOpponentCardBacks, cardBack);
+        player.populateImages(playerCardImages);
+        player.populateCardBacks(topOpponentCardBacks, cardBack);
         roundCount++;
         if (roundCount > 0) {
-            setHandImages(player, handCardImages);
-            setHandImages(topOpponent, topOpponentHandCardImages);
+            player.setHandImages(player, handCardImages);
+            player.setHandImages(topOpponent, topOpponentHandCardImages);
             topOpponent.getHand().addCard(deck.drawCards(1).firstElement());
         }
         turn();
@@ -305,34 +305,6 @@ public class TwoPlayerController {
         });
     }
 
-
-
-
-
-
-    private void populateCardBacks(Vector<ImageView> oppCardsView, Image back) {
-        for (ImageView iv : oppCardsView) {
-            iv.setImage(null);
-        }
-        Vector<ImageView> reverseImageViews = (Vector) oppCardsView.clone();
-        Collections.reverse(reverseImageViews);
-        for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
-            reverseImageViews.get(i).setImage(back);
-        }
-
-    }
-
-    private void setHandImages(Player player, Vector<ImageView> images) {
-        for (ImageView img : images) {
-            img.setImage(null);
-        }
-
-        for (int i = 0; i < player.getHand().getCards().size(); i++) {
-            Image tmp = new Image(player.getHand().getCard(i).getImagePath());
-            images.get(i).setImage(tmp);
-        }
-
-    }
     private void updateScores(Vector<Player> players){
         Vector<Player> clonePlayerList = (Vector) players.clone();
         clonePlayerList.sort(Comparator.comparingInt(Player::getTotalPoints));
