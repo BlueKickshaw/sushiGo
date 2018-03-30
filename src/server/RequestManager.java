@@ -99,7 +99,7 @@ public class RequestManager {
                 break;
 
             case "hostSuccess": {
-                    URL url = getClass().getResource("scenes/hostLobbyScreen.fxml");
+                    URL url = getClass().getResource("serverScenes/hostLobbyScreen.fxml");
                     Platform.runLater(() -> {
                         try {
                             Network.fxmlController.loadScene(url);
@@ -205,7 +205,7 @@ public class RequestManager {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        URL url = getClass().getResource("scenes/welcomeScreen.fxml");
+                        URL url = getClass().getResource("serverScenes/welcomeScreen.fxml");
                         try {
                             network.fxmlController.loadScene(url);
                         } catch (IOException e) {
@@ -242,11 +242,6 @@ public class RequestManager {
                 break;
             }
 
-            case "test":{
-                System.out.println("TEST");
-                break;
-            }
-
             case "receivedLobbyList":
                 network.lobbyManager.lobbyList =
                         (ArrayList<Lobby>)network.deserializeObject(network.getNextBytes(socket));
@@ -258,6 +253,13 @@ public class RequestManager {
                 network.sendRequest(socket, "receivedLobbyList".getBytes());
                 network.sendRequest(socket,network.lobbyManager.lobbyList);
                 break;
+
+            case "startGame": {
+                Platform.runLater(() -> {
+                    network.fxmlController.startGame(network.client.getLobby());
+                });
+                break;
+            }
 
             case "updateLobbyPlayers": {
                 Lobby lobby = (Lobby)network.deserializeObject(network.getNextBytes(socket));

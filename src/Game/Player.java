@@ -3,7 +3,6 @@ package Game;
 import Cards.*;
 
 import java.util.Vector;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Player {
 
@@ -17,7 +16,6 @@ public class Player {
     private int dumplingCount;
     private int makiCount;
     public volatile Boolean firstCardPicked = false;
-    public volatile Boolean secondCardPicked = false;
     public Card selectedCard;
 
 
@@ -36,11 +34,6 @@ public class Player {
         this.IP = IP;
         this.hand = new Hand();
         this.rotatingHand = null;
-        this.roundPoints = 0;
-        this.totalPoints = 0;
-        this.puddingCount = 0;
-        this.dumplingCount = 0;
-        this.makiCount = 0;
     }
 
     public void setHand(Vector<Card> cards) {
@@ -243,5 +236,40 @@ public class Player {
                 " IP: " + this.IP +
                 " Round Points: " + this.roundPoints
                 + " Total Points: " + this.totalPoints);
+    }
+
+    public boolean hasChopsticks() {
+        for (Card card :
+                this.hand.getCards()) {
+            if (card instanceof Chopsticks) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void useChopsticks() {
+        Card selectedCard = null;
+        boolean cardConfirmed = false;
+        long startTime = System.nanoTime();
+        // wait 10 seconds (1e10) for a player to take their turn
+        while (!cardConfirmed && System.nanoTime() - startTime < 1e10) {
+
+            if (selectedCard != null && cardConfirmed) {
+                rotatingHand.addCard(new Chopsticks());
+                hand.addCard(rotatingHand.selectAndRemoveCard(selectedCard));
+
+                if (selectedCard instanceof Dumpling) {
+                    this.dumplingCount++;
+                }
+                cardConfirmed = true;
+                break;
+            }
+
+        }
+        if (!cardConfirmed) {
+
+        }
+
     }
 }
