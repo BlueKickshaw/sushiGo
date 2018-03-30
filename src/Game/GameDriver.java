@@ -5,17 +5,17 @@ import Cards.*;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class GameDriver {
 
     //create the hands
     private Vector<Player> playerList;
-    private int playerCount = 4;
+    private int playerCount;
     private Deck deck;
     private int roundNum = 0;
 
-    public void initialize(int playerCountArg, String[] playerNames, String[] playerIPs) {
+
+    public GameDriver(int playerCountArg, String[] playerNames, String[] playerIPs) {
         playerCount = playerCountArg;
 
         deck = new Deck();
@@ -166,40 +166,6 @@ public class GameDriver {
 
 
     public static void main(String[] args) {
-        GameDriver gameDriver = new GameDriver();
-        String[] names = new String[]{"0","1","2","3"};
-        String[] IPs = new String[]{"0","2","4","6"};
-        gameDriver.initialize(4, names, IPs);
-        gameDriver.startOfRound();
-        for(Player player: gameDriver.playerList){
-            player.getHand().setCards(player.getRotatingHand().getCards());
-        }
-        calculatePoints(gameDriver.playerList, gameDriver.roundNum);
-
-        for (Player playa : gameDriver.playerList) {
-
-            System.out.println(playa);
-        }
-        gameDriver.startOfRound();
-        for(Player player: gameDriver.playerList){
-            player.getHand().setCards(player.getRotatingHand().getCards());
-        }
-        calculatePoints(gameDriver.playerList, gameDriver.roundNum);;
-
-        for (Player playa : gameDriver.playerList) {
-
-            System.out.println(playa);
-        }
-        gameDriver.startOfRound();
-        for(Player player: gameDriver.playerList){
-            player.getHand().setCards(player.getRotatingHand().getCards());
-        }
-        calculatePoints(gameDriver.playerList, gameDriver.roundNum);
-
-        for (Player playa : gameDriver.playerList) {
-
-            System.out.println(playa);
-        }
 
     }
 

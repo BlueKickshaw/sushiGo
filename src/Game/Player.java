@@ -3,9 +3,8 @@ package Game;
 import Cards.*;
 
 import java.util.Vector;
-import java.util.concurrent.ThreadLocalRandom;
 
-public class Player {
+public class Player implements Runnable {
 
     private String name;
     private String IP;
@@ -222,9 +221,11 @@ public class Player {
         for (Card card : hand.getCards()) {
             if (card instanceof MakiRoll1) {
                 makiCount++;
-            } else if (card instanceof MakiRoll2) {
+            }
+            else if (card instanceof MakiRoll2) {
                 makiCount += 2;
-            } else if (card instanceof MakiRoll3) {
+            }
+            else if (card instanceof MakiRoll3) {
                 makiCount += 3;
             }
         }
@@ -244,4 +245,78 @@ public class Player {
                 " Round Points: " + this.roundPoints
                 + " Total Points: " + this.totalPoints);
     }
+
+    @Override
+    public void run() {
+
+
+    }
+
+    private void turn() {
+        Card selectedCard = null;
+        boolean cardConfirmed = false;
+        long startTime = System.nanoTime();
+        // wait 40 seconds (4e10) for a player to take their turn (currently 4e9 = 4 seconds for testing)
+        while (!cardConfirmed && System.nanoTime() - startTime < 4e9) {
+
+            if (selectedCard != null && cardConfirmed) {
+                hand.addCard(rotatingHand.selectAndRemoveCard(selectedCard));
+                if (selectedCard instanceof Dumpling) {
+                    this.dumplingCount++;
+                }
+                cardConfirmed = true;
+                break;
+            }
+
+        }
+        if (!cardConfirmed) {
+
+        }
+
+    }
+
+    public boolean hasChopsticks(){
+        for (Card card :
+                this.hand.getCards()) {
+            if(card instanceof Chopsticks){return true;}
+        }
+        return false;
+    }
+
+    public void useChopsticks() {
+        Card selectedCard = null;
+        boolean cardConfirmed = false;
+        long startTime = System.nanoTime();
+        // wait 10 seconds (1e10) for a player to take their turn
+        while (!cardConfirmed && System.nanoTime() - startTime < 1e10) {
+
+            if (selectedCard != null && cardConfirmed) {
+                rotatingHand.addCard(new Chopsticks());
+                hand.addCard(rotatingHand.selectAndRemoveCard(selectedCard));
+
+                if (selectedCard instanceof Dumpling) {
+                    this.dumplingCount++;
+                }
+                cardConfirmed = true;
+                break;
+            }
+
+        }
+        if (!cardConfirmed) {
+
+        }
+
+    }
+
+    public void useChopsticksTest(Card c) {
+                rotatingHand.addCard(new Chopsticks());
+                hand.addCard(rotatingHand.selectAndRemoveCard(c));
+
+                if (c instanceof Dumpling) {
+                    this.dumplingCount++;
+                }
+
+    }
+
+
 }
