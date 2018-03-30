@@ -1,19 +1,21 @@
 package Game;
 
 import Cards.Card;
+import javafx.beans.InvalidationListener;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Vector;
+import java.util.*;
 
 
 public class FourPlayerController {
@@ -94,6 +96,13 @@ public class FourPlayerController {
     @FXML    ImageView rightPlayerHandCard06 = new ImageView();
     @FXML    ImageView rightPlayerHandCard07 = new ImageView();
     Vector<ImageView> rightOpponentHandCardImages = new Vector<>();
+    @FXML    GridPane scoreGridPane = new GridPane();
+    @FXML    Label firstPlaceText = new Label();
+    @FXML    Label secondPlaceText = new Label();
+    @FXML    Label thirdPlaceText = new Label();
+    @FXML    Label fourthPlaceText = new Label();
+
+
 
 
     Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
@@ -103,6 +112,7 @@ public class FourPlayerController {
     Player topOpponent = new Player("dummy", "321");
     Player leftOpponent = new Player ("lefty", "555");
     Player rightOpponent = new Player("righty", "777");
+    Vector<Player> playerList = new Vector<>();
 
     Deck deck = new Deck();
     int roundCount = 0;
@@ -136,6 +146,9 @@ public class FourPlayerController {
     }
 
     public void getHands(ActionEvent event) {
+
+        GameDriver.calculatePoints(playerList, 0);
+        updateScores(playerList);
         System.out.println(player.getName());
         System.out.println("\tRotating: " + player.getRotatingHand());
         System.out.println("\tSelected: " + player.getHand());
@@ -150,6 +163,11 @@ public class FourPlayerController {
 
 
     public void initialize() {
+        playerList.add(player);
+        playerList.add(topOpponent);
+        playerList.add(leftOpponent);
+        playerList.add(rightOpponent);
+
 
         playerCardImages.add(playerCard00);
         playerCardImages.add(playerCard07);
@@ -219,7 +237,6 @@ public class FourPlayerController {
         rightOpponentHandCardImages.add(rightPlayerHandCard05);
         rightOpponentHandCardImages.add(rightPlayerHandCard06);
         rightOpponentHandCardImages.add(rightPlayerHandCard07);
-
 
         player.drawHand(deck, 4);
 
@@ -368,6 +385,16 @@ public class FourPlayerController {
             images.get(i).setImage(tmp);
         }
 
+    }
+
+    private void updateScores(Vector<Player> players){
+        Vector<Player> clonePlayerList = (Vector) players.clone();
+        clonePlayerList.sort(Comparator.comparingInt(Player::getTotalPoints));
+        Collections.reverse(clonePlayerList);
+        firstPlaceText.setText(clonePlayerList.get(0).getName() + "     " + clonePlayerList.get(0).getTotalPoints() + " Total Points");
+        secondPlaceText.setText(clonePlayerList.get(1).getName() + "     " + clonePlayerList.get(1).getTotalPoints() + " Total Points");
+        thirdPlaceText.setText(clonePlayerList.get(2).getName() + "     " + clonePlayerList.get(2).getTotalPoints() + " Total Points");
+        fourthPlaceText.setText(clonePlayerList.get(3).getName() + "     " + clonePlayerList.get(3).getTotalPoints() + " Total Points");
     }
 
 
