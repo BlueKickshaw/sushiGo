@@ -14,6 +14,7 @@ public class GameDriver {
     private int playerCount;
     private Deck deck;
     private int roundNum = 0;
+    private Player headPlayer;
 
 
     public GameDriver(int playerCountArg, String[] playerNames, String[] playerIPs) {
@@ -28,9 +29,12 @@ public class GameDriver {
     }
 
     public GameDriver(Vector<Player> playerList) {
+        headPlayer = playerList.get(0);//TODO not hardcoded
         if(playerList != null && playerList.size()>0 && playerList.size()<=4) {
             playerCount = playerList.size();
             deck = new Deck();
+        }else{
+            System.err.println("Invalid Vector");
         }
     }
 
@@ -173,12 +177,21 @@ public class GameDriver {
     }
 
     protected void populateImages(Vector<ImageView> images) {
-        for (Player player :
-                playerList) {
-            player.populateImages(images);
-        }
+        headPlayer.populateImages(images);
     }
 
+    protected void populateCardBacks(Vector<ImageView> images){
+        headPlayer.populateImages(images);
+    }
+
+   /* updateScore(){
+        Vector<Player> clonePlayerList = (Vector) players.clone();
+        clonePlayerList.sort(Comparator.comparingInt(Player::getTotalPoints));
+        Collections.reverse(clonePlayerList);
+        firstPlaceText.setText(clonePlayerList.get(0).getName() + "     " + clonePlayerList.get(0).getTotalPoints() + " Total Points");
+        secondPlaceText.setText(clonePlayerList.get(1).getName() + "     " + clonePlayerList.get(1).getTotalPoints() + " Total Points");
+
+    }*/
     public static void main(String[] args) {
 
     }

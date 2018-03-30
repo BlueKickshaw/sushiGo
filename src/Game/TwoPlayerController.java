@@ -119,10 +119,11 @@ public class TwoPlayerController {
 
 
     public void initialize() {
-        driver = new GameDriver(playerList);
-
+        //TODO make players based on info given
         playerList.add(player);
         playerList.add(topOpponent);
+
+        driver = new GameDriver(playerList);
 
         playerCardImages.add(playerCard08);
         playerCardImages.add(playerCard09);
