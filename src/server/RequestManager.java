@@ -242,11 +242,6 @@ public class RequestManager {
                 break;
             }
 
-            case "test":{
-                System.out.println("TEST");
-                break;
-            }
-
             case "receivedLobbyList":
                 network.lobbyManager.lobbyList =
                         (ArrayList<Lobby>)network.deserializeObject(network.getNextBytes(socket));
@@ -258,6 +253,13 @@ public class RequestManager {
                 network.sendRequest(socket, "receivedLobbyList".getBytes());
                 network.sendRequest(socket,network.lobbyManager.lobbyList);
                 break;
+
+            case "startGame": {
+                Platform.runLater(() -> {
+                    network.fxmlController.startGame(network.client.getLobby());
+                });
+                break;
+            }
 
             case "updateLobbyPlayers": {
                 Lobby lobby = (Lobby)network.deserializeObject(network.getNextBytes(socket));

@@ -1,5 +1,6 @@
 package server;
 
+import Game.Deck;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -80,16 +81,35 @@ public class FXMLController implements Initializable {
         network.sendRequest(network.username);  // We need to tell the server who we are
     }
     @FXML public void hostMigrate(ActionEvent e){
+        // Find out what port we can use
         network.port = network.getOpenPort();
+
+        // Tell the server we're going to branch off and become our own server
         network.sendRequest("migrate");
         network.sendRequest(network.username);
         network.sendRequest("" + network.port);
+
+        // Send the lobby information to the users
         network.sendRequest(network.serializeObject(network.client.getLobby()));
+
+        // Disconnect from the server
         network.sendRequest("disconnect");
+
+        // Become the new server, using our new assigned port
         network.startServer(network);
+
+        // Everyone in the lobby (the host as well is intended but not working yet) will be told to start the game
+        network.sendToLobby("startGame".getBytes());
+        startGame(network.client.getLobby());
     }
 
     @FXML public void hostTest(ActionEvent e){
+        URL url = Deck.class.getResource("table/gameTable.fxml");
+        try {
+            loadScene(e,url);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
     }
 
     @FXML private TextField loginNameText;
@@ -137,6 +157,15 @@ public class FXMLController implements Initializable {
         return root;
     }
 
+    @FXML
+    public void loadScene(URL url, int width, int height) throws IOException {
+        Parent root = loader.load(url);
+        Scene newScene = new Scene(root, width, height);
+
+        stage.setScene(newScene);
+        stage.show();
+    }
+
     // When we call this from other methods, we refer to the saved event
     @FXML
     public Parent loadScene(URL url) throws IOException {
@@ -169,6 +198,34 @@ public class FXMLController implements Initializable {
     @FXML public void removeStartLobbyBtn(){
         hostStartLobbyBtn.setDisable(true);
     }
+
+    @FXML public void startGame(Lobby lobby) {
+        // Depending on how many players we have, we'l need to load a different scene
+        URL gameScene = null;
+
+        switch (lobby.playerCount) {
+            case 2:
+                gameScene = Deck.class.getResource("gameScenes/2PlayerGame.fxml");
+                break;
+            case 3:
+                gameScene = Deck.class.getResource("gameScenes/3PlayerGame.fxml");
+                break;
+            case 4:
+                gameScene = Deck.class.getResource("gameScenes/4PlayerGame.fxml");
+                break;
+            default:
+                new Alert(Alert.AlertType.ERROR,"Invalid amount of players!", ButtonType.OK).show();
+                break;
+        }
+
+        try {
+            System.out.println("loading: "+gameScene.toString());
+            loadScene(gameScene,1100,700);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
 
     @FXML private GridPane lobbyPlayerGrid;
     @FXML public void updatePlayerGrid(Lobby lobby){
