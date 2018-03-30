@@ -1,14 +1,21 @@
 package Game;
 
-import static Game.FourPlayerController.disableButtons;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.util.Vector;
+
 
 public class Turn implements Runnable {
 
     private Player player;
     private long timeLimit = (long) 5e9;
+    private Vector<ImageView> playerCardImages;
 
-    Turn(Player player) {
+    Turn(Player player,Vector<ImageView> playerCardImages) {
+
         this.player = player;
+        this.playerCardImages = playerCardImages;
     }
 
 
@@ -29,6 +36,11 @@ public class Turn implements Runnable {
         }
         player.setSelectedCard(null);
         player.firstCardPicked = false;
+    }
+    private void disableButtons() {
+        for (ImageView buttonClick : playerCardImages) {
+            buttonClick.setDisable(true);
+        }
     }
 
 }
