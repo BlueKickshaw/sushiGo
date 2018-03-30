@@ -1,7 +1,10 @@
 package Game;
 
 import Cards.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
+import java.util.Collections;
 import java.util.Vector;
 
 public class Player {
@@ -269,6 +272,21 @@ public class Player {
         }
         if (!cardConfirmed) {
 
+        }
+    }
+
+    protected void populateImages(Vector<ImageView> images) {
+        for (ImageView iv : images) {
+            iv.setImage(null);
+        }
+
+        Vector<ImageView> reverseImageViews = (Vector) images.clone();
+        Collections.reverse(reverseImageViews);
+        for (int i = 0; i < this.getRotatingHand().getCards().size(); i++) {
+            Card tmp = this.getRotatingHand().getCard(i);
+            Image image = new Image(tmp.getImagePath());
+            reverseImageViews.get(i).setDisable(false);
+            reverseImageViews.get(i).setImage(image);
         }
 
     }

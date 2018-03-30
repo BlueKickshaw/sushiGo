@@ -95,7 +95,7 @@ public class TwoPlayerController {
     public void incrementRound(ActionEvent event) {
 
         player.getRotatingHand().setCards(deck.drawCards(10 - roundCount));
-        populateImages(playerCardImages);
+        driver.populateImages(playerCardImages);
         populateCardBacks(topOpponentCardBacks, cardBack);
         roundCount++;
         if (roundCount > 0) {
@@ -308,21 +308,7 @@ public class TwoPlayerController {
 
 
 
-    private void populateImages(Vector<ImageView> images) {
-        for (ImageView iv : images) {
-            iv.setImage(null);
-        }
 
-        Vector<ImageView> reverseImageViews = (Vector) images.clone();
-        Collections.reverse(reverseImageViews);
-        for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
-            Card tmp = player.getRotatingHand().getCard(i);
-            Image image = new Image(tmp.getImagePath());
-            reverseImageViews.get(i).setDisable(false);
-            reverseImageViews.get(i).setImage(image);
-        }
-
-    }
 
     private void populateCardBacks(Vector<ImageView> oppCardsView, Image back) {
         for (ImageView iv : oppCardsView) {

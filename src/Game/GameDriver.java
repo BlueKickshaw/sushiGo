@@ -1,6 +1,7 @@
 package Game;
 
 import Cards.*;
+import javafx.scene.image.ImageView;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -171,6 +172,12 @@ public class GameDriver {
         }
     }
 
+    protected void populateImages(Vector<ImageView> images) {
+        for (Player player :
+                playerList) {
+            player.populateImages(images);
+        }
+    }
 
     public static void main(String[] args) {
 
