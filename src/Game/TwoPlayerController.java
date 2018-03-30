@@ -20,6 +20,7 @@ import java.util.Vector;
 
 public class TwoPlayerController {
 
+    GameDriver driver;
     @FXML    GridPane primaryPlayerGrid;
     @FXML    ImageView playerCard00 = new ImageView();
     @FXML    ImageView playerCard01 = new ImageView();
@@ -79,6 +80,7 @@ public class TwoPlayerController {
     Player topOpponent = new Player("dummy", "321");
     Vector<Player> playerList = new Vector<>();
 
+    //GameDriver driver = new GameDriver(playerList);
     Deck deck = new Deck();
     int roundCount = 0;
 
@@ -117,6 +119,7 @@ public class TwoPlayerController {
 
 
     public void initialize() {
+        driver = new GameDriver(playerList);
 
         playerList.add(player);
         playerList.add(topOpponent);
