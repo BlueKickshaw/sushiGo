@@ -14,7 +14,7 @@ public class Main extends Application {
     int port = 8080;
 
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("scenes/entryScreen.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("serverScenes/entryScreen.fxml"));
         stage.setTitle("SushiGo");
         stage.setScene(new Scene(root,300,500));
         stage.show();
