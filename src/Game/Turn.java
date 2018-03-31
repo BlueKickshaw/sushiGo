@@ -8,7 +8,7 @@ import java.util.Vector;
 public class Turn implements Runnable {
 
     private Player player;
-    private long timeLimit = (long) 5e9;
+    private long timeLimit = (long) 3e7;
     private Vector<ImageView> playerCardImages;
 
     Turn(Player player, Vector<ImageView> playerCardImages) {
@@ -32,7 +32,7 @@ public class Turn implements Runnable {
             System.out.println("Automatically selected card: " + player.getHand().getCard(player.getHand().getCards().size() - 1));
         }
         player.setSelectedCard(null);
-        player.isFirstCardPicked = false;
+//        player.isFirstCardPicked = false;
     }
 
     private void disableButtons() {

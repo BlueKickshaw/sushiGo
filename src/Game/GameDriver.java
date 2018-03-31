@@ -15,7 +15,7 @@ public class GameDriver implements Runnable {
     private Vector<Player> playerList = null;
     private int playerCount;
     private Deck deck;
-    private volatile int roundNum = 0;
+    private int roundNum = 0;
     private Player headPlayer;
     private Vector<Vector<ImageView>> rotatingImages = new Vector<>();
     private Vector<Vector<ImageView>> handImages = new Vector<>();
@@ -58,37 +58,47 @@ public class GameDriver implements Runnable {
 
 
     public void run() {
-    while(playerList.get(0).getHand().getCards().size() < 10) {
-        if (!flag) {
-            startOfRound();
-            flag = true;
-        }
-        populateImages(rotatingImages.get(0));
-        for (int i = 1; i < rotatingImages.size(); i++) {
-            populateCardBacks(rotatingImages.get(i), cardBack);
-        }
-        turn();
+        while (roundNum < 3) {
+            while (headPlayer.getHand().getCards().size() < 10) {
+                if (!flag) {
+                    startOfRound();
+                    flag = true;
+                }
+                populateImages(rotatingImages.get(0));
+                for (int i = 1; i < rotatingImages.size(); i++) {
+                    populateCardBacks(rotatingImages.get(i), cardBack);
+                }
+                turn();
 
-        try {
-            turnHandler.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.out.println("Game run thread broken");
-        }
-        populateImages(rotatingImages.get(0));
-        populateCardBacks(rotatingImages.get(1), cardBack);
-        playerList.get(1).getHand().addCard(playerList.get(1).getRotatingHand().selectAndRemoveCard(playerList.get(1).getRotatingHand().getCard(0)));
-        int tmpIndex = 0;
-        for (Player player : playerList) {
-            player.setHandImages(player, handImages.get(tmpIndex++));
+                try {
+                    turnHandler.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    System.out.println("Game run thread broken");
+                }
+                populateImages(rotatingImages.get(0));
+                populateCardBacks(rotatingImages.get(1), cardBack);
+                playerList.get(1).getHand().addCard(playerList.get(1).getRotatingHand().selectAndRemoveCard(playerList.get(1).getRotatingHand().getCard(0)));
+                int tmpIndex = 0;
+                for (Player player : playerList) {
+                    player.setHandImages(player, handImages.get(tmpIndex++));
 
-        }
+                }
+            }
+            roundNum++;
+            flag = false;
+            if (roundNum < 3) {
+                headPlayer.getHand().clearCards();
+            }
+            int tmpIndex = 0;
+            for (Player player : playerList) {
+                player.setHandImages(player, handImages.get(tmpIndex++));
 
-    }
+            }
+        }
     }
 
     public void startOfRound() {
-        roundNum++;
         for (Player player : playerList) {
             player.clearHand();//clears player hand
             player.drawHand(deck, playerCount);//populates rotating hand
