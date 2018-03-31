@@ -1,6 +1,7 @@
 package server;
 
 import Cards.Card;
+import Game.GameDriver;
 import javafx.application.Platform;
 
 import java.io.*;
@@ -15,7 +16,7 @@ public class Network {
     public Server server;
     public String username = new String("");
 
-    public volatile ArrayList<Card> passedCards = new ArrayList<>();
+    public GameDriver gameDriver;
 
     public static FXMLController fxmlController;
 

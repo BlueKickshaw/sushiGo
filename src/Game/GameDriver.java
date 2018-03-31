@@ -1,7 +1,9 @@
 package Game;
 
 import Cards.*;
+import server.Network;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
@@ -14,6 +16,10 @@ public class GameDriver {
     private Deck deck;
     private int roundNum = 0;
 
+    public ArrayList<String> storedPlayerNames = new ArrayList<>();
+    public ArrayList<Hand> storedPlayedHands = new ArrayList<>();
+    public ArrayList<Hand> storedRotateHands = new ArrayList<>();
+    public int passedCards = 0;
 
     public GameDriver(int playerCountArg, String[] playerNames, String[] playerIPs) {
         playerCount = playerCountArg;
@@ -161,6 +167,10 @@ public class GameDriver {
         for (Player player : tmpPlayerList) {
             player.setMakiCount(0);
         }
+    }
+
+    public void sendEndOfRoundData(){
+
     }
 
     public static void main(String[] args) {

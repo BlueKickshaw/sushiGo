@@ -14,6 +14,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Vector;
 
 public class RequestManager {
     Network network;
@@ -80,21 +81,35 @@ public class RequestManager {
             case "endTurn": {
                 // turn name card hand
                 String playerName = network.getNextString(socket);
-                Card chosenCard = (Card)network.deserializeObject(network.getNextBytes(socket));
-                Hand passedHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
-                System.out.println("RECEIVED CARD: "+chosenCard.getName());
+                Hand playedHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
+                Hand rotateHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
+
+                int ind = network.clientConnectionManager.clients.get(playerName).getPlayerNumber() - 1;
+                network.gameDriver.storedPlayerNames.add(ind, playerName);
+                network.gameDriver.storedPlayedHands.add(ind, playedHand);
+                network.gameDriver.storedRotateHands.add(ind, rotateHand);
+
+                if (network.gameDriver.passedCards == network.client.getLobby().playerCount) {
+                    // We have everyone's card
+                    System.out.println("RECEIVED ALL");
+
+                    for (int i = 1; i < network.client.getLobby().playerCount; i++) {
+                        network.sendToPlayer(i+1,"endOfTurnData".getBytes());
+                        network.sendToPlayer(i+1, network.serializeObject(
+                                network.gameDriver.storedRotateHands.get(i-1)
+                        ));
+                    }
+                }
+
                 break;
             }
 
-            case "endHost": {
-                System.out.println("RECEIVED ALL");
-                // If we're the host, then that means our CCM has entries; if not, this won't even run
-                for (Map.Entry e : network.clientConnectionManager.clients.entrySet()){
-                    Client client = (Client)e.getValue();
-                    int playerNumber = Integer.parseInt(new String(network.getNextBytes(client.getSocket())));
-                    Card chosenCard = (Card)network.deserializeObject(network.getNextBytes(client.getSocket()));
-                    Hand passedHand = (Hand)network.deserializeObject(network.getNextBytes(client.getSocket()));
-                }
+            case "endOfTurnData": {
+                Vector<Hand> allCards = (Vector<Hand>)network.deserializeObject(network.getNextBytes(socket));
+                Hand newHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
+                Platform.runLater(() -> {
+                    System.out.println("RECEIVED NEW HAND: "+newHand.toString());
+                });
                 break;
             }
 

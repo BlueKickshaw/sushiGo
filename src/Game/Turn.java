@@ -30,12 +30,15 @@ public class Turn implements Runnable {
 
 
     public void run() {
+        // If we're the host, and it's the start of the turn then we want to clear the card list from earlier
+        if (network.server != null) {
+            network.gameDriver.passedCards = 0;
+        }
         socket = network.socket;
         long startTime = System.nanoTime();
-        System.out.println(player.getRotatingHand());
         while (!player.firstCardPicked && (System.nanoTime() - startTime < timeLimit)) {
-
         }
+
         if (player.firstCardPicked) {
             disableButtons();
             System.out.println(player.getSelectedCard());
@@ -50,18 +53,14 @@ public class Turn implements Runnable {
 
         // First things first, the players will need to send the cards they've chosen. We want to ignore the
         // host though
-        // this might nullPE -> so check for null server instead or null CCM?
         if (network.server == null) {
-            // Modify the hand to pass
-            Hand handToPass = player.getHand();
-            handToPass.selectAndRemoveCard(player.getSelectedCard());
-
             // Send: ID, picked card, passed hand
             network.sendRequest(socket,"endTurn".getBytes());
-            network.sendRequest(socket,network.username);
-            network.sendRequest(socket,player.getSelectedCard());
-            network.sendRequest(socket, handToPass);
+            network.sendRequest(socket, network.username);
+            network.sendRequest(socket, player.getHand());
+            network.sendRequest(socket, player.getRotatingHand());
         }
+
         player.setSelectedCard(null);
     }
 
