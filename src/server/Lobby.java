@@ -1,5 +1,7 @@
 package server;
 
+import Cards.Card;
+
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ public class Lobby implements Serializable {
     boolean hasPassword = false;
 
     InetAddress host;
-    int playerCount;
+    public int playerCount;
     ArrayList<String> ipList = new ArrayList<>();
     ArrayList<String> playerNames = new ArrayList<>();
 

@@ -113,7 +113,6 @@ public class GameDriver {
         }
     }
 
-
     protected static void calculateMakiPoints(Vector<Player> playerList) {
 
         Vector<Player> tmpPlayerList = (Vector) playerList.clone();
@@ -163,7 +162,6 @@ public class GameDriver {
             player.setMakiCount(0);
         }
     }
-
 
     public static void main(String[] args) {
 

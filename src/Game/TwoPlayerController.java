@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import server.Network;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,6 +20,7 @@ import java.util.Vector;
 
 
 public class TwoPlayerController {
+    public static Network network;
 
     @FXML    GridPane primaryPlayerGrid;
     @FXML    ImageView playerCard00 = new ImageView();
@@ -84,7 +86,7 @@ public class TwoPlayerController {
 
 
     private void turn() {
-        Turn turn = new Turn(player, playerCardImages);
+        Turn turn = new Turn(player, playerCardImages, network);
         Thread turnHandler = new Thread(turn);
         turnHandler.start();
     }
@@ -117,7 +119,6 @@ public class TwoPlayerController {
 
 
     public void initialize() {
-
         playerList.add(player);
         playerList.add(topOpponent);
 

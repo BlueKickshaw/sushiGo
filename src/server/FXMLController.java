@@ -63,6 +63,7 @@ public class FXMLController implements Initializable {
         network.startServer(network);
         network.fxmlController = this;
         try {
+            ((Stage) ((Node) e.getSource()).getScene().getWindow()).setTitle("Server");
             loadScene(e,serverScreen);
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -75,6 +76,7 @@ public class FXMLController implements Initializable {
     @FXML private Button hostCreateLobbyBtn;
     @FXML public void hostCreateLobby(ActionEvent e){
         System.out.println("host attempt");
+        ((Stage) ((Node) e.getSource()).getScene().getWindow()).setTitle("Host");
         network.sendRequest("host");
         network.sendRequest(hostLobbyNameText.getText());
         network.sendRequest(hostPasswordText.getText());
@@ -271,6 +273,7 @@ public class FXMLController implements Initializable {
                 default:
                     playerColor = Color.BLACK;
             }
+
 
             Label label = new Label(s);
             label.setTextFill(playerColor);

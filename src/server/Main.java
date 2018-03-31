@@ -1,5 +1,8 @@
 package server;
 
+import Game.FourPlayerController;
+import Game.ThreePlayerController;
+import Game.TwoPlayerController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +20,11 @@ public class Main extends Application {
         stage.show();
 
         Network network = new Network(port);
+        // Jon, I hate how many statics/controllers you're making me use you bastard
         FXMLController.network = network;
+        TwoPlayerController.network = network;
+        ThreePlayerController.network = network;
+        FourPlayerController.network = network;
 
         // The program still runs background threads; on window close we want to close everything
         stage.setOnCloseRequest(e -> {

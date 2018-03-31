@@ -1,9 +1,11 @@
 package server;
 
+import Cards.Card;
 import javafx.application.Platform;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Network {
@@ -12,6 +14,8 @@ public class Network {
     public Socket socket;
     public Server server;
     public String username = new String("");
+
+    public volatile ArrayList<Card> passedCards = new ArrayList<>();
 
     public static FXMLController fxmlController;
 

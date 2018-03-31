@@ -1,4 +1,5 @@
 package Game.table;
 
-public class GameController {
+public abstract class GameController {
+
 }
