@@ -3,6 +3,7 @@ package server;
 import java.net.Socket;
 
 public class Client {
+    private int playerNumber;
     private Socket socket;
     private Lobby lobby;
     private String name;
@@ -11,6 +12,10 @@ public class Client {
     public Client(Socket socket, String name){
         this.socket = socket;
         this.name = name;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
     }
 
     public Socket getSocket(){
@@ -31,6 +36,11 @@ public class Client {
 
     public void setLoggedIn(boolean status){
         loggedIn = status;
+    }
+
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
     }
 
     public boolean isLoggedIn(){

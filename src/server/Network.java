@@ -1,14 +1,21 @@
 package server;
 
+import Cards.Card;
+import javafx.application.Platform;
+
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class Network {
     public Client client;
     public int port;
     public Socket socket;
     public Server server;
-    public String username;
+    public String username = new String("");
+
+    public volatile ArrayList<Card> passedCards = new ArrayList<>();
 
     public static FXMLController fxmlController;
 
@@ -17,7 +24,7 @@ public class Network {
 
     private String address = "localhost";
 
-    Network(int port){
+    public Network(int port){
         this.port = port;
     }
 
@@ -30,6 +37,12 @@ public class Network {
             clientConnectionManager = new ClientConnectionManager(this, socket);
             System.out.println(Thread.currentThread().getName()
                     +": Created connection to "+ InetAddress.getByName(address));
+
+            // If we have a lobby, that means we're connecting to a server and we want to join the game screen
+            if (null != client && null != client.getLobby()) {
+                Platform.runLater(() -> {fxmlController.startGame(client.getLobby());});
+            }
+
         } catch (IOException e) {
             System.err.println(Thread.currentThread().getName()+": Unable to connect to server over port "+port);
         }
@@ -63,20 +76,6 @@ public class Network {
         return null;
     }
 
-    // Sometimes we receive a lot of data from a socket, but we want to cut it short and disregard the rest.
-    // This is how we do that
-    public void purge(Socket socket) {
-        DataInputStream dis;
-        try {
-            dis = new DataInputStream(socket.getInputStream());
-            while (dis.available() > 0){
-               dis.read();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public byte[] getNextBytes(Socket socket){
         DataInputStream dis;
         try {
@@ -96,6 +95,10 @@ public class Network {
         return null;
     }
 
+    public String getNextString(Socket socket){
+        return new String(getNextBytes(socket));
+    }
+
     public int getOpenPort() {
         int freePort = 0;
         ServerSocket socket = null;
@@ -107,6 +110,20 @@ public class Network {
             e.printStackTrace();
         }
         return freePort;
+    }
+
+    // Sometimes we receive a lot of data from a socket, but we want to cut it short and disregard the rest.
+    // This is how we do that
+    public void purge(Socket socket) {
+        DataInputStream dis;
+        try {
+            dis = new DataInputStream(socket.getInputStream());
+            while (dis.available() > 0){
+                dis.read();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Sends the size of the request, then the request itself (in bytes)
@@ -162,15 +179,25 @@ public class Network {
         sendRequest(dest, serializeObject(o));
     }
 
-    public String getNextString(Socket socket){
-        return new String(getNextBytes(socket));
+    public void sendToLobby(byte[] request){
+        // Everyone in our lobby has connected to us specifically, and they're the clients we have reference to
+        for (Map.Entry entry : clientConnectionManager.clients.entrySet()){
+            Client client = (Client)entry.getValue();
+            sendRequest(client.getSocket(), request);
+        }
     }
 
+    public void sendToPlayer(int playerNum, byte[] request){
+        // Get the target by player number (order of joining)
+        String target = client.getLobby().playerNames.get(playerNum);
+        sendRequest(clientConnectionManager.clients.get(target).getSocket(),request);
+    }
 
     public byte[] serializeObject(Object o){
         ObjectOutputStream oos;
         ByteArrayOutputStream bos = null;
         byte[] bytes = null;
+
         try {
             bos = new ByteArrayOutputStream();
             oos = new ObjectOutputStream(bos);

@@ -2,9 +2,10 @@ package Game;
 
 import Cards.Card;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class Hand {
+public class Hand implements Serializable{
     private Vector<Card> cards;
 
     public Hand(Vector<Card> cards) {
@@ -34,9 +35,7 @@ public class Hand {
 
     public Card selectAndRemoveCard(Card card) {
         int cardIndex = this.cards.indexOf(card);
-        Card selectedCard = this.cards.remove(cardIndex);
-        return selectedCard;
-
+        return this.cards.remove(cardIndex);
     }
 
 

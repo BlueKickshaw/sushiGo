@@ -9,11 +9,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import server.Network;
 
 import java.util.*;
 
 
 public class FourPlayerController {
+    public static Network network;
 
     @FXML    GridPane primaryPlayerGrid;
     @FXML    ImageView playerCard00 = new ImageView();
@@ -114,7 +116,7 @@ public class FourPlayerController {
 
 
     private void turn() {
-        Turn turn = new Turn(player, playerCardImages);
+        Turn turn = new Turn(player, playerCardImages, network);
         Thread turnHandler = new Thread(turn);
         turnHandler.start();
     }

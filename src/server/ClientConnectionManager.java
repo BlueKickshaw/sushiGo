@@ -1,5 +1,7 @@
 package server;
 
+import javafx.application.Platform;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -74,6 +76,11 @@ public class ClientConnectionManager {
                         requestManager.handleRequest(socket,bytes);
                     }
                 } catch (IOException e) {
+                    if (bytes == null) {
+                        // Occasionally we purge the stream and it happens after a disconnection
+                        // TODO: Investigate more thoroughly and deal with cause
+                        return;
+                    }
                     running = false;
                     e.printStackTrace();
                     if (bytes.length < 20) {

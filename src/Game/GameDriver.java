@@ -184,7 +184,6 @@ public class GameDriver implements Runnable {
         }
     }
 
-
     protected static void calculateMakiPoints(Vector<Player> playerList) {
 
         Vector<Player> tmpPlayerList = (Vector) playerList.clone();
