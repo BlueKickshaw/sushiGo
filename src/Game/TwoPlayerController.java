@@ -22,6 +22,7 @@ import java.util.Vector;
 public class TwoPlayerController {
     public static Network network;
 
+    GameDriver driver;
     @FXML    GridPane primaryPlayerGrid;
     @FXML    ImageView playerCard00 = new ImageView();
     @FXML    ImageView playerCard01 = new ImageView();
@@ -69,6 +70,8 @@ public class TwoPlayerController {
     @FXML    ImageView topPlayerHandCard08 = new ImageView();
     @FXML    ImageView topPlayerHandCard09 = new ImageView();
     Vector<ImageView> topOpponentHandCardImages = new Vector<>();
+    Vector<Vector<ImageView>> rotatingImages = new Vector<>();
+    Vector<Vector<ImageView>> handImages = new Vector<>();
 
     @FXML    Label firstPlaceText = new Label();
     @FXML    Label secondPlaceText = new Label();
@@ -81,6 +84,7 @@ public class TwoPlayerController {
     Player topOpponent = new Player("dummy", "321");
     Vector<Player> playerList = new Vector<>();
 
+    //GameDriver driver = new GameDriver(playerList);
     Deck deck = new Deck();
     int roundCount = 0;
 
@@ -89,30 +93,34 @@ public class TwoPlayerController {
         Turn turn = new Turn(player, playerCardImages, network);
         Thread turnHandler = new Thread(turn);
         turnHandler.start();
+        player.getHand().getCards().get(player.getHand().getCards().size()-1);
     }
 
 
     public void incrementRound(ActionEvent event) {
 
         player.getRotatingHand().setCards(deck.drawCards(10 - roundCount));
-        populateImages(playerCardImages);
-        populateCardBacks(topOpponentCardBacks, cardBack);
+        player.populateImages(playerCardImages);
+        player.populateCardBacks(topOpponentCardBacks, cardBack);
         roundCount++;
         if (roundCount > 0) {
-            setHandImages(player, handCardImages);
-            setHandImages(topOpponent, topOpponentHandCardImages);
+            player.setHandImages(player, handCardImages);
+            player.setHandImages(topOpponent, topOpponentHandCardImages);
             topOpponent.getHand().addCard(deck.drawCards(1).firstElement());
         }
         turn();
     }
 
     public void getHands(ActionEvent event) {
-        GameDriver.calculatePoints(playerList, 0);
-        updateScores(playerList);
+        Thread gameHandler = new Thread(driver);
+        gameHandler.start();
+//        GameDriver.calculatePoints(playerList, 0);
+//        updateScores(playerList);
         System.out.println(player.getName());
-        System.out.println("\tRotating: " + player.getRotatingHand());
-        System.out.println("\tSelected: " + player.getHand());
+//        System.out.println("\tRotating: " + player.getRotatingHand());
+//        System.out.println("\tSelected: " + player.getHand());
         System.out.println(topOpponent.getName());
+        System.out.println("\tRotating: " + topOpponent.getRotatingHand());
         System.out.println("\tSelected: " + topOpponent.getHand());
 
     }
@@ -166,6 +174,11 @@ public class TwoPlayerController {
         topOpponentHandCardImages.add(topPlayerHandCard08);
         topOpponentHandCardImages.add(topPlayerHandCard09);
 
+        rotatingImages.add(playerCardImages);
+        rotatingImages.add(topOpponentCardBacks);
+        handImages.add(handCardImages);
+        handImages.add(topOpponentHandCardImages);
+
 
 
         player.drawHand(deck, 2);
@@ -179,7 +192,7 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(7));
                 }
             }
@@ -192,7 +205,7 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(5));
                 }
             }
@@ -205,7 +218,7 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(2));
                 }
             }
@@ -218,7 +231,7 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(0));
                 }
             }
@@ -301,50 +314,13 @@ public class TwoPlayerController {
                 }
             }
         });
+        //TODO make players based on info given
+        playerList.add(player);
+        playerList.add(topOpponent);
+
+        driver = new GameDriver(playerList, rotatingImages, handImages);
     }
 
-
-
-
-    private void populateImages(Vector<ImageView> images) {
-        for (ImageView iv : images) {
-            iv.setImage(null);
-        }
-
-        Vector<ImageView> reverseImageViews = (Vector) images.clone();
-        Collections.reverse(reverseImageViews);
-        for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
-            Card tmp = player.getRotatingHand().getCard(i);
-            Image image = new Image(tmp.getImagePath());
-            reverseImageViews.get(i).setDisable(false);
-            reverseImageViews.get(i).setImage(image);
-        }
-
-    }
-
-    private void populateCardBacks(Vector<ImageView> oppCardsView, Image back) {
-        for (ImageView iv : oppCardsView) {
-            iv.setImage(null);
-        }
-        Vector<ImageView> reverseImageViews = (Vector) oppCardsView.clone();
-        Collections.reverse(reverseImageViews);
-        for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
-            reverseImageViews.get(i).setImage(back);
-        }
-
-    }
-
-    private void setHandImages(Player player, Vector<ImageView> images) {
-        for (ImageView img : images) {
-            img.setImage(null);
-        }
-
-        for (int i = 0; i < player.getHand().getCards().size(); i++) {
-            Image tmp = new Image(player.getHand().getCard(i).getImagePath());
-            images.get(i).setImage(tmp);
-        }
-
-    }
     private void updateScores(Vector<Player> players){
         Vector<Player> clonePlayerList = (Vector) players.clone();
         clonePlayerList.sort(Comparator.comparingInt(Player::getTotalPoints));

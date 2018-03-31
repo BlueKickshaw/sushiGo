@@ -36,20 +36,20 @@ public class Turn implements Runnable {
         }
         socket = network.socket;
         long startTime = System.nanoTime();
-        while (!player.firstCardPicked && (System.nanoTime() - startTime < timeLimit)) {
-        }
+        while (!player.isFirstCardPicked && (System.nanoTime() - startTime < timeLimit)) {
 
-        if (player.firstCardPicked) {
+        }
+        if (player.isFirstCardPicked) {
             disableButtons();
             System.out.println(player.getSelectedCard());
             player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getSelectedCard()));
-        } else if (!player.firstCardPicked) {
+        } else if (!player.isFirstCardPicked) {
             disableButtons();
             player.setSelectedCard(player.getRotatingHand().getCard(0));
             player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(0)));
             System.out.println("Automatically selected card: " + player.getHand().getCard(player.getHand().getCards().size() - 1));
         }
-        player.firstCardPicked = false;
+        player.isFirstCardPicked = false;
 
         // First things first, the players will need to send the cards they've chosen. We want to ignore the
         // host though

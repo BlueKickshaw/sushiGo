@@ -1,7 +1,10 @@
 package Game;
 
 import Cards.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
+import java.util.Collections;
 import java.util.Vector;
 
 public class Player {
@@ -15,7 +18,7 @@ public class Player {
     private int puddingCount;
     private int dumplingCount;
     private int makiCount;
-    public volatile Boolean firstCardPicked = false;
+    public volatile Boolean isFirstCardPicked = false;
     public Card selectedCard;
 
 
@@ -269,6 +272,45 @@ public class Player {
         }
         if (!cardConfirmed) {
 
+        }
+    }
+
+    protected void populateImages(Vector<ImageView> images) {
+        for (ImageView iv : images) {
+            iv.setImage(null);
+        }
+
+        Vector<ImageView> reverseImageViews = (Vector) images.clone();
+        Collections.reverse(reverseImageViews);
+        for (int i = 0; i < this.getRotatingHand().getCards().size(); i++) {
+            Card tmp = this.getRotatingHand().getCard(i);
+            Image image = new Image(tmp.getImagePath());
+            reverseImageViews.get(i).setDisable(false);
+            reverseImageViews.get(i).setImage(image);
+        }
+
+    }
+
+    protected void populateCardBacks(Vector<ImageView> oppCardsView, Image back) {
+        for (ImageView iv : oppCardsView) {
+            iv.setImage(null);
+        }
+        Vector<ImageView> reverseImageViews = (Vector) oppCardsView.clone();
+        Collections.reverse(reverseImageViews);
+        for (int i = 0; i < this.getRotatingHand().getCards().size(); i++) {
+            reverseImageViews.get(i).setImage(back);
+        }
+
+    }
+
+    protected void setHandImages(Player player, Vector<ImageView> images) {
+        for (ImageView img : images) {
+            img.setImage(null);
+        }
+
+        for (int i = 0; i < player.getHand().getCards().size(); i++) {
+            Image tmp = new Image(player.getHand().getCard(i).getImagePath());
+            images.get(i).setImage(tmp);
         }
 
     }
