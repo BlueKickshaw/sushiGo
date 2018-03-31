@@ -58,7 +58,7 @@ public class GameDriver implements Runnable {
 
 
     public void run() {
-
+    while(playerList.get(0).getHand().getCards().size() < 10) {
         if (!flag) {
             startOfRound();
             flag = true;
@@ -84,7 +84,7 @@ public class GameDriver implements Runnable {
 
         }
 
-
+    }
     }
 
     public void startOfRound() {
