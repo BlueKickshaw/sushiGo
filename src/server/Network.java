@@ -16,7 +16,7 @@ public class Network {
     public Server server;
     public String username = new String("");
 
-    public GameDriver gameDriver;
+    public static GameDriver gameDriver;
 
     public static FXMLController fxmlController;
 

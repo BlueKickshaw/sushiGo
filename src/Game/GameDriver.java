@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.Vector;
 
 public class GameDriver implements Runnable {
+    private Network network;
 
     //create the hands
     private Vector<Player> playerList = null;
@@ -44,7 +45,8 @@ public class GameDriver implements Runnable {
     }
 
     public GameDriver(Vector<Player> playerList, Vector<Vector<ImageView>> rotatingImages,
-                      Vector<Vector<ImageView>> handImages) {
+                      Vector<Vector<ImageView>> handImages, Network network) {
+        this.network = network;
         this.playerList = playerList;
         headPlayer = playerList.get(0);//TODO not hardcoded
         this.rotatingImages = rotatingImages;
@@ -58,7 +60,8 @@ public class GameDriver implements Runnable {
     }
 
     private void turn() {
-        turn = new Turn(headPlayer, rotatingImages.get(0));
+        network.gameDriver = this;
+        turn = new Turn(headPlayer, rotatingImages.get(0), network);
         turnHandler = new Thread(turn);
         turnHandler.start();
     }
@@ -88,7 +91,7 @@ public class GameDriver implements Runnable {
                 playerList.get(1).getHand().addCard(playerList.get(1).getRotatingHand().selectAndRemoveCard(playerList.get(1).getRotatingHand().getCard(0)));
                 int tmpIndex = 0;
                 for (Player player : playerList) {
-                    player.setHandImages(player, handImages.get(tmpIndex++));
+                    //player.setHandImages(player, handImages.get(tmpIndex++));
 
                 }
             }

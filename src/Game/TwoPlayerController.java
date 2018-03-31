@@ -93,7 +93,6 @@ public class TwoPlayerController {
         Turn turn = new Turn(player, playerCardImages, network);
         Thread turnHandler = new Thread(turn);
         turnHandler.start();
-        player.getHand().getCards().get(player.getHand().getCards().size()-1);
     }
 
 
@@ -244,7 +243,7 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(1));
                 }
             }
@@ -257,7 +256,7 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(3));
                 }
             }
@@ -270,7 +269,7 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(4));
                 }
             }
@@ -283,7 +282,7 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(6));
                 }
             }
@@ -296,7 +295,7 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(9));
                 }
             }
@@ -309,7 +308,7 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.firstCardPicked = true;
+                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(8));
                 }
             }
@@ -318,7 +317,7 @@ public class TwoPlayerController {
         playerList.add(player);
         playerList.add(topOpponent);
 
-        driver = new GameDriver(playerList, rotatingImages, handImages);
+        driver = new GameDriver(playerList, rotatingImages, handImages, network);
     }
 
     private void updateScores(Vector<Player> players){

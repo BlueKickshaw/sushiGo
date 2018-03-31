@@ -83,11 +83,19 @@ public class RequestManager {
                 String playerName = network.getNextString(socket);
                 Hand playedHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
                 Hand rotateHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
+                System.out.println(playerName+": "+playedHand);
 
-                int ind = network.clientConnectionManager.clients.get(playerName).getPlayerNumber() - 1;
+                int ind = 0;
+                for (int i = 0; i < network.gameDriver.storedPlayerNames.size(); i++) {
+                   if (network.gameDriver.storedPlayerNames.equals(playerName)){
+                       ind = i;
+                   }
+                }
+
                 network.gameDriver.storedPlayerNames.add(ind, playerName);
                 network.gameDriver.storedPlayedHands.add(ind, playedHand);
                 network.gameDriver.storedRotateHands.add(ind, rotateHand);
+                network.gameDriver.passedCards++;
 
                 if (network.gameDriver.passedCards == network.client.getLobby().playerCount) {
                     // We have everyone's card

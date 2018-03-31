@@ -17,7 +17,7 @@ public class Turn implements Runnable {
 
 
     private Player player;
-    private long timeLimit = (long) 5e10;
+    private long timeLimit = (long) 5e9;
     private Vector<ImageView> playerCardImages;
     private Network network;
     private Socket socket;
@@ -28,10 +28,9 @@ public class Turn implements Runnable {
         this.playerCardImages = playerCardImages;
     }
 
-
     public void run() {
         // If we're the host, and it's the start of the turn then we want to clear the card list from earlier
-        if (network.server != null) {
+        if (null != network.server) {
             network.gameDriver.passedCards = 0;
         }
         socket = network.socket;
