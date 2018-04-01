@@ -17,24 +17,26 @@ public class Turn implements Runnable {
 
 
     private Player player;
-    private long timeLimit = (long) 1e7;
+    private long timeLimit = (long) 5e9;
     private Vector<ImageView> playerCardImages;
     private Network network;
     private Socket socket;
 
-    Turn(Player player, Vector<ImageView> playerCardImages, Network network) {
+    Turn(Player player,Vector<ImageView> playerCardImages, Network network) {
         this.network = network;
         this.player = player;
         this.playerCardImages = playerCardImages;
     }
 
-    boolean online = true;
-
     public void run() {
-        if (!online) {
-            socket = network.socket;
+        player.isFirstCardPicked = false;
+        // If we're the host, and it's the start of the turn then we want to clear the card list from earlier
+        if (null != network.server) {
+            network.gameDriver.passedCards = 0;
         }
+        socket = network.socket;
         long startTime = System.nanoTime();
+
         while (!player.isFirstCardPicked && (System.nanoTime() - startTime < timeLimit)) {
 
         }
@@ -46,30 +48,23 @@ public class Turn implements Runnable {
             disableButtons();
             player.setSelectedCard(player.getRotatingHand().getCard(0));
             player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(0)));
+            //player.getHand().addCard(player.getRotatingHand().getCard(0));
             System.out.println("Automatically selected card: " + player.getHand().getCard(player.getHand().getCards().size() - 1));
         }
-
-
         player.isFirstCardPicked = false;
 
         // First things first, the players will need to send the cards they've chosen. We want to ignore the
         // host though
-        // this might nullPE -> so check for null server instead or null CCM?
-        if (!online) {
-            if (network.server == null) {
-
-                network.sendRequest(socket, "endTurn".getBytes());
-                network.sendRequest(socket, network.username);
-                network.sendRequest(socket, player.getHand());
-                network.sendRequest(socket, player.getRotatingHand());
-
-            }
+        if (network.server == null) {
+            // Send: ID, picked card, passed hand
+            network.sendRequest(socket,"endTurn".getBytes());
+            network.sendRequest(socket, network.username);
+            network.sendRequest(socket, player.getHand());
+            network.sendRequest(socket, player.getRotatingHand());
         }
+
         player.setSelectedCard(null);
     }
-
-
-
 
     private void disableButtons() {
         for (ImageView buttonClick : playerCardImages) {

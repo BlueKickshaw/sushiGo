@@ -1,6 +1,7 @@
 package server;
 
 import Cards.Card;
+import Game.GameDriver;
 import javafx.application.Platform;
 
 import java.io.*;
@@ -15,7 +16,7 @@ public class Network {
     public Server server;
     public String username = new String("");
 
-    public volatile ArrayList<Card> passedCards = new ArrayList<>();
+    public static GameDriver gameDriver;
 
     public static FXMLController fxmlController;
 
@@ -41,6 +42,16 @@ public class Network {
             // If we have a lobby, that means we're connecting to a server and we want to join the game screen
             if (null != client && null != client.getLobby()) {
                 Platform.runLater(() -> {fxmlController.startGame(client.getLobby());});
+
+
+                // Tell the host to create references to us
+                sendRequest(socket,"addClient".getBytes());
+                sendRequest(socket,client.getName().getBytes());
+                String pid = client.getPlayerNumber() + "";
+                sendRequest(socket,pid.getBytes());
+                sendRequest(socket,client.getLobby());
+
+
             }
 
         } catch (IOException e) {
@@ -162,6 +173,7 @@ public class Network {
     // When we want to send a request to a specific socket (aka not the server, but a client)
     public void sendRequest(Socket dest, byte[] request){
         DataOutputStream dos;
+
         try {
             dos = new DataOutputStream(dest.getOutputStream());
             dos.writeInt(request.length);
@@ -170,6 +182,7 @@ public class Network {
             e.printStackTrace();
         }
     }
+
     // Various types of send requests
     public void sendRequest(Socket dest, int request){
         sendRequest(dest, new String("" + request).getBytes());

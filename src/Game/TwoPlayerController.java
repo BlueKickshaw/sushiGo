@@ -21,6 +21,7 @@ import java.util.Vector;
 
 public class TwoPlayerController {
     public static Network network;
+    Player player;
 
     GameDriver driver;
     @FXML    GridPane primaryPlayerGrid;
@@ -83,8 +84,6 @@ public class TwoPlayerController {
     Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
     Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
 
-    Player player = new Player("Jon", "123");
-    Player topOpponent = new Player("dummy", "321");
     Vector<Player> playerList = new Vector<>();
 
     //GameDriver driver = new GameDriver(playerList);
@@ -93,47 +92,21 @@ public class TwoPlayerController {
 
 
     private void turn() {
-        Turn turn = new Turn(player, playerCardImages, network);
-        Thread turnHandler = new Thread(turn);
-        turnHandler.start();
-//        player.getHand().getCards().get(player.getHand().getCards().size()-1);
     }
 
 
     public void incrementRound(ActionEvent event) {
-
-        player.getRotatingHand().setCards(deck.drawCards(10 - roundCount));
-        player.populateImages(playerCardImages);
-        player.populateCardBacks(topOpponentCardBacks, cardBack);
-        roundCount++;
-        if (roundCount > 0) {
-            player.setHandImages(player, handCardImages);
-            player.setHandImages(topOpponent, topOpponentHandCardImages);
-            topOpponent.getHand().addCard(deck.drawCards(1).firstElement());
-        }
-        turn();
     }
 
     public void getHands(ActionEvent event) {
         Thread gameHandler = new Thread(driver);
         gameHandler.start();
-//        GameDriver.calculatePoints(playerList, 0);
-//        updateScores(playerList);
-        System.out.println(player.getName());
-//        System.out.println("\tRotating: " + player.getRotatingHand());
-//        System.out.println("\tSelected: " + player.getHand());
-        System.out.println(topOpponent.getName());
-        System.out.println("\tRotating: " + topOpponent.getRotatingHand());
-        System.out.println("\tSelected: " + topOpponent.getHand());
-
     }
 
 
     public void initialize() {
         scoreLabels.add(firstPlaceText);
         scoreLabels.add(secondPlaceText);
-        playerList.add(player);
-        playerList.add(topOpponent);
 
          int[] populationOrder = new int[]{0, 9, 1, 8, 2, 7, 3, 6, 4, 5};
         for (int i=0; i<10;i++){
@@ -220,8 +193,7 @@ public class TwoPlayerController {
 
 
 
-        player.drawHand(deck, 2);
-        int[] populationOrderButtons = new int[]{7, 5, 2, 0, 1, 3, 4, 6, 9, 8};
+         int[] populationOrderButtons = new int[]{7, 5, 2, 0, 1, 3, 4, 6, 9, 8};
 
         for (int i = 0; i < playerCardImages.size(); i++) {
             int finalI = i;
@@ -376,11 +348,26 @@ public class TwoPlayerController {
         playerList.add(player);
         playerList.add(topOpponent);
 
-//        playerList.add(new Player("ted", "3"));
-//        playerList.add(new Player("fred", "4"));
+
+
+
+
+
+        for (int i = 0; i < network.client.getLobby().playerCount; i++) {
+           playerList.add(new Player(network.client.getLobby().playerNames.get(i)));
+        }
+
+        for (Player p : playerList) {
+            if(network!=null && p.getName().equals(network.username)){
+                player = p;
+            }
+        }
 
         //driver = new GameDriver(playerList, rotatingImages, handImages, network);
-        driver = new GameDriver(playerList, rotatingImages, handImages, null, scoreLabels, player);
+        driver = new GameDriver(playerList, rotatingImages, handImages, network, scoreLabels);
+
+
+
     }
 
     private void updateScores(Vector<Player> players){

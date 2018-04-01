@@ -108,10 +108,10 @@ public class FourPlayerController {
     Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
     Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
 
-    Player player = new Player("Jon", "123");
-    Player topOpponent = new Player("dummy", "321");
-    Player leftOpponent = new Player ("lefty", "555");
-    Player rightOpponent = new Player("righty", "777");
+    Player player = new Player("Jon");
+    Player topOpponent = new Player("dummy");
+    Player leftOpponent = new Player ("lefty");
+    Player rightOpponent = new Player("righty");
     Vector<Player> playerList = new Vector<>();
     private Vector<Vector<ImageView>> rotatingImages = new Vector<>();
     private Vector<Vector<ImageView>> handImages= new Vector<>();
@@ -340,7 +340,7 @@ public class FourPlayerController {
         });
 
 
-        driver = new GameDriver(playerList, rotatingImages, handImages, null, scoreLabels, player);
+        driver = new GameDriver(playerList, rotatingImages, handImages, network, scoreLabels);
     }
 
     private void populateImages(Vector<ImageView> images) {

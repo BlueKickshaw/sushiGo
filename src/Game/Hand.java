@@ -28,7 +28,6 @@ public class Hand implements Serializable{
         this.cards = cards;
     }
 
-
     public Card getCard(int i) {
         return cards.get(i);
     }
@@ -54,6 +53,4 @@ public class Hand implements Serializable{
         }
         return contents;
     }
-
-
 }

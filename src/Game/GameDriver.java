@@ -1,26 +1,29 @@
 package Game;
 
 import Cards.*;
+import server.Network;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import server.Network;
 
+import java.util.ArrayList;
 import java.sql.Time;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
 public class GameDriver implements Runnable {
-
-    private boolean dataReceived = false;
     private Network network;
+
+    private volatile boolean dataReceived = false;
+
     private Vector<Player> playerList = null;
     private int playerCount;
     private Deck deck;
     private int roundNum = 0;
-    private Player headPlayer;
+    public Player headPlayer;
     private Vector<Vector<ImageView>> rotatingImages = new Vector<>();
     private Vector<Vector<ImageView>> handImages = new Vector<>();
     private Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
@@ -33,12 +36,15 @@ public class GameDriver implements Runnable {
     private int handSize;
     int indOfHeadPlayer;
 
+    public ArrayList<String> storedPlayerNames = new ArrayList<>();
+    public ArrayList<Hand> storedPlayedHands = new ArrayList<>();
+    public ArrayList<Hand> storedRotateHands = new ArrayList<>();
+    public int passedCards = 0;
 
     public GameDriver(Vector<Player> playerList, Vector<Vector<ImageView>> rotatingImages,
-                      Vector<Vector<ImageView>> handImages, Network network, Vector<Label> scoreLabels, Player primaryPlayer) {
-//        this.network = network;
+                      Vector<Vector<ImageView>> handImages, Network network, Vector<Label> scoreLabels) {
+        this.network = network;
         this.playerList = playerList;
-        this.headPlayer = primaryPlayer;
         playerList.indexOf(headPlayer);
         this.scoreLabels = scoreLabels;
         for (Player player :this.playerList) {
@@ -79,6 +85,7 @@ public class GameDriver implements Runnable {
 
 
     private void turn() {
+        network.gameDriver = this;
         turn = new Turn(headPlayer, rotatingImages.get(0), network);
         turnHandler = new Thread(turn);
         turnHandler.start();
@@ -103,27 +110,29 @@ public class GameDriver implements Runnable {
                 }
                 turn();
 
-                dataReceived = false;
                 try {
                     turnHandler.join();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    System.err.println("Game run thread broken");
                 }
-        //        while (!dataReceived) {}
-
-
-                for (int k = 0; k < playerList.size()-1; k++) {
-                    int j = (k + 1 + indOfHeadPlayer)%playerList.size();
-                    playerList.get(j).getHand().addCard(playerList.get(j).getRotatingHand().selectAndRemoveCard(playerList.get(j).getRotatingHand().getCard(0)));
-
-
+                while (!dataReceived) {
                 }
+
+                dataReceived = false;
+
                 int tmpIndex = 0;
-                for (Player player : playerList) {
-                    player.setHandImages(player, handImages.get(tmpIndex++));
 
+                playerList.get(indOfHeadPlayer).setHandImages(playerList.get(indOfHeadPlayer),
+                        handImages.get(0));
+                for (int k = 1; k < playerList.size(); k++) {
+                    int j = (k + 1 + indOfHeadPlayer)%playerList.size();
+                    playerList.get(j).setHandImages(playerList.get(j), handImages.get(k));
                 }
+
+
+
+
+                System.out.println("END TURN");
             }
             // fixes 1 card getting stuck in primary player hand
             populateImages(rotatingImages.get(0));
@@ -149,12 +158,11 @@ public class GameDriver implements Runnable {
     }
 
     public void receiveEndOfTurnData(Vector<Hand> tableHands, Hand rotatingHand) {
-
+        int iter = 0;
         for (Player player : playerList) {
-            for (Hand hand : tableHands) {
-                player.setHand(hand.getCards());
-            }
-            headPlayer.setHand(rotatingHand.getCards());
+            player.setHand(tableHands.get(iter).getCards());
+            headPlayer.setRotatingHand(rotatingHand.getCards());
+            iter++;
         }
         dataReceived = true;
     }
