@@ -1,5 +1,7 @@
 package server;
 
+import Cards.Card;
+import Game.Hand;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -74,6 +76,27 @@ public class RequestManager {
                             socket.getInetAddress().toString());
                 });
                 break;
+
+            case "endTurn": {
+                // turn name card hand
+                String playerName = network.getNextString(socket);
+                Card chosenCard = (Card)network.deserializeObject(network.getNextBytes(socket));
+                Hand passedHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
+                System.out.println("RECEIVED CARD: "+chosenCard.getName());
+                break;
+            }
+
+            case "endHost": {
+                System.out.println("RECEIVED ALL");
+                // If we're the host, then that means our CCM has entries; if not, this won't even run
+                for (Map.Entry e : network.clientConnectionManager.clients.entrySet()){
+                    Client client = (Client)e.getValue();
+                    int playerNumber = Integer.parseInt(new String(network.getNextBytes(client.getSocket())));
+                    Card chosenCard = (Card)network.deserializeObject(network.getNextBytes(client.getSocket()));
+                    Hand passedHand = (Hand)network.deserializeObject(network.getNextBytes(client.getSocket()));
+                }
+                break;
+            }
 
             // Received a request to host a lobby
             case "host": {
@@ -242,11 +265,6 @@ public class RequestManager {
                 break;
             }
 
-            case "test":{
-                System.out.println("TEST");
-                break;
-            }
-
             case "receivedLobbyList":
                 network.lobbyManager.lobbyList =
                         (ArrayList<Lobby>)network.deserializeObject(network.getNextBytes(socket));
@@ -258,6 +276,13 @@ public class RequestManager {
                 network.sendRequest(socket, "receivedLobbyList".getBytes());
                 network.sendRequest(socket,network.lobbyManager.lobbyList);
                 break;
+
+            case "startGame": {
+                Platform.runLater(() -> {
+                    network.fxmlController.startGame(network.client.getLobby());
+                });
+                break;
+            }
 
             case "updateLobbyPlayers": {
                 Lobby lobby = (Lobby)network.deserializeObject(network.getNextBytes(socket));

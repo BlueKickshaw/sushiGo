@@ -1,5 +1,6 @@
 package Game;
 
+import Cards.Card;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import server.Network;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,6 +20,7 @@ import java.util.Vector;
 
 
 public class TwoPlayerController {
+    public static Network network;
 
     GameDriver driver;
     @FXML    GridPane primaryPlayerGrid;
@@ -75,7 +78,7 @@ public class TwoPlayerController {
 
     @FXML    Label firstPlaceText = new Label();
     @FXML    Label secondPlaceText = new Label();
-
+             Vector<Label> scoreLabels = new Vector<>();
 
     Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
     Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
@@ -90,10 +93,10 @@ public class TwoPlayerController {
 
 
     private void turn() {
-        Turn turn = new Turn(player, playerCardImages);
+        Turn turn = new Turn(player, playerCardImages, network);
         Thread turnHandler = new Thread(turn);
         turnHandler.start();
-        player.getHand().getCards().get(player.getHand().getCards().size()-1);
+//        player.getHand().getCards().get(player.getHand().getCards().size()-1);
     }
 
 
@@ -127,7 +130,12 @@ public class TwoPlayerController {
 
 
     public void initialize() {
-        int[] populationOrder = new int[]{0, 9, 1, 8, 2, 7, 3, 6, 4, 5};
+        scoreLabels.add(firstPlaceText);
+        scoreLabels.add(secondPlaceText);
+        playerList.add(player);
+        playerList.add(topOpponent);
+
+         int[] populationOrder = new int[]{0, 9, 1, 8, 2, 7, 3, 6, 4, 5};
         for (int i=0; i<10;i++){
             ImageView temp = new ImageView();
             //temp.setPreserveRatio(true);
@@ -368,7 +376,11 @@ public class TwoPlayerController {
         playerList.add(player);
         playerList.add(topOpponent);
 
-        driver = new GameDriver(playerList, rotatingImages, handImages);
+//        playerList.add(new Player("ted", "3"));
+//        playerList.add(new Player("fred", "4"));
+
+        //driver = new GameDriver(playerList, rotatingImages, handImages, network);
+        driver = new GameDriver(playerList, rotatingImages, handImages, null, scoreLabels, player);
     }
 
     private void updateScores(Vector<Player> players){

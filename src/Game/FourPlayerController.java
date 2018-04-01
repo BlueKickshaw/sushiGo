@@ -9,11 +9,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import server.Network;
 
 import java.util.*;
 
 
 public class FourPlayerController {
+    public static Network network;
+    GameDriver driver;
 
     @FXML    GridPane primaryPlayerGrid;
     @FXML    ImageView playerCard00 = new ImageView();
@@ -24,7 +27,8 @@ public class FourPlayerController {
     @FXML    ImageView playerCard05 = new ImageView();
     @FXML    ImageView playerCard06 = new ImageView();
     @FXML    ImageView playerCard07 = new ImageView();
-    static Vector<ImageView> playerCardImages = new Vector<>();
+    Vector<ImageView> playerCardImages = new Vector<>();
+
     @FXML    ImageView playerHandCard00 = new ImageView();
     @FXML    ImageView playerHandCard01 = new ImageView();
     @FXML    ImageView playerHandCard02 = new ImageView();
@@ -72,6 +76,7 @@ public class FourPlayerController {
     @FXML    ImageView leftPlayerHandCard06 = new ImageView();
     @FXML    ImageView leftPlayerHandCard07 = new ImageView();
     Vector<ImageView> leftOpponentHandCardImages = new Vector<>();
+    Vector<Label> scoreLabels = new Vector<>();
 
     @FXML    ImageView rightOpponentCard00 = new ImageView();
     @FXML    ImageView rightOpponentCard01 = new ImageView();
@@ -108,56 +113,42 @@ public class FourPlayerController {
     Player leftOpponent = new Player ("lefty", "555");
     Player rightOpponent = new Player("righty", "777");
     Vector<Player> playerList = new Vector<>();
-
-    Deck deck = new Deck();
-    int roundCount = 0;
+    private Vector<Vector<ImageView>> rotatingImages = new Vector<>();
+    private Vector<Vector<ImageView>> handImages= new Vector<>();
 
 
     private void turn() {
-        Turn turn = new Turn(player, playerCardImages);
+        Turn turn = new Turn(player, playerCardImages, network);
         Thread turnHandler = new Thread(turn);
         turnHandler.start();
     }
 
 
     public void incrementRound(ActionEvent event) {
-
-        player.getRotatingHand().setCards(deck.drawCards(8 - roundCount));
-        populateImages(playerCardImages);
-        populateCardBacks(topOpponentCardBacks, cardBack);
-        populateCardBacks(leftOpponentCardBacks, rotatedCardBack);
-        populateCardBacks(rightOpponentCardBacks, rotatedCardBack);
-        roundCount++;
-        if (roundCount > 0) {
-            setHandImages(player, handCardImages);
-            setHandImages(topOpponent, topOpponentHandCardImages);
-            setHandImages(leftOpponent, leftOpponentHandCardImages);
-            setHandImages(rightOpponent, rightOpponentHandCardImages);
-            topOpponent.getHand().addCard(deck.drawCards(1).firstElement());
-            leftOpponent.getHand().addCard(deck.drawCards(1).firstElement());
-            rightOpponent.getHand().addCard(deck.drawCards(1).firstElement());
-        }
-        turn();
     }
 
     public void getHands(ActionEvent event) {
-
-        GameDriver.calculatePoints(playerList, 0);
-        updateScores(playerList);
+        Thread gameHandler = new Thread(driver);
+        gameHandler.start();
+//        GameDriver.calculatePoints(playerList, 0);
+//        updateScores(playerList);
         System.out.println(player.getName());
-        System.out.println("\tRotating: " + player.getRotatingHand());
-        System.out.println("\tSelected: " + player.getHand());
+//        System.out.println("\tRotating: " + player.getRotatingHand());
+//        System.out.println("\tSelected: " + player.getHand());
         System.out.println(topOpponent.getName());
+        System.out.println("\tRotating: " + topOpponent.getRotatingHand());
         System.out.println("\tSelected: " + topOpponent.getHand());
-        System.out.println(leftOpponent.getName());
-        System.out.println("\tSelected: " + leftOpponent.getHand());
-        System.out.println(rightOpponent.getName());
-        System.out.println("\tSelected: " + rightOpponent.getHand());
 
     }
 
 
     public void initialize() {
+        scoreLabels.add(firstPlaceText);
+        scoreLabels.add(secondPlaceText);
+        scoreLabels.add(thirdPlaceText);
+        scoreLabels.add(fourthPlaceText);
+
+
         playerList.add(player);
         playerList.add(topOpponent);
         playerList.add(leftOpponent);
@@ -233,8 +224,15 @@ public class FourPlayerController {
         rightOpponentHandCardImages.add(rightPlayerHandCard06);
         rightOpponentHandCardImages.add(rightPlayerHandCard07);
 
-        player.drawHand(deck, 4);
 
+        rotatingImages.add(playerCardImages);
+        rotatingImages.add(topOpponentCardBacks);
+        rotatingImages.add(leftOpponentCardBacks);
+        rotatingImages.add(rightOpponentCardBacks);
+        handImages.add(handCardImages);
+        handImages.add(topOpponentHandCardImages);
+        handImages.add(leftOpponentHandCardImages);
+        handImages.add(rightOpponentHandCardImages);
 
         playerCard00.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -340,6 +338,9 @@ public class FourPlayerController {
                 }
             }
         });
+
+
+        driver = new GameDriver(playerList, rotatingImages, handImages, null, scoreLabels, player);
     }
 
     private void populateImages(Vector<ImageView> images) {
