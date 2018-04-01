@@ -114,16 +114,31 @@ public class RequestManager {
                 // We don't want to wait for data from the host, so we subtract one
                 if (network.gameDriver.passedCards == (network.client.getLobby().playerCount-1)) {
                     // We have everyone's card
-
-                    for (int i = 1; i < network.client.getLobby().playerCount; i++) {
+                    for (int i = 2; i < network.client.getLobby().playerCount; i++) {
                         network.sendToPlayer(i,"endOfTurnData".getBytes());
                         network.sendToPlayer(i, network.serializeObject(
                                 network.gameDriver.storedRotateHands.get(i-1)
                         ));
                     }
+
+                    // We have to explicitly send player 1
+                    network.sendToPlayer(1,"endOfTurnData".getBytes());
+                    network.sendToPlayer(1,network.serializeObject(
+                            network.gameDriver.headPlayer.getRotatingHand()
+                    ));
+
                     // Send EVERYONE the hand data
                     Vector<Hand> handVector = new Vector<>(network.gameDriver.storedPlayedHands);
+                    // Need to send the host's *played* hand
+                    handVector.add(0,network.gameDriver.headPlayer.getHand());
                     network.sendToLobby(network.serializeObject(handVector));
+
+                    //
+                    for (Hand hand : handVector) {
+                        System.out.println("V:"+hand.toString());
+                    }
+
+                    // Update the host's hand
                     network.gameDriver.receiveEndOfTurnData(
                             handVector,
                             // Get the last player in the games hand [-2, we also aren't in this list]

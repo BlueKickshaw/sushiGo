@@ -11,9 +11,9 @@ public class Deck {
     Deck() {
         // create a vector, shuffle it, then populate the stack
         Vector<Card> tmp = new Vector<>();
-        for (int i = 0; i < 4; i++) {
-            tmp.add(new Chopsticks("Chopsticks"));
-        }
+//        for (int i = 0; i < 4; i++) {
+//            tmp.add(new Chopsticks("Chopsticks"));
+//        }
         for (int i = 0; i < 14; i++) {
             tmp.add(new Dumpling("Dumpling"));
         }

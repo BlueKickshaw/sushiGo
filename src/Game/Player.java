@@ -10,7 +10,6 @@ import java.util.Vector;
 public class Player {
 
     private String name;
-    private String IP;
     private Hand hand;
     private Hand rotatingHand;
     private int roundPoints;
@@ -32,9 +31,8 @@ public class Player {
     }
 
 
-    public Player(String name, String IP) {
+    public Player(String name) {
         this.name = name;
-        this.IP = IP;
         this.hand = new Hand();
         this.rotatingHand = null;
     }
@@ -45,10 +43,6 @@ public class Player {
 
     public String getName() {
         return name;
-    }
-
-    public String getIP() {
-        return IP;
     }
 
     public void setMakiCount(int makiCount) {
@@ -70,6 +64,8 @@ public class Player {
     public Hand getRotatingHand() {
         return rotatingHand;
     }
+
+    public void setRotatingHand(Vector<Card> cards) { this.rotatingHand = new Hand(cards); }
 
     public int getRoundPoints() {
         return roundPoints;
@@ -236,7 +232,6 @@ public class Player {
 
     public String toString() {
         return ("Name: " + this.name +
-                " IP: " + this.IP +
                 " Round Points: " + this.roundPoints
                 + " Total Points: " + this.totalPoints);
     }

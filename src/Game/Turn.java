@@ -48,6 +48,7 @@ public class Turn implements Runnable {
             disableButtons();
             player.setSelectedCard(player.getRotatingHand().getCard(0));
             player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(0)));
+            //player.getHand().addCard(player.getRotatingHand().getCard(0));
             System.out.println("Automatically selected card: " + player.getHand().getCard(player.getHand().getCards().size() - 1));
         }
         player.isFirstCardPicked = false;
