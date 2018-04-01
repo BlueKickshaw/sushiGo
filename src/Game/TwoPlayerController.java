@@ -79,7 +79,7 @@ public class TwoPlayerController {
 
     @FXML    Label firstPlaceText = new Label();
     @FXML    Label secondPlaceText = new Label();
-             Vector<Label> scoreLabels = new Vector<>();
+    Vector<Label> scoreLabels = new Vector<>();
 
     Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
     Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
@@ -108,7 +108,7 @@ public class TwoPlayerController {
         scoreLabels.add(firstPlaceText);
         scoreLabels.add(secondPlaceText);
 
-         int[] populationOrder = new int[]{0, 9, 1, 8, 2, 7, 3, 6, 4, 5};
+        int[] populationOrder = new int[]{0, 9, 1, 8, 2, 7, 3, 6, 4, 5};
         for (int i=0; i<10;i++){
             ImageView temp = new ImageView();
             //temp.setPreserveRatio(true);
@@ -150,7 +150,7 @@ public class TwoPlayerController {
 
 
 
-         int[] populationOrderButtons = new int[]{7, 5, 2, 0, 1, 3, 4, 6, 9, 8};
+        int[] populationOrderButtons = new int[]{7, 5, 2, 0, 1, 3, 4, 6, 9, 8};
 
         for (int i = 0; i < playerCardImages.size(); i++) {
             int finalI = i;
@@ -178,7 +178,7 @@ public class TwoPlayerController {
 
 
         for (int i = 0; i < network.client.getLobby().playerCount; i++) {
-           playerList.add(new Player(network.client.getLobby().playerNames.get(i)));
+            playerList.add(new Player(network.client.getLobby().playerNames.get(i)));
         }
 
         for (Player p : playerList) {
