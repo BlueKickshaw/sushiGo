@@ -93,6 +93,7 @@ public class TwoPlayerController {
         Turn turn = new Turn(player, playerCardImages, network);
         Thread turnHandler = new Thread(turn);
         turnHandler.start();
+//        player.getHand().getCards().get(player.getHand().getCards().size()-1);
     }
 
 
@@ -313,11 +314,12 @@ public class TwoPlayerController {
                 }
             }
         });
-        //TODO make players based on info given
-        playerList.add(player);
-        playerList.add(topOpponent);
 
-        driver = new GameDriver(playerList, rotatingImages, handImages, network);
+//        playerList.add(new Player("ted", "3"));
+//        playerList.add(new Player("fred", "4"));
+
+        //driver = new GameDriver(playerList, rotatingImages, handImages, network);
+        driver = new GameDriver(playerList, rotatingImages, handImages);
     }
 
     private void updateScores(Vector<Player> players){
