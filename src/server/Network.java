@@ -32,7 +32,6 @@ public class Network {
     // Connects to the server (either lobby server, or host server)
     public void connectToServer() {
         try {
-            // TODO: the address is hardcoded to the localhost, this should be changed
             socket = new Socket(address,port);
             // Create a connectionManager to listen for the server's responses
             clientConnectionManager = new ClientConnectionManager(this, socket);

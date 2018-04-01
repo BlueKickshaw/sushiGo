@@ -11,10 +11,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 public class RequestManager {
     Network network;
@@ -93,6 +90,8 @@ public class RequestManager {
             case "endTurn": {
                 // turn name card hand
                 String playerName = network.getNextString(socket);
+                int playerNumber = Integer.parseInt(network.getNextString(socket));
+                System.out.println("RECEIVED PLAYER NUMBER: "+playerNumber);
                 Hand playedHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
                 Hand rotateHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
                 network.gameDriver.passedCards++;
@@ -108,11 +107,13 @@ public class RequestManager {
                 }
 
                 network.gameDriver.storedPlayerNames.add(ind, playerName);
+                network.gameDriver.storedPlayerNumbers.add(ind, playerNumber);
                 network.gameDriver.storedPlayedHands.add(ind, playedHand);
                 network.gameDriver.storedRotateHands.add(ind, rotateHand);
 
                 // We don't want to wait for data from the host, so we subtract one
                 if (network.gameDriver.passedCards == (network.client.getLobby().playerCount-1)) {
+                    while (!network.gameDriver.hostTurnEnded){}
                     // We have everyone's card
                     for (int i = 2; i < network.client.getLobby().playerCount; i++) {
                         network.sendToPlayer(i,"endOfTurnData".getBytes());
@@ -127,8 +128,22 @@ public class RequestManager {
                             network.gameDriver.headPlayer.getRotatingHand()
                     ));
 
+                    Map<Integer,Hand> tree = new TreeMap<>();
+                    for (int i = 0; i < network.gameDriver.storedPlayedHands.size(); i++) {
+                        System.out.println("PUTTING: "+
+                        network.gameDriver.storedPlayerNumbers.get(i)+" "+
+                        network.gameDriver.storedPlayedHands.get(i));
+                        tree.put(
+                                network.gameDriver.storedPlayerNumbers.get(i),
+                                network.gameDriver.storedPlayedHands.get(i));
+                    } // This sorts the hands by player name
+
                     // Send EVERYONE the hand data
-                    Vector<Hand> handVector = new Vector<>(network.gameDriver.storedPlayedHands);
+                    Vector<Hand> handVector = new Vector<>();
+                    for (Map.Entry<Integer, Hand> entry : tree.entrySet()) {
+                        handVector.add(entry.getValue());
+                    }
+
                     // Need to send the host's *played* hand
                     handVector.add(0,network.gameDriver.headPlayer.getHand());
                     network.sendToLobby(network.serializeObject(handVector));
@@ -146,7 +161,7 @@ public class RequestManager {
 
                     network.gameDriver.storedPlayerNames.clear();
                     network.gameDriver.storedRotateHands.clear();
-                    network.gameDriver.storedRotateHands.clear();
+                    network.gameDriver.storedPlayedHands.clear();
                     network.gameDriver.passedCards = 0;
                 }
 
@@ -185,6 +200,10 @@ public class RequestManager {
                     }
                 }
                 break;
+            case "endHostTurn": {
+                network.gameDriver.hostTurnEnded = true;
+                break;
+            }
 
             case "hostSuccess": {
                     URL url = getClass().getResource("serverScenes/hostLobbyScreen.fxml");

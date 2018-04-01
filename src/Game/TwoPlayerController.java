@@ -162,8 +162,8 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(7));
+                    player.isFirstCardPicked = true;
                 }
             }
         });
@@ -175,8 +175,8 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(5));
+                    player.isFirstCardPicked = true;
                 }
             }
         });
@@ -188,8 +188,8 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(2));
+                    player.isFirstCardPicked = true;
                 }
             }
         });
@@ -201,8 +201,8 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(0));
+                    player.isFirstCardPicked = true;
                 }
             }
         });
@@ -214,8 +214,8 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(1));
+                    player.isFirstCardPicked = true;
                 }
             }
         });
@@ -227,8 +227,8 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(3));
+                    player.isFirstCardPicked = true;
                 }
             }
         });
@@ -240,8 +240,8 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(4));
+                    player.isFirstCardPicked = true;
                 }
             }
         });
@@ -253,8 +253,8 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(6));
+                    player.isFirstCardPicked = true;
                 }
             }
         });
@@ -266,8 +266,8 @@ public class TwoPlayerController {
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(9));
+                    player.isFirstCardPicked = true;
                 }
             }
         });
@@ -279,8 +279,8 @@ public class TwoPlayerController {
                 alert.setTitle("Confirm Card Pick");
                 if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
                     player.setSelectedCard(player.getRotatingHand().getCard(8));
+                    player.isFirstCardPicked = true;
                 }
             }
         });

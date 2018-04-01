@@ -123,9 +123,16 @@ public class FXMLController implements Initializable {
         network.sendRequest(loginPasswordText.getText());
     }
 
+    @FXML private TextField loginIPField;
     @FXML
     public void loginLogin(){
         network.fxmlController = this;
+
+        if (!loginIPField.getText().equals("localhost")) {
+            System.out.println("Connecting to something other than localhost");
+            network.setServerAddress(loginIPField.getText());
+        }
+
         network.connectToServer();
 
         network.username = loginNameText.getText();
@@ -256,6 +263,11 @@ public class FXMLController implements Initializable {
 
         int i = 0;
         for (String s : lobby.playerNames){
+            if (s.equals(network.username)){
+                // Update our clients reference
+                s += " (You)";
+                network.client.setPlayerNumber(i+1);
+            }
             Color playerColor;
             switch (i) {
                 case 0:

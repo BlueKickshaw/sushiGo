@@ -18,6 +18,7 @@ public class GameDriver implements Runnable {
     private Network network;
 
     private volatile boolean dataReceived = false;
+    public volatile boolean hostTurnEnded = false;
 
     private Vector<Player> playerList = null;
     private int playerCount;
@@ -39,19 +40,22 @@ public class GameDriver implements Runnable {
     public ArrayList<String> storedPlayerNames = new ArrayList<>();
     public ArrayList<Hand> storedPlayedHands = new ArrayList<>();
     public ArrayList<Hand> storedRotateHands = new ArrayList<>();
+    public ArrayList<Integer> storedPlayerNumbers = new ArrayList<>();
     public int passedCards = 0;
 
     public GameDriver(Vector<Player> playerList, Vector<Vector<ImageView>> rotatingImages,
                       Vector<Vector<ImageView>> handImages, Network network, Vector<Label> scoreLabels) {
         this.network = network;
         this.playerList = playerList;
-        playerList.indexOf(headPlayer);
         this.scoreLabels = scoreLabels;
+        // Set ourselves as the head player
         for (Player player :this.playerList) {
             if(network!=null&&player.getName().equals(network.username)){
                 this.headPlayer = player;
             }
         }
+        indOfHeadPlayer = playerList.indexOf(headPlayer);
+
         this.rotatingImages = rotatingImages;
         this.handImages = handImages;
         if (this.playerList != null && this.playerList.size() > 0 && this.playerList.size() <= 4) {
@@ -64,8 +68,6 @@ public class GameDriver implements Runnable {
         for (int i = 0; i < playerList.size()-1; i++) {
             int j = (i + 1 + indOfHeadPlayer)%playerList.size();
             opponents.add(i, playerList.get(j));
-            System.out.println("j is: "+j);
-
         }
 
         switch (playerCount) {
@@ -94,6 +96,14 @@ public class GameDriver implements Runnable {
 
     public void run() {
         while (roundNum < 3) {
+            // Update the played hands at the beginning of a round
+            playerList.get(indOfHeadPlayer).setHandImages(playerList.get(indOfHeadPlayer),
+                    handImages.get(0));
+            for (int k=0; k < opponents.size(); k++) {
+                opponents.get(k).setHandImages(opponents.get(k), handImages.get(k+1));
+            }
+
+
             for(int i=0; i<handSize;i++){
                 if (!flag) {
                     startOfRound();
@@ -118,22 +128,20 @@ public class GameDriver implements Runnable {
                 while (!dataReceived) {
                 }
 
+                if (network.server == null) {
+                    while (!hostTurnEnded){}
+                }
                 dataReceived = false;
+                hostTurnEnded = false;
 
-                int tmpIndex = 0;
-
+                // Populate the images of the head player and each of the players in the game as well
                 playerList.get(indOfHeadPlayer).setHandImages(playerList.get(indOfHeadPlayer),
                         handImages.get(0));
-                for (int k = 1; k < playerList.size(); k++) {
-                    int j = (k + 1 + indOfHeadPlayer)%playerList.size();
-                    playerList.get(j).setHandImages(playerList.get(j), handImages.get(k));
+                for (int k=0; k < opponents.size(); k++) {
+                    opponents.get(k).setHandImages(opponents.get(k), handImages.get(k+1));
                 }
-
-
-
-
-                System.out.println("END TURN");
             }
+
             // fixes 1 card getting stuck in primary player hand
             populateImages(rotatingImages.get(0));
             // for loop above doesn't quite cut it, not sure why. no time. this fixes it
@@ -153,6 +161,12 @@ public class GameDriver implements Runnable {
             for (Player player : playerList) {
                 player.setHandImages(player, handImages.get(tmpIndex++));
 
+            }
+            // Update the played hands again AFTER the end of a round
+            playerList.get(indOfHeadPlayer).setHandImages(playerList.get(indOfHeadPlayer),
+                    handImages.get(0));
+            for (int k=0; k < opponents.size(); k++) {
+                opponents.get(k).setHandImages(opponents.get(k), handImages.get(k+1));
             }
         }
     }

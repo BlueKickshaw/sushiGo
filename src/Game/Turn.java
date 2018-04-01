@@ -17,7 +17,7 @@ public class Turn implements Runnable {
 
 
     private Player player;
-    private long timeLimit = (long) 5e9;
+    private long timeLimit = (long) 5e12;
     private Vector<ImageView> playerCardImages;
     private Network network;
     private Socket socket;
@@ -37,8 +37,7 @@ public class Turn implements Runnable {
         socket = network.socket;
         long startTime = System.nanoTime();
 
-        while (!player.isFirstCardPicked && (System.nanoTime() - startTime < timeLimit)) {
-
+        while (!player.isFirstCardPicked && System.nanoTime() - startTime < timeLimit) {
         }
         if (player.isFirstCardPicked) {
             disableButtons();
@@ -48,7 +47,6 @@ public class Turn implements Runnable {
             disableButtons();
             player.setSelectedCard(player.getRotatingHand().getCard(0));
             player.getHand().addCard(player.getRotatingHand().selectAndRemoveCard(player.getRotatingHand().getCard(0)));
-            //player.getHand().addCard(player.getRotatingHand().getCard(0));
             System.out.println("Automatically selected card: " + player.getHand().getCard(player.getHand().getCards().size() - 1));
         }
         player.isFirstCardPicked = false;
@@ -59,11 +57,15 @@ public class Turn implements Runnable {
             // Send: ID, picked card, passed hand
             network.sendRequest(socket,"endTurn".getBytes());
             network.sendRequest(socket, network.username);
+            String playerNum = network.client.getPlayerNumber() + "";
+            network.sendRequest(socket, playerNum.getBytes());
             network.sendRequest(socket, player.getHand());
             network.sendRequest(socket, player.getRotatingHand());
+        } else {
+            network.sendToLobby("endHostTurn".getBytes());
+            network.gameDriver.hostTurnEnded = true;
         }
 
-        player.setSelectedCard(null);
     }
 
     private void disableButtons() {

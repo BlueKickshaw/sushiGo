@@ -33,12 +33,16 @@ public class Hand implements Serializable{
     }
 
     public Card selectAndRemoveCard(Card card) {
+        if (card == null){
+            System.out.println("CARD IS NULL");
+        }
         int cardIndex = this.cards.indexOf(card);
         return this.cards.remove(cardIndex);
     }
 
 
     public void removeCard(Card c) {
+        System.out.println("REMOVING CARD");
         cards.remove(c);
     }
 
