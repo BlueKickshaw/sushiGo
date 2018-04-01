@@ -75,7 +75,7 @@ public class TwoPlayerController {
 
     @FXML    Label firstPlaceText = new Label();
     @FXML    Label secondPlaceText = new Label();
-
+             Vector<Label> scoreLabels = new Vector<>();
 
     Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
     Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
@@ -127,6 +127,8 @@ public class TwoPlayerController {
 
 
     public void initialize() {
+        scoreLabels.add(firstPlaceText);
+        scoreLabels.add(secondPlaceText);
         playerList.add(player);
         playerList.add(topOpponent);
 
@@ -305,8 +307,8 @@ public class TwoPlayerController {
             @Override
             public void handle(MouseEvent event) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
                 Optional<ButtonType> result = alert.showAndWait();
+                alert.setTitle("Confirm Card Pick");
                 if (result.get() == ButtonType.OK) {
 
                     player.isFirstCardPicked = true;
@@ -319,7 +321,7 @@ public class TwoPlayerController {
 //        playerList.add(new Player("fred", "4"));
 
         //driver = new GameDriver(playerList, rotatingImages, handImages, network);
-        driver = new GameDriver(playerList, rotatingImages, handImages);
+        driver = new GameDriver(playerList, rotatingImages, handImages, null, scoreLabels);
     }
 
     private void updateScores(Vector<Player> players){

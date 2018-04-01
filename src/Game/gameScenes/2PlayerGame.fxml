@@ -281,7 +281,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
-      <GridPane fx:id="scoreGridPane" gridLinesVisible="true" layoutX="440.0" layoutY="267.0" prefHeight="97.0" prefWidth="222.0">
+      <GridPane  gridLinesVisible="true" layoutX="440.0" layoutY="267.0" prefHeight="97.0" prefWidth="222.0">
          <children>
             <Label fx:id="firstPlaceText" prefHeight="37.0" prefWidth="202.0" textFill="#ae2828">
                <font>
