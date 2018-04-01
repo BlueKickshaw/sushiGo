@@ -14,7 +14,6 @@ import java.util.Vector;
 
 public class GameDriver implements Runnable {
 
-    //create the hands
     private boolean dataReceived = false;
     private Network network;
     private Vector<Player> playerList = null;
@@ -36,10 +35,10 @@ public class GameDriver implements Runnable {
 
 
     public GameDriver(Vector<Player> playerList, Vector<Vector<ImageView>> rotatingImages,
-                      Vector<Vector<ImageView>> handImages, Network network, Vector<Label> scoreLabels) {
+                      Vector<Vector<ImageView>> handImages, Network network, Vector<Label> scoreLabels, Player primaryPlayer) {
 //        this.network = network;
         this.playerList = playerList;
-        this.headPlayer = playerList.get(0);
+        this.headPlayer = primaryPlayer;
         playerList.indexOf(headPlayer);
         this.scoreLabels = scoreLabels;
         for (Player player :this.playerList) {
@@ -126,6 +125,8 @@ public class GameDriver implements Runnable {
 
                 }
             }
+            // fixes 1 card getting stuck in primary player hand
+            populateImages(rotatingImages.get(0));
             // for loop above doesn't quite cut it, not sure why. no time. this fixes it
             for (int j = 1; j < rotatingImages.size(); j++) {
                 if (j > 1){

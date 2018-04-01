@@ -340,7 +340,7 @@ public class FourPlayerController {
         });
 
 
-        driver = new GameDriver(playerList, rotatingImages, handImages, null, scoreLabels);
+        driver = new GameDriver(playerList, rotatingImages, handImages, null, scoreLabels, player);
     }
 
     private void populateImages(Vector<ImageView> images) {

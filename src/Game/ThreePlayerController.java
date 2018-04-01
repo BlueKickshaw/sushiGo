@@ -90,6 +90,8 @@ public class ThreePlayerController {
     @FXML    Label secondPlaceText = new Label();
     @FXML    Label thirdPlaceText = new Label();
 
+    GameDriver driver;
+
     Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
     Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
 
@@ -97,9 +99,9 @@ public class ThreePlayerController {
     Player topOpponent = new Player("dummy", "321");
     Player leftOpponent = new Player ("lefty", "555");
     Vector<Player> playerList = new Vector<>();
-
-    Deck deck = new Deck();
-    int roundCount = 0;
+    private Vector<Vector<ImageView>> rotatingImages = new Vector<>();
+    private Vector<Vector<ImageView>> handImages = new Vector<>();
+    private Vector<Label> scoreLabels = new Vector<>();
 
 
     private void turn() {
@@ -111,36 +113,27 @@ public class ThreePlayerController {
 
     public void incrementRound(ActionEvent event) {
 
-        player.getRotatingHand().setCards(deck.drawCards(9 - roundCount));
-        populateImages(playerCardImages);
-        populateCardBacks(topOpponentCardBacks, cardBack);
-        populateCardBacks(leftOpponentCardBacks, rotatedCardBack);
-        roundCount++;
-        if (roundCount > 0) {
-            setHandImages(player, handCardImages);
-            setHandImages(topOpponent, topOpponentHandCardImages);
-            setHandImages(leftOpponent, leftOpponentHandCardImages);
-            topOpponent.getHand().addCard(deck.drawCards(1).firstElement());
-            leftOpponent.getHand().addCard(deck.drawCards(1).firstElement());
-        }
-        turn();
     }
 
     public void getHands(ActionEvent event) {
-        GameDriver.calculatePoints(playerList, 0);
-        updateScores(playerList);
+        Thread gameHandler = new Thread(driver);
+        gameHandler.start();
+//        GameDriver.calculatePoints(playerList, 0);
+//        updateScores(playerList);
         System.out.println(player.getName());
-        System.out.println("\tRotating: " + player.getRotatingHand());
-        System.out.println("\tSelected: " + player.getHand());
+//        System.out.println("\tRotating: " + player.getRotatingHand());
+//        System.out.println("\tSelected: " + player.getHand());
         System.out.println(topOpponent.getName());
+        System.out.println("\tRotating: " + topOpponent.getRotatingHand());
         System.out.println("\tSelected: " + topOpponent.getHand());
-        System.out.println(leftOpponent.getName());
-        System.out.println("\tSelected: " + leftOpponent.getHand());
 
     }
 
 
     public void initialize() {
+        scoreLabels.add(firstPlaceText);
+        scoreLabels.add(secondPlaceText);
+        scoreLabels.add(thirdPlaceText);
 
         playerList.add(player);
         playerList.add(topOpponent);
@@ -205,7 +198,12 @@ public class ThreePlayerController {
         leftOpponentHandCardImages.add(leftPlayerHandCard07);
         leftOpponentHandCardImages.add(leftPlayerHandCard08);
 
-        player.drawHand(deck, 3);
+        rotatingImages.add(playerCardImages);
+        rotatingImages.add(topOpponentCardBacks);
+        rotatingImages.add(leftOpponentCardBacks);
+        handImages.add(handCardImages);
+        handImages.add(topOpponentHandCardImages);
+        handImages.add(leftOpponentHandCardImages);
 
 
         playerCard00.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -325,6 +323,7 @@ public class ThreePlayerController {
                 }
             }
         });
+        driver = new GameDriver(playerList, rotatingImages, handImages, null, scoreLabels, player);
     }
 
     private void populateImages(Vector<ImageView> images) {

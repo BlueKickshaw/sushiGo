@@ -321,7 +321,7 @@ public class TwoPlayerController {
 //        playerList.add(new Player("fred", "4"));
 
         //driver = new GameDriver(playerList, rotatingImages, handImages, network);
-        driver = new GameDriver(playerList, rotatingImages, handImages, null, scoreLabels);
+        driver = new GameDriver(playerList, rotatingImages, handImages, null, scoreLabels, player);
     }
 
     private void updateScores(Vector<Player> players){
