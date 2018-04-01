@@ -39,6 +39,17 @@ public class RequestManager {
                 });
                 break;
 
+            case "addClient": {
+                String name = network.getNextString(socket);
+                System.out.println("ADDING TO CCM: "+name);
+                Client client = new Client(socket, name);
+                client.setPlayerNumber(Integer.parseInt(network.getNextString(socket)));
+                client.setLobby((Lobby)network.deserializeObject(network.getNextBytes(socket)));
+                client.setSocket(socket);
+                network.clientConnectionManager.clients.put(name,client);
+                break;
+            }
+
             case "connectToHost": {
                 InetAddress address = (InetAddress)network.deserializeObject(network.getNextBytes(socket));
                 int newPort = Integer.parseInt(network.getNextString(socket));
@@ -56,6 +67,7 @@ public class RequestManager {
                 network.setServerAddress(network.client.getLobby().host.getHostAddress());
                 network.port = newPort;
                 network.connectToServer();
+
             }
                 break;
 
@@ -83,7 +95,10 @@ public class RequestManager {
                 String playerName = network.getNextString(socket);
                 Hand playedHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
                 Hand rotateHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
-                System.out.println(playerName+": "+playedHand);
+                network.gameDriver.passedCards++;
+
+                System.out.println(playerName+": ["+network.gameDriver.passedCards+"/" +
+                        +(network.client.getLobby().playerCount-1)+"] "+playedHand);
 
                 int ind = 0;
                 for (int i = 0; i < network.gameDriver.storedPlayerNames.size(); i++) {
@@ -95,28 +110,40 @@ public class RequestManager {
                 network.gameDriver.storedPlayerNames.add(ind, playerName);
                 network.gameDriver.storedPlayedHands.add(ind, playedHand);
                 network.gameDriver.storedRotateHands.add(ind, rotateHand);
-                network.gameDriver.passedCards++;
 
-                if (network.gameDriver.passedCards == network.client.getLobby().playerCount) {
+                // We don't want to wait for data from the host, so we subtract one
+                if (network.gameDriver.passedCards == (network.client.getLobby().playerCount-1)) {
                     // We have everyone's card
-                    System.out.println("RECEIVED ALL");
 
                     for (int i = 1; i < network.client.getLobby().playerCount; i++) {
-                        network.sendToPlayer(i+1,"endOfTurnData".getBytes());
-                        network.sendToPlayer(i+1, network.serializeObject(
+                        network.sendToPlayer(i,"endOfTurnData".getBytes());
+                        network.sendToPlayer(i, network.serializeObject(
                                 network.gameDriver.storedRotateHands.get(i-1)
                         ));
                     }
+                    // Send EVERYONE the hand data
+                    Vector<Hand> handVector = new Vector<>(network.gameDriver.storedPlayedHands);
+                    network.sendToLobby(network.serializeObject(handVector));
+                    network.gameDriver.receiveEndOfTurnData(
+                            handVector,
+                            // Get the last player in the games hand [-2, we also aren't in this list]
+                            network.gameDriver.storedRotateHands.get(network.client.getLobby().playerCount-2));
+
+                    network.gameDriver.storedPlayerNames.clear();
+                    network.gameDriver.storedRotateHands.clear();
+                    network.gameDriver.storedRotateHands.clear();
+                    network.gameDriver.passedCards = 0;
                 }
 
                 break;
             }
 
             case "endOfTurnData": {
-                Vector<Hand> allCards = (Vector<Hand>)network.deserializeObject(network.getNextBytes(socket));
                 Hand newHand = (Hand)network.deserializeObject(network.getNextBytes(socket));
+                System.out.println("PASSED HAND: "+newHand.toString());
+                Vector<Hand> allCards = (Vector<Hand>)network.deserializeObject(network.getNextBytes(socket));
                 Platform.runLater(() -> {
-                    System.out.println("RECEIVED NEW HAND: "+newHand.toString());
+                    network.gameDriver.receiveEndOfTurnData(allCards,newHand);
                 });
                 break;
             }

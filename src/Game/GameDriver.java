@@ -17,7 +17,7 @@ public class GameDriver implements Runnable {
 
     //create the hands
     private boolean dataReceived = false;
-    private Network network;
+
     private Vector<Player> playerList = null;
     private int playerCount;
     private Deck deck;
@@ -37,42 +37,9 @@ public class GameDriver implements Runnable {
     public ArrayList<Hand> storedRotateHands = new ArrayList<>();
     public int passedCards = 0;
 
-    public GameDriver(int playerCountArg, String[] playerNames, String[] playerIPs) {
-        playerCount = playerCountArg;
-
     public GameDriver(Vector<Player> playerList, Vector<Vector<ImageView>> rotatingImages,
                       Vector<Vector<ImageView>> handImages, Network network) {
         this.network = network;
-        this.playerList = playerList;
-        for (Player player :this.playerList) {
-            if(network!=null&&player.getName().equals(network.username)){
-                this.headPlayer = player;
-            }
-        }
-        this.rotatingImages = rotatingImages;
-        this.handImages = handImages;
-        if (this.playerList != null && this.playerList.size() > 0 && this.playerList.size() <= 4) {
-            playerCount = this.playerList.size();
-            deck = new Deck();
-        } else {
-            System.err.println("Invalid Vector");
-        }
-        int indOfHeadPlayer = playerList.indexOf(headPlayer);
-        opponents = new Vector<>(playerList.size());
-        for (int i = 0; i < playerList.size()-1; i++) {
-            int j = (i + 1 + indOfHeadPlayer)%playerList.size();
-            opponents.add(i, playerList.get(j));
-            System.out.println("j is: "+j);
-
-        }
-
-    }
-
-    public GameDriver(Vector<Player> playerList, Vector<Vector<ImageView>> rotatingImages,
-                      Vector<Vector<ImageView>> handImages, Network network) {
-        this.network = network;
-                      Vector<Vector<ImageView>> handImages) {
-//        this.network = network;
         this.playerList = playerList;
         this.headPlayer = playerList.get(0);
 
@@ -98,7 +65,6 @@ public class GameDriver implements Runnable {
     private void turn() {
         network.gameDriver = this;
         turn = new Turn(headPlayer, rotatingImages.get(0), network);
-        turn = new Turn(headPlayer, rotatingImages.get(0), network);
         turnHandler = new Thread(turn);
         turnHandler.start();
     }
@@ -106,7 +72,9 @@ public class GameDriver implements Runnable {
 
     public void run() {
         while (roundNum < 3) {
+            System.out.println("NEW ROUND");
             while (headPlayer.getHand().getCards().size() < 10) {
+                System.out.println("NEW TURN");
                 if (!flag) {
                     startOfRound();
                     flag = true;
@@ -117,21 +85,17 @@ public class GameDriver implements Runnable {
                 }
                 turn();
 
+                turnHandler.interrupt();
+                while (!dataReceived) {}
+
                 dataReceived = false;
-                try {
-                    turnHandler.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    System.err.println("Game run thread broken");
-                }
-        //        while (!dataReceived) {}
 
                 populateImages(rotatingImages.get(0));
                 populateCardBacks(rotatingImages.get(1), cardBack);
                 playerList.get(1).getHand().addCard(playerList.get(1).getRotatingHand().selectAndRemoveCard(playerList.get(1).getRotatingHand().getCard(0)));
                 int tmpIndex = 0;
                 for (Player player : playerList) {
-                    //player.setHandImages(player, handImages.get(tmpIndex++));
+                    player.setHandImages(player, handImages.get(tmpIndex++));
 
                 }
             }
@@ -149,7 +113,6 @@ public class GameDriver implements Runnable {
     }
 
     public void receiveEndOfTurnData(Vector<Hand> tableHands, Hand rotatingHand) {
-
         for (Player player : playerList) {
             for (Hand hand : tableHands) {
                 player.setHand(hand.getCards());

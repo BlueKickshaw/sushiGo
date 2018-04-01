@@ -29,12 +29,14 @@ public class Turn implements Runnable {
     }
 
     public void run() {
+        player.isFirstCardPicked = false;
         // If we're the host, and it's the start of the turn then we want to clear the card list from earlier
         if (null != network.server) {
             network.gameDriver.passedCards = 0;
         }
         socket = network.socket;
         long startTime = System.nanoTime();
+
         while (!player.isFirstCardPicked && (System.nanoTime() - startTime < timeLimit)) {
 
         }

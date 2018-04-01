@@ -38,6 +38,9 @@ public class Client {
         loggedIn = status;
     }
 
+    public String getName() {
+        return name;
+    }
 
     public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
