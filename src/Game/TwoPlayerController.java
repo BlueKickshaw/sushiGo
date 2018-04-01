@@ -21,6 +21,9 @@ public class TwoPlayerController {
 
     GameDriver driver;
     @FXML    GridPane primaryPlayerGrid;
+    @FXML    GridPane topOpponentCardBacksGrid;
+    @FXML    GridPane handCardImagesGrid;
+    @FXML    GridPane topOpponentHandCardImagesGrid;
     @FXML    ImageView playerCard00 = new ImageView();
     @FXML    ImageView playerCard01 = new ImageView();
     @FXML    ImageView playerCard02 = new ImageView();
@@ -124,49 +127,83 @@ public class TwoPlayerController {
 
 
     public void initialize() {
-        playerCardImages.add(playerCard08);
-        playerCardImages.add(playerCard09);
-        playerCardImages.add(playerCard00);
-        playerCardImages.add(playerCard07);
-        playerCardImages.add(playerCard01);
-        playerCardImages.add(playerCard06);
-        playerCardImages.add(playerCard05);
-        playerCardImages.add(playerCard02);
-        playerCardImages.add(playerCard04);
-        playerCardImages.add(playerCard03);
-        topOpponentCardBacks.add(topOpponentCard08);
-        topOpponentCardBacks.add(topOpponentCard09);
-        topOpponentCardBacks.add(topOpponentCard00);
-        topOpponentCardBacks.add(topOpponentCard07);
-        topOpponentCardBacks.add(topOpponentCard01);
-        topOpponentCardBacks.add(topOpponentCard06);
-        topOpponentCardBacks.add(topOpponentCard05);
-        topOpponentCardBacks.add(topOpponentCard02);
-        topOpponentCardBacks.add(topOpponentCard04);
-        topOpponentCardBacks.add(topOpponentCard03);
+        int[] populationOrder = new int[]{0, 9, 1, 8, 2, 7, 3, 6, 4, 5};
+        for (int i=0; i<10;i++){
+            ImageView temp = new ImageView();
+            //temp.setPreserveRatio(true);
+            temp.setFitHeight(primaryPlayerGrid.getPrefHeight());
+            temp.setFitWidth(primaryPlayerGrid.getPrefWidth()/10);
+            playerCardImages.add(temp);
+            primaryPlayerGrid.add(temp, populationOrder[i] ,1);
 
 
-        handCardImages.add(playerHandCard00);
-        handCardImages.add(playerHandCard01);
-        handCardImages.add(playerHandCard02);
-        handCardImages.add(playerHandCard03);
-        handCardImages.add(playerHandCard04);
-        handCardImages.add(playerHandCard05);
-        handCardImages.add(playerHandCard06);
-        handCardImages.add(playerHandCard07);
-        handCardImages.add(playerHandCard08);
-        handCardImages.add(playerHandCard09);
+            temp = new ImageView();
+            //temp.setPreserveRatio(true);
+            temp.setFitHeight(topOpponentCardBacksGrid.getPrefHeight());
+            temp.setFitWidth(topOpponentCardBacksGrid.getPrefWidth()/10);
+            topOpponentCardBacks.add(temp);
+            topOpponentCardBacksGrid.add(temp, populationOrder[i] ,1);
 
-        topOpponentHandCardImages.add(topPlayerHandCard00);
-        topOpponentHandCardImages.add(topPlayerHandCard01);
-        topOpponentHandCardImages.add(topPlayerHandCard02);
-        topOpponentHandCardImages.add(topPlayerHandCard03);
-        topOpponentHandCardImages.add(topPlayerHandCard04);
-        topOpponentHandCardImages.add(topPlayerHandCard05);
-        topOpponentHandCardImages.add(topPlayerHandCard06);
-        topOpponentHandCardImages.add(topPlayerHandCard07);
-        topOpponentHandCardImages.add(topPlayerHandCard08);
-        topOpponentHandCardImages.add(topPlayerHandCard09);
+
+            temp = new ImageView();
+            //temp.setPreserveRatio(true);
+            temp.setFitHeight(handCardImagesGrid.getPrefHeight());
+            temp.setFitWidth(handCardImagesGrid.getPrefWidth()/10);
+            handCardImages.add(temp);
+            handCardImagesGrid.add(temp, i ,1);
+
+
+            temp = new ImageView();
+            //temp.setPreserveRatio(true);
+            temp.setFitHeight(topOpponentHandCardImagesGrid.getPrefHeight());
+            temp.setFitWidth(topOpponentHandCardImagesGrid.getPrefWidth()/10);
+            topOpponentHandCardImages.add(temp);
+            topOpponentHandCardImagesGrid.add(temp, i ,1);
+        }
+
+//        playerCardImages.add(playerCard08);
+//        playerCardImages.add(playerCard09);
+//        playerCardImages.add(playerCard00);
+//        playerCardImages.add(playerCard07);
+//        playerCardImages.add(playerCard01);
+//        playerCardImages.add(playerCard06);
+//        playerCardImages.add(playerCard05);
+//        playerCardImages.add(playerCard02);
+//        playerCardImages.add(playerCard04);
+//        playerCardImages.add(playerCard03);
+//        topOpponentCardBacks.add(topOpponentCard08);
+//        topOpponentCardBacks.add(topOpponentCard09);
+//        topOpponentCardBacks.add(topOpponentCard00);
+//        topOpponentCardBacks.add(topOpponentCard07);
+//        topOpponentCardBacks.add(topOpponentCard01);
+//        topOpponentCardBacks.add(topOpponentCard06);
+//        topOpponentCardBacks.add(topOpponentCard05);
+//        topOpponentCardBacks.add(topOpponentCard02);
+//        topOpponentCardBacks.add(topOpponentCard04);
+//        topOpponentCardBacks.add(topOpponentCard03);
+
+
+//        handCardImages.add(playerHandCard00);
+//        handCardImages.add(playerHandCard01);
+//        handCardImages.add(playerHandCard02);
+//        handCardImages.add(playerHandCard03);
+//        handCardImages.add(playerHandCard04);
+//        handCardImages.add(playerHandCard05);
+//        handCardImages.add(playerHandCard06);
+//        handCardImages.add(playerHandCard07);
+//        handCardImages.add(playerHandCard08);
+//        handCardImages.add(playerHandCard09);
+
+//        topOpponentHandCardImages.add(topPlayerHandCard00);
+//        topOpponentHandCardImages.add(topPlayerHandCard01);
+//        topOpponentHandCardImages.add(topPlayerHandCard02);
+//        topOpponentHandCardImages.add(topPlayerHandCard03);
+//        topOpponentHandCardImages.add(topPlayerHandCard04);
+//        topOpponentHandCardImages.add(topPlayerHandCard05);
+//        topOpponentHandCardImages.add(topPlayerHandCard06);
+//        topOpponentHandCardImages.add(topPlayerHandCard07);
+//        topOpponentHandCardImages.add(topPlayerHandCard08);
+//        topOpponentHandCardImages.add(topPlayerHandCard09);
 
         rotatingImages.add(playerCardImages);
         rotatingImages.add(topOpponentCardBacks);
@@ -176,138 +213,157 @@ public class TwoPlayerController {
 
 
         player.drawHand(deck, 2);
+        int[] populationOrderButtons = new int[]{7, 5, 2, 0, 1, 3, 4, 6, 9, 8};
 
+        for (int i = 0; i < playerCardImages.size(); i++) {
+            int finalI = i;
+            int[] finalPopulationOrder = populationOrderButtons;
+            playerCardImages.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+                    alert.setTitle("Confirm Card Pick");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK) {
 
-        playerCard00.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-
-                    player.isFirstCardPicked = true;
-                    player.setSelectedCard(player.getRotatingHand().getCard(7));
+                        player.isFirstCardPicked = true;
+                        player.setSelectedCard(player.getRotatingHand().getCard(finalPopulationOrder[finalI]));
+                    }
                 }
-            }
-        });
-        playerCard01.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
+            });
+        }
 
-                    player.isFirstCardPicked = true;
-                    player.setSelectedCard(player.getRotatingHand().getCard(5));
-                }
-            }
-        });
-        playerCard02.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
 
-                    player.isFirstCardPicked = true;
-                    player.setSelectedCard(player.getRotatingHand().getCard(2));
-                }
-            }
-        });
-        playerCard03.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-
-                    player.isFirstCardPicked = true;
-                    player.setSelectedCard(player.getRotatingHand().getCard(0));
-                }
-            }
-        });
-        playerCard04.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-
-                    player.isFirstCardPicked = true;
-                    player.setSelectedCard(player.getRotatingHand().getCard(1));
-                }
-            }
-        });
-        playerCard05.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-
-                    player.isFirstCardPicked = true;
-                    player.setSelectedCard(player.getRotatingHand().getCard(3));
-                }
-            }
-        });
-        playerCard06.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-
-                    player.isFirstCardPicked = true;
-                    player.setSelectedCard(player.getRotatingHand().getCard(4));
-                }
-            }
-        });
-        playerCard07.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-
-                    player.isFirstCardPicked = true;
-                    player.setSelectedCard(player.getRotatingHand().getCard(6));
-                }
-            }
-        });
-        playerCard08.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-
-                    player.isFirstCardPicked = true;
-                    player.setSelectedCard(player.getRotatingHand().getCard(9));
-                }
-            }
-        });
-        playerCard09.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
-                alert.setTitle("Confirm Card Pick");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-
-                    player.isFirstCardPicked = true;
-                    player.setSelectedCard(player.getRotatingHand().getCard(8));
-                }
-            }
-        });
+//        playerCard00.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+//                alert.setTitle("Confirm Card Pick");
+//                Optional<ButtonType> result = alert.showAndWait();
+//                if (result.get() == ButtonType.OK) {
+//
+//                    player.isFirstCardPicked = true;
+//                    player.setSelectedCard(player.getRotatingHand().getCard(7));
+//                }
+//            }
+//        });
+//        playerCard01.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+//                alert.setTitle("Confirm Card Pick");
+//                Optional<ButtonType> result = alert.showAndWait();
+//                if (result.get() == ButtonType.OK) {
+//
+//                    player.isFirstCardPicked = true;
+//                    player.setSelectedCard(player.getRotatingHand().getCard(5));
+//                }
+//            }
+//        });
+//        playerCard02.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+//                alert.setTitle("Confirm Card Pick");
+//                Optional<ButtonType> result = alert.showAndWait();
+//                if (result.get() == ButtonType.OK) {
+//
+//                    player.isFirstCardPicked = true;
+//                    player.setSelectedCard(player.getRotatingHand().getCard(2));
+//                }
+//            }
+//        });
+//        playerCard03.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+//                alert.setTitle("Confirm Card Pick");
+//                Optional<ButtonType> result = alert.showAndWait();
+//                if (result.get() == ButtonType.OK) {
+//
+//                    player.isFirstCardPicked = true;
+//                    player.setSelectedCard(player.getRotatingHand().getCard(0));
+//                }
+//            }
+//        });
+//        playerCard04.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+//                alert.setTitle("Confirm Card Pick");
+//                Optional<ButtonType> result = alert.showAndWait();
+//                if (result.get() == ButtonType.OK) {
+//
+//                    player.isFirstCardPicked = true;
+//                    player.setSelectedCard(player.getRotatingHand().getCard(1));
+//                }
+//            }
+//        });
+//        playerCard05.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+//                alert.setTitle("Confirm Card Pick");
+//                Optional<ButtonType> result = alert.showAndWait();
+//                if (result.get() == ButtonType.OK) {
+//
+//                    player.isFirstCardPicked = true;
+//                    player.setSelectedCard(player.getRotatingHand().getCard(3));
+//                }
+//            }
+//        });
+//        playerCard06.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+//                alert.setTitle("Confirm Card Pick");
+//                Optional<ButtonType> result = alert.showAndWait();
+//                if (result.get() == ButtonType.OK) {
+//
+//                    player.isFirstCardPicked = true;
+//                    player.setSelectedCard(player.getRotatingHand().getCard(4));
+//                }
+//            }
+//        });
+//        playerCard07.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+//                alert.setTitle("Confirm Card Pick");
+//                Optional<ButtonType> result = alert.showAndWait();
+//                if (result.get() == ButtonType.OK) {
+//
+//                    player.isFirstCardPicked = true;
+//                    player.setSelectedCard(player.getRotatingHand().getCard(6));
+//                }
+//            }
+//        });
+//        playerCard08.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+//                alert.setTitle("Confirm Card Pick");
+//                Optional<ButtonType> result = alert.showAndWait();
+//                if (result.get() == ButtonType.OK) {
+//
+//                    player.isFirstCardPicked = true;
+//                    player.setSelectedCard(player.getRotatingHand().getCard(9));
+//                }
+//            }
+//        });
+//        playerCard09.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Final Choice?");
+//                alert.setTitle("Confirm Card Pick");
+//                Optional<ButtonType> result = alert.showAndWait();
+//                if (result.get() == ButtonType.OK) {
+//
+//                    player.isFirstCardPicked = true;
+//                    player.setSelectedCard(player.getRotatingHand().getCard(8));
+//                }
+//            }
+//        });
         //TODO make players based on info given
         playerList.add(player);
         playerList.add(topOpponent);
