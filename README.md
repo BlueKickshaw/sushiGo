@@ -23,12 +23,12 @@ USAGE:
 
 
 	If the user decides to join a server, they will have an option of choosing the IP of the server they would like to
-	join. By default the user will attempt to join a server that is created on their own machine; if they are joining a
-	server on their local network then they should take care to join by that by entering the local IP of the host (this
-	will have to be obtained from the host themselves). If the user is joining a server that is being hosted
+	join. By default the user will attempt to join a server that is created on their own machine; if they are joining
+	a server on their local network then they should take care to join by that by entering the local IP of the host
+	(this will have to be obtained from the host themselves). If the user is joining a server that is being hosted
 	
 NOTE:
-	Coling worked on setting up initial classes(player, cards, hand), majority of calculate points methods, calcualting
+	Colin worked on setting up initial classes(player, cards, hand), majority of calculate points methods, calculating
 	total points, GameDriver, and gamedriver meshing.
 
 	Connor worked on server/network logic/UI as well as game driver meshing.
@@ -37,8 +37,8 @@ NOTE:
 
 	On Friday march 30, Colin and Jon worked in pair programming with Jon pushing the code. On Saturday March 31st and
 	Sunday April 1st, we all worked within the same room putting everything together, fixing bugs as the came up, and
-	discussing/trying strategies to fix problems. Any work done in these two days, although not in the commit messages,
-	was done with the 3 of us doing "pair" programming.
+	discussing/trying strategies to fix problems. Any work done in these two days, although not in the commit
+	messages, was done with the 3 of us doing "pair" programming.
 
 
 BUGS & LIMITATIONS: 
