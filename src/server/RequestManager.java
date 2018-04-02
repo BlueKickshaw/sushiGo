@@ -49,6 +49,9 @@ public class RequestManager {
 
             case "connectToHost": {
                 InetAddress address = (InetAddress)network.deserializeObject(network.getNextBytes(socket));
+                if (address.isAnyLocalAddress()){
+                    network.setServerAddress("192.168.2.17");
+                }
                 int newPort = Integer.parseInt(network.getNextString(socket));
                 // From here we're safe to disconnect
                 network.sendRequest("disconnect");

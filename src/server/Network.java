@@ -110,16 +110,20 @@ public class Network {
     }
 
     public int getOpenPort() {
-        int freePort = 0;
         ServerSocket socket = null;
-        try {
-            socket = new ServerSocket(0);
-            socket.close();
-            freePort = socket.getLocalPort();
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (int i = 8080; i < 8090; i++) {
+            try {
+                socket = new ServerSocket(i);
+                if (socket.isClosed()) {
+                    continue;
+                }
+                socket.close();
+                return i;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return freePort;
+        return -1;
     }
 
     // Sometimes we receive a lot of data from a socket, but we want to cut it short and disregard the rest.
