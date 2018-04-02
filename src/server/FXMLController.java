@@ -20,7 +20,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-
 public class FXMLController implements Initializable {
     private static int screenWidth = 300;
     private static int screenHeight = 500;
@@ -37,22 +36,15 @@ public class FXMLController implements Initializable {
     URL browserScreen = getClass().getResource("serverScenes/browserScreen.fxml");
     URL hostLobbyScreen = getClass().getResource("serverScenes/hostLobbyScreen.fxml");
 
-
     @FXML
     // The user presses a button indicating they want to go back to the welcome screen
     private void toWelcomeBtn(ActionEvent e){
         URL url = getClass().getResource("serverScenes/welcomeScreen.fxml");
         try {
             loadScene(e, url);
-            updateWelcome();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-    }
-
-    @FXML private TextField welcomeUser;
-    @FXML private void updateWelcome(){
-        welcomeUser.setText("Welcome "+network.username+"!");
     }
 
     @FXML
