@@ -55,6 +55,7 @@ public class Network {
 
         } catch (IOException e) {
             System.err.println(Thread.currentThread().getName()+": Unable to connect to server over port "+port);
+            System.err.println(e);
         }
     }
 
@@ -110,20 +111,33 @@ public class Network {
     }
 
     public int getOpenPort() {
-        ServerSocket socket = null;
         for (int i = 8080; i < 8090; i++) {
-            try {
-                socket = new ServerSocket(i);
-                if (socket.isClosed()) {
-                    continue;
-                }
-                socket.close();
+            System.out.println("CHECKING PORT: "+i);
+            if (portAvailable(i)){
                 return i;
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
         return -1;
+    }
+
+    private boolean portAvailable(int port) {
+        ServerSocket socket = null;
+        try {
+            socket = new ServerSocket(port);
+            socket.setReuseAddress(true);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 
     // Sometimes we receive a lot of data from a socket, but we want to cut it short and disregard the rest.
