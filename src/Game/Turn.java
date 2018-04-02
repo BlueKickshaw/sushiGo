@@ -17,7 +17,7 @@ public class Turn implements Runnable {
 
 
     private Player player;
-    private long timeLimit = (long) 5e12;
+    private long timeLimit = (long) 30e9;
     private Vector<ImageView> playerCardImages;
     private Network network;
     private Socket socket;

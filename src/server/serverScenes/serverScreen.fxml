@@ -15,7 +15,7 @@
     <GridPane alignment="CENTER" layoutX="28.0" layoutY="20.0" prefHeight="81.0" prefWidth="196.0">
       <children>
         <Label text="Users:" textAlignment="LEFT" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <TextField fx:id="serverUserCountField" editable="false" prefWidth="200.0" text="" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TextField fx:id="serverUserCountField" editable="false" prefWidth="200.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         <Label text="Lobbies:" textAlignment="LEFT" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1" />
       </children>
       <columnConstraints>
