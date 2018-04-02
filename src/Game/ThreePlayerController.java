@@ -316,53 +316,8 @@ public class ThreePlayerController {
         getHands(new ActionEvent());
     }
 
-    private void populateImages(Vector<ImageView> images) {
-        for (ImageView iv : images) {
-            iv.setImage(null);
-        }
 
-        Vector<ImageView> reverseImageViews = (Vector) images.clone();
-        Collections.reverse(reverseImageViews);
-        for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
-            Card tmp = player.getRotatingHand().getCard(i);
-            Image image = new Image(tmp.getImagePath());
-            reverseImageViews.get(i).setDisable(false);
-            reverseImageViews.get(i).setImage(image);
-        }
 
-    }
-
-    private void populateCardBacks(Vector<ImageView> oppCardsView, Image back) {
-        for (ImageView iv : oppCardsView) {
-            iv.setImage(null);
-        }
-        Vector<ImageView> reverseImageViews = (Vector) oppCardsView.clone();
-        Collections.reverse(reverseImageViews);
-        for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
-            reverseImageViews.get(i).setImage(back);
-        }
-
-    }
-
-    private void setHandImages(Player player, Vector<ImageView> images) {
-        for (ImageView img : images) {
-            img.setImage(null);
-        }
-
-        for (int i = 0; i < player.getHand().getCards().size(); i++) {
-            Image tmp = new Image(player.getHand().getCard(i).getImagePath());
-            images.get(i).setImage(tmp);
-        }
-
-    }
-    private void updateScores(Vector<Player> players){
-        Vector<Player> clonePlayerList = (Vector) players.clone();
-        clonePlayerList.sort(Comparator.comparingInt(Player::getTotalPoints));
-        Collections.reverse(clonePlayerList);
-        firstPlaceText.setText(clonePlayerList.get(0).getName() + "     " + clonePlayerList.get(0).getTotalPoints() + " Total Points");
-        secondPlaceText.setText(clonePlayerList.get(1).getName() + "     " + clonePlayerList.get(1).getTotalPoints() + " Total Points");
-        thirdPlaceText.setText(clonePlayerList.get(2).getName() + "     " + clonePlayerList.get(2).getTotalPoints() + " Total Points");
-    }
 
 
 }
