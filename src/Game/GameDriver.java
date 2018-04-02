@@ -1,11 +1,10 @@
 package Game;
 
-import Cards.*;
-import server.Network;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import server.Network;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,40 +12,80 @@ import java.util.Comparator;
 import java.util.Vector;
 
 public class GameDriver implements Runnable {
+    // network that this player is connected to
     private Network network;
 
+    // flags used to ensure data is syned over the network
     private volatile boolean dataReceived = false;
     public volatile boolean hostTurnEnded = false;
 
+    // the list of players in a game
     private Vector<Player> playerList = null;
     private int playerCount;
-    private Deck deck;
-    private int roundNum = 0;
+    private int handSize;
+
+    // the player in the player list that this gameDriver is attached to
     public Player headPlayer;
+    int indOfHeadPlayer;
+
+    // the deck used to deal cards
+    private Deck deck;
+
+    //updated in startofround function
+    private int roundNum = 0;
+
+    // the images of the hands that  are passed around the "table"
     private Vector<Vector<ImageView>> rotatingImages = new Vector<>();
+
+    // these are the images of already chosen cards that are put in front of the player
     private Vector<Vector<ImageView>> handImages = new Vector<>();
+
+    //paths to images
     private Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
-    Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
+    private Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
+
+    // handles turn threads
     private Turn turn;
     private Thread turnHandler;
     boolean notEndOfRoundReached = false;
+
+
     //Order is top, left, right
     private Vector<Player> opponents;
-    private Vector<Label> scoreLabels;
-    private int handSize;
-    int indOfHeadPlayer;
 
+    //scoreboard output
+    private Vector<Label> scoreLabels;
+
+
+// these are used by the serve when receiving data
     public ArrayList<String> storedPlayerNames = new ArrayList<>();
     public ArrayList<Hand> storedPlayedHands = new ArrayList<>();
     public ArrayList<Hand> storedRotateHands = new ArrayList<>();
     public ArrayList<Integer> storedPlayerNumbers = new ArrayList<>();
     public int passedCards = 0;
 
+
+    /**
+     *
+     * @param playerList a player Vector of all players in a game with the host as zero and adding players clockwise
+     *
+     * @param rotatingImages A vector of imageView vectors(one vector per player in the game) used to display  cards
+     *                      to be picked
+     *
+     * @param handImages A vector of imageView vectors(one vector per player in the game) used to display  cards
+     *                    already pickedpicked
+     *
+     * @param network   A copy of the network the server is on
+     *
+     * @param scoreLabels A vector of labels to show the score
+     */
     public GameDriver(Vector<Player> playerList, Vector<Vector<ImageView>> rotatingImages,
                       Vector<Vector<ImageView>> handImages, Network network, Vector<Label> scoreLabels) {
         this.network = network;
         this.playerList = playerList;
         this.scoreLabels = scoreLabels;
+
+
         // Set ourselves as the head player
         for (Player player : this.playerList) {
             if (network != null && player.getName().equals(network.username)) {
@@ -57,6 +96,7 @@ public class GameDriver implements Runnable {
 
         this.rotatingImages = rotatingImages;
         this.handImages = handImages;
+
         if (this.playerList != null && this.playerList.size() > 0 && this.playerList.size() <= 4) {
             playerCount = this.playerList.size();
             // makes the deck consistent for all players
@@ -64,6 +104,8 @@ public class GameDriver implements Runnable {
         } else {
             System.err.println("Invalid Vector");
         }
+
+
         opponents = new Vector<>(playerList.size());
         for (int i = 0; i < playerList.size() - 1; i++) {
             int j = (i + 1 + indOfHeadPlayer) % playerList.size();
@@ -84,7 +126,9 @@ public class GameDriver implements Runnable {
 
     }
 
-
+    /**
+     * starts a turn thread for the headplayer
+     */
     private void turn() {
         network.gameDriver = this;
         turn = new Turn(headPlayer, rotatingImages.get(0), network);
@@ -171,6 +215,11 @@ public class GameDriver implements Runnable {
         }
     }
 
+    /**
+     * This is called by the server to update the hands once all data is received
+     * @param tableHands    visible hands
+     * @param rotatingHand  just the head players hand
+     */
     public void receiveEndOfTurnData(Vector<Hand> tableHands, Hand rotatingHand) {
         int iter = 0;
         for (Player player : playerList) {
@@ -192,6 +241,7 @@ public class GameDriver implements Runnable {
 
 
     public static void calculatePoints(Vector<Player> playerList, int roundNum) {
+        //ensure round points are zero and then update counts
         for (Player player : playerList) {
             player.clearRoundPoints();
             player.updatePuddingCount();
@@ -200,6 +250,8 @@ public class GameDriver implements Runnable {
         }
 
 
+        //call the mothods that update points
+        //pudding and maki need a player list since they compare hands between players
         calculateMakiPoints(playerList);
         if (roundNum == 3) {
             calculatePuddingPoints(playerList);
