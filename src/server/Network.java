@@ -1,13 +1,10 @@
 package server;
 
-import Cards.Card;
 import Game.GameDriver;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Network {

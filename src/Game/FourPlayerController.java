@@ -3,13 +3,16 @@ package Game;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import server.Network;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.Vector;
 
 
 public class FourPlayerController {

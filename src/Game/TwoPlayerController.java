@@ -1,20 +1,16 @@
 package Game;
 
-import Cards.Card;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import server.Network;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.Vector;
 
