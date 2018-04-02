@@ -114,19 +114,24 @@ public class RequestManager {
                 // We don't want to wait for data from the host, so we subtract one
                 if (network.gameDriver.passedCards == (network.client.getLobby().playerCount-1)) {
                     while (!network.gameDriver.hostTurnEnded){}
-                    // We have everyone's card
-                    for (int i = 2; i < network.client.getLobby().playerCount; i++) {
-                        network.sendToPlayer(i,"endOfTurnData".getBytes());
-                        network.sendToPlayer(i, network.serializeObject(
-                                network.gameDriver.storedRotateHands.get(i-1)
-                        ));
-                    }
 
-                    // We have to explicitly send player 1
-                    network.sendToPlayer(1,"endOfTurnData".getBytes());
-                    network.sendToPlayer(1,network.serializeObject(
-                            network.gameDriver.headPlayer.getRotatingHand()
-                    ));
+                    // We have everyone's card
+/*                    for (int i = 1; i < network.client.getLobby().playerCount; i++) {
+                        network.sendToPlayer(i,"endOfTurnData".getBytes());
+                        if (i != 1) {
+                            network.sendToPlayer(i, network.serializeObject(
+                                    network.gameDriver.storedRotateHands.get(i - 1)
+                            ));
+                        } else {
+                            network.sendToPlayer(i,network.serializeObject(
+                                    network.gameDriver.headPlayer.getRotatingHand()
+                            ));
+                        }
+                    }*/
+
+
+                    //
+
 
                     Map<Integer,Hand> tree = new TreeMap<>();
                     for (int i = 0; i < network.gameDriver.storedPlayedHands.size(); i++) {
@@ -137,6 +142,20 @@ public class RequestManager {
                                 network.gameDriver.storedPlayerNumbers.get(i),
                                 network.gameDriver.storedPlayedHands.get(i));
                     } // This sorts the hands by player name
+                    System.out.println(network.gameDriver.storedRotateHands.get(0));
+                    System.out.println(network.gameDriver.storedRotateHands.get(1));
+
+
+                    for (int i = network.client.getLobby().playerCount - 2; i >= 1; i--) {
+                        network.sendToPlayer(i+1, "endOfTurnData".getBytes());
+                        network.sendToPlayer(i+1,
+                                network.serializeObject(network.gameDriver.storedRotateHands.get(i-1))
+                        );
+                    }
+                    network.sendToPlayer(1, "endOfTurnData".getBytes());
+                    network.sendToPlayer(1,
+                            network.serializeObject(network.gameDriver.headPlayer.getRotatingHand()));
+
 
                     // Send EVERYONE the hand data
                     Vector<Hand> handVector = new Vector<>();
@@ -154,11 +173,12 @@ public class RequestManager {
                     }
 
                     // Update the host's hand
+                    System.out.println(network.gameDriver.storedRotateHands.get(
+                            network.gameDriver.storedRotateHands.size()-1));
                     network.gameDriver.receiveEndOfTurnData(
                             handVector,
                             // Get the last player in the games hand [-2, we also aren't in this list]
-                            network.gameDriver.storedRotateHands.get(network.client.getLobby().playerCount-2));
-
+                            network.gameDriver.storedRotateHands.get(network.gameDriver.storedRotateHands.size() -1));
                     network.gameDriver.storedPlayerNames.clear();
                     network.gameDriver.storedRotateHands.clear();
                     network.gameDriver.storedPlayedHands.clear();
@@ -354,7 +374,7 @@ public class RequestManager {
                 }
 
                 // We can now remove this lobby from our active lobby list
-                for (Lobby l : network.lobbyManager.lobbyList){
+                for (Lobby l : (ArrayList<Lobby>)network.lobbyManager.lobbyList.clone()){
                     if (l.name.equals(lobby.name)){
                         network.lobbyManager.lobbyList.remove(l);
                     }
