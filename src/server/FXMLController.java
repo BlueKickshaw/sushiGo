@@ -44,9 +44,15 @@ public class FXMLController implements Initializable {
         URL url = getClass().getResource("serverScenes/welcomeScreen.fxml");
         try {
             loadScene(e, url);
+            updateWelcome();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+    }
+
+    @FXML private TextField welcomeUser;
+    @FXML private void updateWelcome(){
+        welcomeUser.setText("Welcome "+network.username+"!");
     }
 
     @FXML
@@ -145,6 +151,7 @@ public class FXMLController implements Initializable {
 
     @FXML
     public void loadLobbyScene(){
+        stage.setTitle("Player");
         try {
             loadScene(hostLobbyScreen);
         } catch (IOException e) {
