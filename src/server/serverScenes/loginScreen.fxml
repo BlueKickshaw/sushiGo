@@ -31,10 +31,5 @@
         <Button fx:id="loginLoginBtn" layoutX="32.0" layoutY="90.0" mnemonicParsing="false" onAction="#loginLogin" prefWidth="136.0" text="Login" />
       </children>
     </AnchorPane>
-    <Label id="loginText" fx:id="loginErrorText" alignment="CENTER" layoutX="0.0" layoutY="247.0" prefHeight="42.0" prefWidth="300.0" text="&lt;MESSAGE&gt;" textAlignment="CENTER" textFill="WHITE">
-      <font>
-        <Font size="18.0" />
-      </font>
-    </Label>
   </children>
 </AnchorPane>

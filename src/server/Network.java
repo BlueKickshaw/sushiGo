@@ -3,6 +3,7 @@ package server;
 import Cards.Card;
 import Game.GameDriver;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.net.*;
@@ -55,6 +56,7 @@ public class Network {
 
         } catch (IOException e) {
             System.err.println(Thread.currentThread().getName()+": Unable to connect to server over port "+port);
+            System.err.println(e);
         }
     }
 
@@ -110,20 +112,33 @@ public class Network {
     }
 
     public int getOpenPort() {
-        ServerSocket socket = null;
         for (int i = 8080; i < 8090; i++) {
-            try {
-                socket = new ServerSocket(i);
-                if (socket.isClosed()) {
-                    continue;
-                }
-                socket.close();
+            System.out.println("CHECKING PORT: "+i);
+            if (portAvailable(i)){
                 return i;
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
         return -1;
+    }
+
+    private boolean portAvailable(int port) {
+        ServerSocket socket = null;
+        try {
+            socket = new ServerSocket(port);
+            socket.setReuseAddress(true);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 
     // Sometimes we receive a lot of data from a socket, but we want to cut it short and disregard the rest.
@@ -234,5 +249,29 @@ public class Network {
     public int startServer(Network network) {
         server = new Server(network, port);
         return port;
+    }
+
+    public boolean isAValidIP(String IP){
+        System.out.println("Validating IP");
+        if (IP.equals("localhost")){
+            System.out.println("PASS");
+            return true;
+        }
+        String[] splitIP = IP.split(".");
+        //192.168.1.1
+        if (splitIP.length != 4){
+            System.out.println("FAIL");
+            return false;
+        }
+        for (String s : splitIP) {
+            int i = Integer.parseInt(s);
+            if (0 > i || i > 255) {
+                System.out.println("FAIL");
+                return false;
+            }
+        }
+        System.out.println("PASS");
+        return true;
+
     }
 }

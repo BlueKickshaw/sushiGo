@@ -45,5 +45,6 @@
         </GridPane>
       </children>
     </VBox>
+    <Button layoutX="189.0" layoutY="462.0" mnemonicParsing="false" onAction="#endServer" text="End Server" />
   </children>
 </AnchorPane>

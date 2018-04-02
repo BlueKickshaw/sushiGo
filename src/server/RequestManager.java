@@ -36,6 +36,13 @@ public class RequestManager {
                 });
                 break;
 
+            case "accountCreationSucceeded": {
+                Platform.runLater(() -> {
+                    new Alert(Alert.AlertType.CONFIRMATION,"Account created!",ButtonType.OK).show();
+                });
+                break;
+            }
+
             case "addClient": {
                 String name = network.getNextString(socket);
                 System.out.println("ADDING TO CCM: "+name);
@@ -78,6 +85,8 @@ public class RequestManager {
                 if (error != 0) {
                     network.sendRequest(socket, "accountCreationFailed".getBytes());
                     network.sendRequest(socket, ("" + error).getBytes());
+                } else {
+                    network.sendRequest(socket, "accountCreationSucceeded".getBytes());
                 }
                 break;
 
@@ -349,8 +358,6 @@ public class RequestManager {
                 Lobby lobby =
                         (Lobby)network.deserializeObject(network.getNextBytes(socket));
 
-
-
                 for (String user :  lobby.playerNames) {
                     // This is a lengthy way of finding out of we're comparing the host....
                     if (!user.equals(hostName)) {
@@ -377,6 +384,15 @@ public class RequestManager {
                         (ArrayList<Lobby>)network.deserializeObject(network.getNextBytes(socket));
                 Platform.runLater(() -> network.fxmlController.updateServerLobbyDisplay(network.lobbyManager.lobbyList,false));
                 break;
+
+            // The server has been shutdown, after we've confirmed that we know that, close
+            case "serverShutdown": {
+                Platform.runLater(()->{
+                    new Alert(Alert.AlertType.ERROR,"The server has shutdown",ButtonType.OK).showAndWait();
+                    System.exit(0);
+                });
+                break;
+            }
 
             case "showLobbyList":
                 System.out.println("Serializing/sending lobby list");
