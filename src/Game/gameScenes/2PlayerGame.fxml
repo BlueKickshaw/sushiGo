@@ -8,9 +8,9 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1120.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Game.TwoPlayerController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.TwoPlayerController">
   <children>
-    <GridPane fx:id="primaryPlayerGrid" gridLinesVisible="true" layoutX="155.0" layoutY="495.0" prefHeight="135.0" prefWidth="791.0">
+    <GridPane fx:id="primaryPlayerGrid" layoutX="155.0" layoutY="495.0" prefHeight="135.0" prefWidth="791.0">
       <children>
         <Pane fx:id="playerPane00" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
           <children>
@@ -79,7 +79,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <GridPane gridLinesVisible="true" layoutX="276.0" layoutY="408.0" prefHeight="87.0" prefWidth="550.0">
+    <GridPane layoutX="276.0" layoutY="408.0" prefHeight="87.0" prefWidth="550.0">
       <children>
         <Pane prefHeight="200.0" prefWidth="200.0">
           <children>
@@ -148,7 +148,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <GridPane gridLinesVisible="true" layoutX="276.0" layoutY="135.0" prefHeight="87.0" prefWidth="550.0">
+    <GridPane layoutX="276.0" layoutY="135.0" prefHeight="87.0" prefWidth="550.0">
       <children>
         <Pane prefHeight="200.0" prefWidth="200.0">
           <children>
@@ -217,7 +217,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <GridPane gridLinesVisible="true" layoutX="155.0" prefHeight="135.0" prefWidth="791.0">
+    <GridPane layoutX="155.0" prefHeight="135.0" prefWidth="791.0">
       <children>
         <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
           <children>
