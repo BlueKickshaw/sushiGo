@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
@@ -20,6 +21,5 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <Button id="hostStartLobbyBtn" layoutX="14.0" layoutY="462.0" mnemonicParsing="false" onAction="#hostTest" prefWidth="61.0" text="TEST" />
   </children>
 </AnchorPane>

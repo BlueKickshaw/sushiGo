@@ -320,6 +320,7 @@ public class ThreePlayerController {
         }
 
         driver = new GameDriver(playerList, rotatingImages, handImages, network, scoreLabels);
+        getHands(new ActionEvent());
     }
 
     private void populateImages(Vector<ImageView> images) {

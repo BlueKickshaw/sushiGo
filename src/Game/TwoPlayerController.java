@@ -304,7 +304,7 @@ public class TwoPlayerController {
         driver = new GameDriver(playerList, rotatingImages, handImages, network, scoreLabels);
 
 
-
+        getHands(new ActionEvent());
     }
 
     private void updateScores(Vector<Player> players){
