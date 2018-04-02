@@ -1,14 +1,14 @@
 package Game;
 
 import Cards.*;
-
 import java.util.*;
+import java.util.Random;
 
 public class Deck {
 
     private Stack<Card> deck = new Stack<>();
 
-    Deck() {
+    Deck(int seed) {
         // create a vector, shuffle it, then populate the stack
         Vector<Card> tmp = new Vector<>();
 //        for (int i = 0; i < 4; i++) {
@@ -48,7 +48,8 @@ public class Deck {
             tmp.add(new Wasabi("Wasabi"));
         }
 
-        Collections.shuffle(tmp);
+        // used so all players have the same deck they are drawing from
+        Collections.shuffle(tmp, new Random(seed));
         for (Card card : tmp) {
             deck.push(card);
         }

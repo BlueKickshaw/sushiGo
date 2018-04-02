@@ -84,8 +84,6 @@ public class TwoPlayerController {
     Vector<Player> playerList = new Vector<>();
 
     //GameDriver driver = new GameDriver(playerList);
-    Deck deck = new Deck();
-    int roundCount = 0;
 
 
     private void turn() {
