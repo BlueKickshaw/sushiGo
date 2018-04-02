@@ -6,10 +6,8 @@ import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import server.Network;
 
 import java.util.ArrayList;
-import java.sql.Time;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
@@ -31,8 +29,9 @@ public class GameDriver implements Runnable {
     Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
     private Turn turn;
     private Thread turnHandler;
-    boolean flag = false;
-    private Vector<Player> opponents;//Order is top, left, right
+    boolean notEndOfRoundReached = false;
+    //Order is top, left, right
+    private Vector<Player> opponents;
     private Vector<Label> scoreLabels;
     private int handSize;
     int indOfHeadPlayer;
@@ -95,7 +94,7 @@ public class GameDriver implements Runnable {
 
 
     public void run() {
-        Platform.runLater( () -> updateScores());
+        Platform.runLater(() -> updateScores());
         while (roundNum < 3) {
             // Update the played hands at the beginning of a round
             playerList.get(indOfHeadPlayer).setHandImages(playerList.get(indOfHeadPlayer), handImages.get(0));
@@ -103,13 +102,16 @@ public class GameDriver implements Runnable {
                 opponents.get(k).setHandImages(opponents.get(k), handImages.get(k + 1));
             }
 
-
+//          creates a loop to run enough turns for players to have the appropriate amount of turns before a round ends
             for (int i = 0; i < handSize; i++) {
-                if (!flag) {
+                // currently can't think of a better name for this flag
+                if (!notEndOfRoundReached) {
                     startOfRound();
-                    flag = true;
+                    notEndOfRoundReached = true;
                 }
+                // populate the client's head players rotating hand images
                 populateImages(rotatingImages.get(0));
+                // populate their opponents card backs
                 for (int j = 1; j < rotatingImages.size(); j++) {
                     if (j > 1) {
                         populateCardBacks(rotatingImages.get(j), rotatedCardBack);
@@ -125,9 +127,10 @@ public class GameDriver implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                // wait for the host to receive all data
                 while (!dataReceived) {
                 }
-
+                // also wait for the host to end their turn
                 if (network.server == null) {
                     while (!hostTurnEnded) {
                     }
@@ -135,7 +138,7 @@ public class GameDriver implements Runnable {
                 dataReceived = false;
                 hostTurnEnded = false;
 
-                // Populate the images of the head player and each of the players in the game as well
+                // Populate the images of the head player table hand and each of the players in the game as well
                 playerList.get(indOfHeadPlayer).setHandImages(playerList.get(indOfHeadPlayer),
                         handImages.get(0));
                 for (int k = 0; k < opponents.size(); k++) {
@@ -157,7 +160,7 @@ public class GameDriver implements Runnable {
 
             Platform.runLater(() -> calculatePoints(playerList, roundNum));
             Platform.runLater(() -> updateScores());
-            flag = false;
+            notEndOfRoundReached = false;
 
             // Update the played hands again AFTER the end of a round
             playerList.get(indOfHeadPlayer).setHandImages(playerList.get(indOfHeadPlayer),
@@ -185,16 +188,6 @@ public class GameDriver implements Runnable {
             player.clearHand();//clears player hand
             player.drawHand(deck, playerCount);//populates rotating hand
         }
-    }
-
-    public void chooseCard(Player player, Card c) {
-        player.chooseCard(c);
-    }
-
-
-    //if no card is chosen in time it will automatically take the left most card.
-    public void chooseCard(Player player) {
-        player.chooseCard(player.getRotatingHand().getCards().firstElement());
     }
 
 
@@ -269,6 +262,9 @@ public class GameDriver implements Runnable {
         }
     }
 
+
+    // The first if condition is there because if we reach the last player in the list, there is a tie for maki rolls
+    // and we can just add the last player to the list and give out the appropriate maki points
     protected static void calculateMakiPoints(Vector<Player> playerList) {
 
         Vector<Player> tmpPlayerList = (Vector) playerList.clone();

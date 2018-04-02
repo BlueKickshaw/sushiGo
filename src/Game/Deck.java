@@ -11,6 +11,8 @@ public class Deck {
     Deck(int seed) {
         // create a vector, shuffle it, then populate the stack
         Vector<Card> tmp = new Vector<>();
+
+        // chopsticks not implemented currently
 //        for (int i = 0; i < 4; i++) {
 //            tmp.add(new Chopsticks("Chopsticks"));
 //        }

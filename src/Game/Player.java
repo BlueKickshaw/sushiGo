@@ -181,7 +181,7 @@ public class Player {
         this.roundPoints += (count / 2) * 5;
     }
 
-    public void calculateWasabiPoints() {//the base points from nigirs are calculated separately
+    public void calculateWasabiPoints() {//the base points from nigiris are calculated separately
         int wasabis = 0;//tracks number of unused wasabis
         for (Card card : hand.getCards()) {
             if (card instanceof Wasabi) {
