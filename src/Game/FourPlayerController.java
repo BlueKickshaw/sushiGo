@@ -336,7 +336,7 @@ public class FourPlayerController {
             }
         }
         driver = new GameDriver(playerList, rotatingImages, handImages, network, scoreLabels);
-        getHands(new ActionEvent(t add .));
+        getHands(new ActionEvent());
     }
 
     private void populateImages(Vector<ImageView> images) {
