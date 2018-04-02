@@ -8,9 +8,9 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1120.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Game.ThreePlayerController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Game.ThreePlayerController">
   <children>
-    <GridPane fx:id="primaryPlayerGrid" gridLinesVisible="true" layoutX="175.0" layoutY="495.0" prefHeight="135.0" prefWidth="771.0">
+    <GridPane fx:id="primaryPlayerGrid" layoutX="175.0" layoutY="495.0" prefHeight="135.0" prefWidth="771.0">
       <children>
         <Pane fx:id="playerPane00" prefHeight="200.0" prefWidth="200.0">
           <children>
@@ -73,7 +73,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <GridPane gridLinesVisible="true" layoutX="175.0" prefHeight="135.0" prefWidth="771.0">
+    <GridPane layoutX="175.0" prefHeight="135.0" prefWidth="771.0">
       <children>
         <Pane prefHeight="200.0" prefWidth="200.0">
           <children>
@@ -136,7 +136,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <GridPane gridLinesVisible="true" layoutY="96.0" prefHeight="426.0" prefWidth="85.0">
+    <GridPane layoutY="96.0" prefHeight="426.0" prefWidth="85.0">
       <children>
         <Pane prefHeight="52.0" prefWidth="516.0">
           <children>
@@ -199,7 +199,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <GridPane gridLinesVisible="true" layoutX="298.0" layoutY="406.0" prefHeight="87.0" prefWidth="525.0">
+    <GridPane layoutX="298.0" layoutY="406.0" prefHeight="87.0" prefWidth="525.0">
       <children>
         <Pane prefHeight="200.0" prefWidth="200.0">
           <children>
@@ -262,7 +262,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <GridPane gridLinesVisible="true" layoutX="298.0" layoutY="135.0" prefHeight="87.0" prefWidth="525.0">
+    <GridPane layoutX="298.0" layoutY="135.0" prefHeight="87.0" prefWidth="525.0">
       <children>
         <Pane prefHeight="200.0" prefWidth="200.0">
           <children>
@@ -325,7 +325,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <GridPane gridLinesVisible="true" layoutX="85.0" layoutY="137.0" prefHeight="356.0" prefWidth="96.0">
+    <GridPane layoutX="85.0" layoutY="137.0" prefHeight="356.0" prefWidth="96.0">
       <children>
         <Pane prefHeight="200.0" prefWidth="200.0">
           <children>

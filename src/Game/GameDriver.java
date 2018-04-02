@@ -95,6 +95,7 @@ public class GameDriver implements Runnable {
 
 
     public void run() {
+        Platform.runLater( () -> updateScores());
         while (roundNum < 3) {
             // Update the played hands at the beginning of a round
             playerList.get(indOfHeadPlayer).setHandImages(playerList.get(indOfHeadPlayer),
