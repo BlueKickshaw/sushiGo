@@ -30,6 +30,9 @@ USAGE:
 	a server and a lobby on the same machine if they intend to be the only person running that particular lobby, for the sake 
 	of testing for example. 
 	
+	When all of the desired amount of players have joined the lobby, the host may start the lobby and the players will play 
+	the game in accordance with the rules!
+	
 NOTE:
 	Colin worked on setting up initial classes(player, cards, hand), majority of calculate points methods, calculating
 	total points, GameDriver, and gamedriver meshing.
