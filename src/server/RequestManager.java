@@ -116,22 +116,18 @@ public class RequestManager {
                     while (!network.gameDriver.hostTurnEnded){}
 
                     // We have everyone's card
-/*                    for (int i = 1; i < network.client.getLobby().playerCount; i++) {
+                    for (int i = 1; i < network.client.getLobby().playerCount; i++) {
                         network.sendToPlayer(i,"endOfTurnData".getBytes());
                         if (i != 1) {
                             network.sendToPlayer(i, network.serializeObject(
-                                    network.gameDriver.storedRotateHands.get(i - 1)
+                                    network.gameDriver.storedRotateHands.get(i - 2)
                             ));
                         } else {
                             network.sendToPlayer(i,network.serializeObject(
                                     network.gameDriver.headPlayer.getRotatingHand()
                             ));
                         }
-                    }*/
-
-
-                    //
-
+                    }
 
                     Map<Integer,Hand> tree = new TreeMap<>();
                     for (int i = 0; i < network.gameDriver.storedPlayedHands.size(); i++) {
@@ -142,19 +138,8 @@ public class RequestManager {
                                 network.gameDriver.storedPlayerNumbers.get(i),
                                 network.gameDriver.storedPlayedHands.get(i));
                     } // This sorts the hands by player name
-                    System.out.println(network.gameDriver.storedRotateHands.get(0));
-                    System.out.println(network.gameDriver.storedRotateHands.get(1));
 
 
-                    for (int i = network.client.getLobby().playerCount - 2; i >= 1; i--) {
-                        network.sendToPlayer(i+1, "endOfTurnData".getBytes());
-                        network.sendToPlayer(i+1,
-                                network.serializeObject(network.gameDriver.storedRotateHands.get(i-1))
-                        );
-                    }
-                    network.sendToPlayer(1, "endOfTurnData".getBytes());
-                    network.sendToPlayer(1,
-                            network.serializeObject(network.gameDriver.headPlayer.getRotatingHand()));
 
 
                     // Send EVERYONE the hand data
