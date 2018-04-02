@@ -269,12 +269,18 @@ public class RequestManager {
                 }
             } break;
 
-            case "joinFailed":
+            case "joinFailed": {
                 Platform.runLater(() -> {
-                    new Alert(Alert.AlertType.ERROR,"Unable to join lobby; perhaps it's full" +
-                            " or the password was incorrect?",ButtonType.OK).show();
-                });
-                break;
+                    new Alert(Alert.AlertType.ERROR, "Unable to join lobby; perhaps it's full" +
+                            " or the password was incorrect?", ButtonType.OK).show();
+                    });
+                URL url = getClass().getResource("serverScenes/welcomeScreen.fxml");
+                try {
+                    network.fxmlController.loadScene(url);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } break;
 
             case "joinSuccessful": {
                 Platform.runLater(() -> {
@@ -326,6 +332,7 @@ public class RequestManager {
             // We want to disconnect from the server and migrate over now!
             case "migrate": {
 
+
                 // We send the name of the host so that we can get a reference to the client and thus lobby
                 String hostName = network.getNextString(socket);
                 InetAddress hostAddress = socket.getInetAddress();
@@ -345,6 +352,14 @@ public class RequestManager {
                         network.sendRequest(client.getSocket(), newPort.getBytes());
                     }
                 }
+
+                // We can now remove this lobby from our active lobby list
+                for (Lobby l : network.lobbyManager.lobbyList){
+                    if (l.name.equals(lobby.name)){
+                        network.lobbyManager.lobbyList.remove(l);
+                    }
+                }
+
                 network.purge(socket);
                 break;
             }
