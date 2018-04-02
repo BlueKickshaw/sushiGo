@@ -12,8 +12,8 @@
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="300.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="server.FXMLController">
   <children>
     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="radial-gradient(focus-angle 0.0deg, focus-distance 0.0% , center 180.0px 280.0px, radius 500.0px, 0xff0000ff 0.0%, 0xff0000ff 30.0%, 0x000000ff 100.0%)" height="500.0" layoutX="0.0" layoutY="0.0" stroke="BLACK" strokeType="INSIDE" width="300.0" />
-    <Button id="welcomeCreateLobby" fx:id="welcomeCreateLobbyBtn" layoutX="89.0" layoutY="195.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#welcomeCreateLobby" text="Create a Lobby" />
-    <Button id="welcomeJoinLobby" fx:id="welcomeShowLobbyBtn" layoutX="89.0" layoutY="222.0" mnemonicParsing="false" onAction="#welcomeShowLobby" prefWidth="122.0" text="Show Lobbies" />
+    <Button id="welcomeCreateLobby" fx:id="welcomeCreateLobbyBtn" layoutX="89.0" layoutY="195.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="22.0" minWidth="122.0" mnemonicParsing="false" onAction="#welcomeCreateLobby" text="Create a Lobby" />
+    <Button id="welcomeJoinLobby" fx:id="welcomeShowLobbyBtn" layoutX="89.0" layoutY="222.0" maxWidth="122.0" minWidth="122.0" mnemonicParsing="false" onAction="#welcomeShowLobby" prefWidth="122.0" text="Show Lobbies" />
     <Label id="welcomeUser" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="158.0" prefWidth="272.0" text="Welcome!" textFill="WHITE">
       <font>
         <Font size="20.0" />

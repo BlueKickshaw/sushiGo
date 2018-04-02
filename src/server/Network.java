@@ -3,6 +3,7 @@ package server;
 import Cards.Card;
 import Game.GameDriver;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.net.*;
@@ -248,5 +249,29 @@ public class Network {
     public int startServer(Network network) {
         server = new Server(network, port);
         return port;
+    }
+
+    public boolean isAValidIP(String IP){
+        System.out.println("Validating IP");
+        if (IP.equals("localhost")){
+            System.out.println("PASS");
+            return true;
+        }
+        String[] splitIP = IP.split(".");
+        //192.168.1.1
+        if (splitIP.length != 4){
+            System.out.println("FAIL");
+            return false;
+        }
+        for (String s : splitIP) {
+            int i = Integer.parseInt(s);
+            if (0 > i || i > 255) {
+                System.out.println("FAIL");
+                return false;
+            }
+        }
+        System.out.println("PASS");
+        return true;
+
     }
 }

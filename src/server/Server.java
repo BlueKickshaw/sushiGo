@@ -1,8 +1,13 @@
 package server;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Server {
@@ -28,6 +33,9 @@ public class Server {
             new ClientConnectionManager(network);
         } catch (IOException e) {
             System.err.println(Thread.currentThread().getName()+": Unable to start server over port "+port);
+            new Alert(Alert.AlertType.ERROR,"Unable to start server over port "+port+". It may be in use",
+                    ButtonType.OK).showAndWait();
+            System.exit(0);
             e.printStackTrace();
         }
     }

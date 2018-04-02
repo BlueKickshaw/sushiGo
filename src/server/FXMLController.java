@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class FXMLController implements Initializable {
@@ -44,6 +45,16 @@ public class FXMLController implements Initializable {
             loadScene(e, url);
         } catch (IOException e1) {
             e1.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void endServer(){
+        for (Map.Entry<String,Client> e : network.clientConnectionManager.clients.entrySet()) {
+            if (e.getValue().getSocket().isConnected()) {
+                network.sendRequest(e.getValue().getSocket(), "serverShutdown".getBytes());
+                System.exit(0);
+            }
         }
     }
 
@@ -131,6 +142,12 @@ public class FXMLController implements Initializable {
             network.setServerAddress(loginIPField.getText());
         }
 
+        if (!network.isAValidIP(loginIPField.getText())){
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Sorry, we're expecting the form 'localhost' or 'x.x.x.x'!",
+                    ButtonType.OK).showAndWait();
+            System.exit(0);
+        }
         network.connectToServer();
 
         network.username = loginNameText.getText();
@@ -210,7 +227,13 @@ public class FXMLController implements Initializable {
     @FXML public void startGame(Lobby lobby) {
         // Depending on how many players we have, we'l need to load a different scene
         URL gameScene = null;
-
+        if (lobby.playerCount <= 1) {
+            Platform.runLater(() -> {
+                new Alert(Alert.AlertType.ERROR,"No other players, we're going to wait!",
+                        ButtonType.OK).show();
+            });
+            return;
+        }
         switch (lobby.playerCount) {
             case 2:
                 gameScene = Deck.class.getResource("gameScenes/2PlayerGame.fxml");
