@@ -38,6 +38,7 @@ public class Client {
         loggedIn = status;
     }
 
+
     public String getName() {
         return name;
     }

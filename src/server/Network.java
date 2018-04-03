@@ -248,6 +248,7 @@ public class Network {
         return port;
     }
 
+    // Check to see if the IP is of the form x.x.x.x or if it matches "localhost"
     public boolean isAValidIP(String IP){
         System.out.println("Validating IP");
         if (IP.equals("localhost")){
@@ -255,7 +256,6 @@ public class Network {
             return true;
         }
         String[] splitIP = IP.split(".");
-        //192.168.1.1
         if (splitIP.length != 4){
             System.out.println("FAIL");
             return false;

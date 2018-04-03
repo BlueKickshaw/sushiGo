@@ -16,7 +16,6 @@
           </font>
         </Label>
         <Label font="$x1" layoutX="46.0" layoutY="183.0" text="Password:" textFill="WHITE" />
-        <Button fx:id="loginCreateAccountBtn" layoutX="0.0" layoutY="204.0" mnemonicParsing="false" onAction="#loginCreateAccount" prefWidth="136.0" text="Create Account" />
       </children>
     </AnchorPane>
     <Text fill="WHITE" layoutX="20.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server IP:" />
@@ -28,5 +27,6 @@
         <Button fx:id="loginLoginBtn" layoutX="32.0" layoutY="90.0" mnemonicParsing="false" onAction="#loginLogin" prefWidth="136.0" text="Login" />
       </children>
     </AnchorPane>
+    <Button fx:id="loginCreateAccountBtn" layoutX="150.0" layoutY="240.0" mnemonicParsing="false" onAction="#loginCreateAccount" prefWidth="136.0" text="Create Account" />
   </children>
 </AnchorPane>

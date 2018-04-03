@@ -80,6 +80,7 @@ public class TwoPlayerController {
     // called at the end of initialize to start the game for players
     public void getHands(ActionEvent event) {
         Thread gameHandler = new Thread(driver);
+        System.out.println("Getting starting hands");
         gameHandler.start();
     }
 

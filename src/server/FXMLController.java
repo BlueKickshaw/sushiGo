@@ -109,7 +109,7 @@ public class FXMLController implements Initializable {
         // Become the new server, using our new assigned port
         network.startServer(network);
 
-        // Everyone in the lobby (the host as well is intended but not working yet) will be told to start the game
+        // Everyone in the lobby
         network.sendToLobby("startGame".getBytes());
         startGame(network.client.getLobby());
     }
@@ -225,6 +225,7 @@ public class FXMLController implements Initializable {
     }
 
     @FXML public void startGame(Lobby lobby) {
+
         // Depending on how many players we have, we'l need to load a different scene
         URL gameScene = null;
         if (lobby.playerCount <= 1) {
@@ -324,7 +325,6 @@ public class FXMLController implements Initializable {
             serverUserCountField.setText(""+i);
         } else {
             serverUserCountField.setText("" + (Integer.parseInt(serverUserCountField.getText()) + i));
-
         }
     }
 
@@ -357,7 +357,6 @@ public class FXMLController implements Initializable {
             Label playerCount = new Label(l.playerCount+"/4");
             playerCount.setTextFill(Color.WHITESMOKE);
 
-
             // We want to change whether or not the join button is shown to prevent the server from
             // throwing some wacky errors
             if (isServer) {
@@ -367,7 +366,6 @@ public class FXMLController implements Initializable {
                         playerCount,
                         iv);
             } else {
-
                 // Create and add the button which will ask us to join the game
                 Button join = new Button("Join");
                 join.setOnAction(e -> {

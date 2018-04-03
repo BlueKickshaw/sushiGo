@@ -97,6 +97,12 @@ public class RequestManager {
                     Network.fxmlController.updateUserCount(-1);
                     System.out.println(Thread.currentThread().getName()+": Disconnecting "+
                             socket.getInetAddress().toString());
+                    // Tell the server that the user is no longer logged in
+                    for (Map.Entry<String,Client> e : network.clientConnectionManager.clients.entrySet()){
+                        if (e.getValue().getSocket() == socket) {
+                            e.getValue().setLoggedIn(false);
+                        }
+                    }
                 });
                 break;
 
@@ -253,6 +259,13 @@ public class RequestManager {
 
                 for (Lobby lobby : network.lobbyManager.lobbyList) {
                     if (lobbyName.equals(lobby.name)) {
+                        // If we find out that the lobby is full we need to break out immediately
+                        if (lobby.playerCount >= 4){
+                            success = false;
+                            break;
+                        }
+
+
                         if (lobbyPassword.equals(lobby.password)) {
                             // The user successfully joins the lobby, we need to apply the necessary logic
                             success = true;
@@ -291,13 +304,13 @@ public class RequestManager {
                 Platform.runLater(() -> {
                     new Alert(Alert.AlertType.ERROR, "Unable to join lobby; perhaps it's full" +
                             " or the password was incorrect?", ButtonType.OK).show();
-                    });
                 URL url = getClass().getResource("serverScenes/welcomeScreen.fxml");
                 try {
                     network.fxmlController.loadScene(url);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                });
             } break;
 
             case "joinSuccessful": {
@@ -312,14 +325,27 @@ public class RequestManager {
             case "login":
                 name = network.getNextString(socket);
                 password = network.getNextString(socket);
+
+
                 network.client = new Client(socket,name);
+
                 boolean success = network.server.accounts.verifyAccount(name,password);
+
+                // Make sure that the user isn't already logged in
+                if (network.clientConnectionManager.clients.containsKey(name)) {
+                    if (network.clientConnectionManager.clients.get(name).isLoggedIn()){
+                        success = false;
+
+                    }
+                }
+
                 if (success) {
                     network.sendRequest(socket,"loginSuccessful".getBytes());
 
                     // We create a reference to the client for later calls
                     network.client = new Client(socket,name);
                     network.clientConnectionManager.clients.put(name,network.client);
+                    network.client.setLoggedIn(true);
 
                     Platform.runLater(() -> Network.fxmlController.updateUserCount(1));
                 } else {
@@ -329,7 +355,7 @@ public class RequestManager {
 
             case "loginFailed":
                 Platform.runLater(() -> new Alert(Alert.AlertType.ERROR,"Login failed; the " +
-                        "username/password combination could not be found in the database",ButtonType.OK));
+                        "username/password combination could not be found in the database",ButtonType.OK).show());
                 break;
 
             case "loginSuccessful":
