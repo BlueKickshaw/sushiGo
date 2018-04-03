@@ -1,20 +1,16 @@
 package Game;
 
-import Cards.Card;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import server.Network;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.Vector;
 
@@ -78,23 +74,10 @@ public class TwoPlayerController {
     @FXML    Label secondPlaceText = new Label();
              Vector<Label> scoreLabels = new Vector<>();
 
-    Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
-    Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
-
     Vector<Player> playerList = new Vector<>();
 
-    //GameDriver driver = new GameDriver(playerList);
-    Deck deck = new Deck();
-    int roundCount = 0;
 
-
-    private void turn() {
-    }
-
-
-    public void incrementRound(ActionEvent event) {
-    }
-
+    // called at the end of initialize to start the game for players
     public void getHands(ActionEvent event) {
         Thread gameHandler = new Thread(driver);
         gameHandler.start();
@@ -154,6 +137,12 @@ public class TwoPlayerController {
         handImages.add(handCardImages);
         handImages.add(topOpponentHandCardImages);
 
+//        The reason the buttons set a different selected card than their corresponding number is because how the cards
+//        are displayed in the UI doesn't match their indices in their actual hand. It was done this way
+//        so that it looked nice that when a player has a card removed/chosen from their hand, there are not blanks on
+//        the UI but rather the cards are in the center of the screen for the client player. It can be understood that
+//        the button number corresponds to the ith card in their hand. The buttons are disabled at the end of the round,
+//        and 1 less is enabled each subsequent round.
         playerCard00.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -306,14 +295,5 @@ public class TwoPlayerController {
 
         getHands(new ActionEvent());
     }
-
-    private void updateScores(Vector<Player> players){
-        Vector<Player> clonePlayerList = (Vector) players.clone();
-        clonePlayerList.sort(Comparator.comparingInt(Player::getTotalPoints));
-        Collections.reverse(clonePlayerList);
-        firstPlaceText.setText(clonePlayerList.get(0).getName() + "     " + clonePlayerList.get(0).getTotalPoints() + " Total Points");
-        secondPlaceText.setText(clonePlayerList.get(1).getName() + "     " + clonePlayerList.get(1).getTotalPoints() + " Total Points");
-    }
-
 
 }

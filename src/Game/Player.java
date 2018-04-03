@@ -10,8 +10,14 @@ import java.util.Vector;
 public class Player {
 
     private String name;
+
+    // already picked cards
     private Hand hand;
+
+    //cards to be picked from
     private Hand rotatingHand;
+
+
     private int roundPoints;
     private int totalPoints;
     private int puddingCount;
@@ -181,7 +187,9 @@ public class Player {
         this.roundPoints += (count / 2) * 5;
     }
 
-    public void calculateWasabiPoints() {//the base points from nigirs are calculated separately
+
+    //Wasabis always count on the next nigiri picked and do not work retroactively as stated in the rules
+    public void calculateWasabiPoints() {//the base points from nigiris are calculated separately
         int wasabis = 0;//tracks number of unused wasabis
         for (Card card : hand.getCards()) {
             if (card instanceof Wasabi) {

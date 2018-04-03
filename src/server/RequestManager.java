@@ -1,6 +1,5 @@
 package server;
 
-import Cards.Card;
 import Game.Hand;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -10,8 +9,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
 
 public class RequestManager {
     Network network;

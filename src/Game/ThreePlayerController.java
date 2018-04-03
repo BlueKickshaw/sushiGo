@@ -92,9 +92,6 @@ public class ThreePlayerController {
 
     GameDriver driver;
 
-    Image cardBack = new Image("/Game/CardImages/Cardback.jpg");
-    Image rotatedCardBack = new Image("/Game/CardImages/Cardback_Rotated.jpg");
-
     Player player;
     Vector<Player> playerList = new Vector<>();
     private Vector<Vector<ImageView>> rotatingImages = new Vector<>();
@@ -102,17 +99,8 @@ public class ThreePlayerController {
     private Vector<Label> scoreLabels = new Vector<>();
 
 
-    private void turn() {
-        Turn turn = new Turn(player, playerCardImages, network);
-        Thread turnHandler = new Thread(turn);
-        turnHandler.start();
-    }
 
-
-    public void incrementRound(ActionEvent event) {
-
-    }
-
+    // called at the end of initialize to start the game for players
     public void getHands(ActionEvent event) {
         Thread gameHandler = new Thread(driver);
         gameHandler.start();
@@ -190,7 +178,12 @@ public class ThreePlayerController {
         handImages.add(topOpponentHandCardImages);
         handImages.add(leftOpponentHandCardImages);
 
-
+//        The reason the buttons set a different selected card than their corresponding number is because how the cards
+//        are displayed in the UI doesn't match their indices in their actual hand. It was done this way
+//        so that it looked nice that when a player has a card removed/chosen from their hand, there are not blanks on
+//        the UI but rather the cards are in the center of the screen for the client player. It can be understood that
+//        the button number corresponds to the ith card in their hand. The buttons are disabled at the end of the round,
+//        and 1 less is enabled each subsequent round.
         playerCard00.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -323,53 +316,8 @@ public class ThreePlayerController {
         getHands(new ActionEvent());
     }
 
-    private void populateImages(Vector<ImageView> images) {
-        for (ImageView iv : images) {
-            iv.setImage(null);
-        }
 
-        Vector<ImageView> reverseImageViews = (Vector) images.clone();
-        Collections.reverse(reverseImageViews);
-        for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
-            Card tmp = player.getRotatingHand().getCard(i);
-            Image image = new Image(tmp.getImagePath());
-            reverseImageViews.get(i).setDisable(false);
-            reverseImageViews.get(i).setImage(image);
-        }
 
-    }
-
-    private void populateCardBacks(Vector<ImageView> oppCardsView, Image back) {
-        for (ImageView iv : oppCardsView) {
-            iv.setImage(null);
-        }
-        Vector<ImageView> reverseImageViews = (Vector) oppCardsView.clone();
-        Collections.reverse(reverseImageViews);
-        for (int i = 0; i < player.getRotatingHand().getCards().size(); i++) {
-            reverseImageViews.get(i).setImage(back);
-        }
-
-    }
-
-    private void setHandImages(Player player, Vector<ImageView> images) {
-        for (ImageView img : images) {
-            img.setImage(null);
-        }
-
-        for (int i = 0; i < player.getHand().getCards().size(); i++) {
-            Image tmp = new Image(player.getHand().getCard(i).getImagePath());
-            images.get(i).setImage(tmp);
-        }
-
-    }
-    private void updateScores(Vector<Player> players){
-        Vector<Player> clonePlayerList = (Vector) players.clone();
-        clonePlayerList.sort(Comparator.comparingInt(Player::getTotalPoints));
-        Collections.reverse(clonePlayerList);
-        firstPlaceText.setText(clonePlayerList.get(0).getName() + "     " + clonePlayerList.get(0).getTotalPoints() + " Total Points");
-        secondPlaceText.setText(clonePlayerList.get(1).getName() + "     " + clonePlayerList.get(1).getTotalPoints() + " Total Points");
-        thirdPlaceText.setText(clonePlayerList.get(2).getName() + "     " + clonePlayerList.get(2).getTotalPoints() + " Total Points");
-    }
 
 
 }
